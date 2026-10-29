@@ -1,0 +1,6 @@
+{
+  "data/admission_pilot_v0.jsonl": "f276358074504f4ca76167d34c5162e597b42c83f294384a104894c995e5fa2a",
+  "scripts/train_admission.py": "7e3b9f21c422c4fc7239714766b245b8219aa23746d95da4eefbeb2cc218a98b",
+  "requirements-training.lock.txt": "fe0aa79f39fc65fcda6a767e0fb9655b5290c501cda3ef55cf9d8e97e1da6172",
+  "models/admission-pilot-v0-seed17/checkpoint.pt": "6b29d13dc04654521ebaf7d10daab604d3504a4de4b7ad113b1ec149c91913df"
+}

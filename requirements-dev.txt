@@ -1,0 +1,5 @@
+# Development tools verified on Python 3.13.1; application runtime uses the standard library.
+packaging==26.3
+ruff==0.17.3
+setuptools==84.2.1
+wheel==0.48.0

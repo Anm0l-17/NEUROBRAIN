@@ -1,0 +1,67 @@
+classDiagram
+    class Candidate {
+        +string id
+        +string sourceId
+        +string text
+        +datetime eventTime
+    }
+    class AdmissionModel {
+        +string version
+        +float threshold
+        +predict(features) score
+    }
+    class TrainingRun {
+        +string runId
+        +int seed
+        +string dataManifestHash
+        +fit()
+        +validate()
+    }
+    class DatasetManifest {
+        +string version
+        +string splitHash
+        +validateGroups()
+    }
+    class Checkpoint {
+        +string weightsHash
+        +string encoderRevision
+        +string featureSchema
+    }
+    class PolicyService {
+        +allows(source) bool
+    }
+    class Memory {
+        +string id
+        +string status
+        +datetime validFrom
+        +datetime validTo
+    }
+    class ProvenanceLink {
+        +string parentId
+        +string childId
+    }
+    class Artifact {
+        +string id
+        +string kind
+        +string status
+    }
+    class RetrievalService {
+        +search(query, scope, time)
+    }
+    class DeletionService {
+        +preview(scope)
+        +purge(scope)
+        +verify()
+    }
+    DatasetManifest "1" --> "0..*" TrainingRun : configures
+    TrainingRun "1" --> "0..*" Checkpoint : saves
+    AdmissionModel --> Checkpoint : loads
+    PolicyService ..> Candidate : gates
+    AdmissionModel ..> Candidate : scores
+    Candidate "0..*" --> "0..*" Memory : supports
+    Memory "0..*" --> "0..*" Artifact : derives
+    ProvenanceLink ..> Candidate
+    ProvenanceLink ..> Memory
+    ProvenanceLink ..> Artifact
+    RetrievalService ..> Memory
+    DeletionService ..> ProvenanceLink

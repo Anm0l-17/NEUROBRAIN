@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>NeuroBrain · Local memory</title>
+  <style nonce="__TOKEN__">
+    :root{font:16px/1.6 system-ui,sans-serif;color:#243d37;background:#f2f4ee}
+    *{box-sizing:border-box} body{margin:0}main{max-width:1020px;margin:auto;padding:40px 24px}
+    header{border-bottom:1px solid #ccd7ce;margin-bottom:30px;padding-bottom:22px}
+    h1{font-size:40px;letter-spacing:-1.5px;margin:0}h2{font-size:21px;margin-top:0}
+    .eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:2px;color:#587565}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}.card{background:#fff;padding:25px;border:1px solid #d7dfd6;border-radius:14px;margin-bottom:22px}
+    label{display:block;margin-bottom:8px}input{width:100%;padding:12px;border:1px solid #9bb1a3;border-radius:7px;font:inherit}
+    button{padding:10px 16px;border:0;background:#245f49;color:white;border-radius:7px;cursor:pointer;font:inherit;margin:10px 8px 0 0}
+    button:focus-visible,input:focus-visible{outline:3px solid #c49336;outline-offset:3px}button:disabled{opacity:.5;cursor:wait}
+    .secondary{background:#e8eee8;color:#243d37}.danger{background:#984938}.muted{color:#586c61;font-size:14px}
+    pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.7 ui-monospace,monospace;background:#f5f7f3;padding:15px;border-radius:8px}
+    #status{min-height:30px}article{border-top:1px solid #d7dfd6;padding:16px 0}small{display:block;overflow-wrap:anywhere}
+    dialog{max-width:600px;width:90%;border:1px solid #bdcbbc;border-radius:14px;padding:25px}dialog::backdrop{background:#17291b88}
+    @media(max-width:700px){.grid{grid-template-columns:1fr}main{padding:25px 16px}h1{font-size:34px}}
+  </style>
+</head>
+<body><main>
+  <header><div class="eyebrow">Private by selection · Prototype 0.1</div><h1>NeuroBrain</h1>
+    <p>Your notes, with evidence you can inspect and memory you can remove.</p>
+    <p class="muted">Baseline: local text search and exact excerpts. Neural admission and generated answers are planned.</p></header>
+  <div class="grid">
+    <section class="card"><h2>Remember a note</h2><form id="import-form">
+      <label for="path">File within your allowed notes folder</label><input id="path" placeholder="project.md" required maxlength="1000">
+      <button>Import note</button></form><p class="muted">TXT or Markdown, up to 1 MiB. Only import notes you have checked for private content.</p></section>
+    <section class="card"><h2>Find evidence</h2><form id="search-form">
+      <label for="query">What would you like to recall?</label><input id="query" placeholder="SQLite" required maxlength="2000">
+      <button>Search memory</button></form><p class="muted">Results quote stored notes. Matching words do not prove that a passage answers your question.</p></section>
+  </div>
+  <p id="status" role="status" aria-live="polite"></p>
+  <section class="card"><h2>Evidence</h2><div id="evidence"><p class="muted">Search your imported notes to see cited excerpts here.</p></div></section>
+  <section class="card"><h2>Stored sources</h2><p class="muted">Reimporting an edited note creates a version. Search uses the latest version; inspection can show earlier evidence.</p><div id="sources"></div></section>
+  <dialog id="delete-dialog"><h2>Review deletion</h2><p id="delete-summary"></p><p class="muted">All imported versions of this source and their search entries will be removed. Original files, backups, and previously displayed content remain. Identical content is blocked from reimport; edited content can be imported again.</p><button id="confirm-delete" class="danger">Forget these versions</button><button id="cancel-delete" class="secondary">Cancel</button></dialog>
+  <footer class="muted">Nothing is sent to a language model. Your notes are never used for training in this prototype. Storage is local and is not encrypted by NeuroBrain.</footer>
+</main>
+<script nonce="__TOKEN__">
+const token='__TOKEN__', byId=id=>document.getElementById(id);
+let pending=null;
+async function api(path,payload){
+  const response=await fetch(path,{method:payload?'POST':'GET',headers:{'X-NeuroBrain-Token':token,...(payload?{'Content-Type':'application/json'}:{})},...(payload?{body:JSON.stringify(payload)}:{})});
+  const data=await response.json();if(!response.ok)throw Error(data.error||'Request failed');return data;
+}
+function status(message){byId('status').textContent=message;}
+function element(tag,text,parent){const node=document.createElement(tag);node.textContent=text;parent.append(node);return node;}
+function showEvidence(data){
+  const target=byId('evidence');target.replaceChildren();element('p',data.message,target);
+  for(const hit of data.evidence){const article=element('article','',target);element('small',`${hit.path.split('/').pop()} · version ${hit.version} · lines ${hit.line_start}–${hit.line_end}`,article);element('small',`[${hit.citation}]`,article);element('pre',hit.text,article);}
+}
+async function loadSources(){
+  const rows=await api('/api/sources'),target=byId('sources');target.replaceChildren();
+  if(!rows.length)element('p','No notes imported yet.',target);
+  for(const source of rows){
+    const article=element('article','',target);element('strong',source.path.split('/').pop(),article);
+    element('small',`Version ${source.version} · ${source.chunks} passages · ${source.active?'current':'superseded'}`,article);
+    const inspect=element('button','Inspect',article);inspect.className='secondary';inspect.onclick=()=>run(async()=>{const data=await api('/api/inspect?id='+source.id);showEvidence({message:'Stored source evidence',evidence:data.chunks.map(c=>({...c,path:data.source.path,version:data.source.version,citation:`${source.id}:${c.id}`}))});});
+    const forget=element('button','Preview deletion',article);forget.className='secondary';forget.onclick=()=>run(async()=>{const preview=await api('/api/preview?id='+source.id);pending={id:source.id,preview_token:preview.preview_token};byId('delete-summary').textContent=`Remove ${preview.versions} source version(s) and ${preview.chunks} passage(s)?`;byId('delete-dialog').showModal();});
+  }
+}
+async function run(action){try{await action();}catch(error){status(error.message);}}
+byId('import-form').onsubmit=event=>{event.preventDefault();run(async()=>{const result=await api('/api/import',{path:byId('path').value});status(result.duplicate?'This version is already stored.':`Imported version ${result.version}.`);await loadSources();});};
+byId('search-form').onsubmit=event=>{event.preventDefault();run(async()=>{showEvidence(await api('/api/search?q='+encodeURIComponent(byId('query').value)));status('Search complete.');});};
+byId('cancel-delete').onclick=()=>{pending=null;byId('delete-dialog').close();};
+byId('confirm-delete').onclick=()=>run(async()=>{if(!pending)return;const result=await api('/api/forget',pending);pending=null;byId('delete-dialog').close();byId('evidence').replaceChildren();status(`Forgot ${result.removed_chunks} passages. Deletion verified. Original file kept.`);await loadSources();});
+run(loadSources);
+</script></body></html>

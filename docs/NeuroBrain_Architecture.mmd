@@ -1,0 +1,18 @@
+flowchart TD
+    T[Selected TXT or Markdown] --> P[Hard privacy policy]
+    S[Later: approved window capture] --> O[Local OCR and preview]
+    O --> P
+    P --> C[Candidates with evidence and time]
+    C --> E[Frozen text encoder and features]
+    E --> N[Trained admission MLP]
+    N --> R[Suggestion or gated admission]
+    R --> D[(Evidence and provenance memory)]
+    D --> H[Lexical and vector retrieval with temporal filters]
+    Q[User question] --> H
+    H --> L[Frozen local language model]
+    L --> A[Cited answer or abstention]
+    U[Forget request] --> X[Dependency purge and verification]
+    X --> D
+    F[Fictional labeled training corpus] --> TR[Train and validate MLP]
+    TR --> K[Versioned checkpoint and threshold]
+    K --> N
