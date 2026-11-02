@@ -1,0 +1,2 @@
+{"case_id":"database_engine","note":"project.md","text":"The prototype stores durable records in SQLite.","query":"Which relational engine backs the application?","expected_source":"project.md","expected_terms":["SQLite"]}
+{"case_id":"source_references","note":"preferences.md","text":"Mira prefers concise answers with source references.","query":"What style of response does Mira favor?","expected_source":"preferences.md","expected_terms":["concise","source references"]}

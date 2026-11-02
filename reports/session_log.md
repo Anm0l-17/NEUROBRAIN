@@ -27,3 +27,10 @@
 - **Verification:** evaluator passed; full unittest suite passed 23/23 with loopback permission; Ruff check and format check passed; Git diff check passed; CodeRabbit reviewed the tracked README change and raised 0 issues.
 - **Boundary:** this is a deterministic lexical/extractive lifecycle gate over fictional notes, not evidence of semantic-search quality, temporal reasoning, generation quality, or real-user performance.
 - **Next prerequisite:** add the measured semantic-retrieval experiment while preserving this baseline as the regression control.
+
+## 3 November 2026 — Step 2 hybrid semantic retrieval checkpoint
+
+- **Implemented:** pinned offline MiniLM embeddings, rebuildable semantic index, reciprocal-rank-fusion hybrid retrieval, CLI `hybrid` command, web `/api/hybrid` route, lexical fallback, citation preservation, cache invalidation on deletion, and concurrency locking.
+- **Measured:** lexical Recall@5 1.0; semantic Recall@5 1.0 on two fictional paraphrase cases. This is a working retrieval path, not evidence of semantic improvement.
+- **Verification:** full unittest suite 30/30 passed; Ruff check/format passed; semantic experiment ran offline; Ralph shell checks passed; CodeRabbit raised 0 issues.
+- **Status:** Step 2 complete as an evaluated implementation checkpoint. Next work is expanding the held-out evaluation corpus and measuring at larger scale before changing defaults.

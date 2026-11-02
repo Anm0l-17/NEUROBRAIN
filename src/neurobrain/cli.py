@@ -24,7 +24,7 @@ def main(argv=None) -> int:
     importer = commands.add_parser("import")
     importer.add_argument("path", type=Path)
     commands.add_parser("sources")
-    for name in ("search", "ask"):
+    for name in ("search", "ask", "hybrid"):
         sub = commands.add_parser(name)
         sub.add_argument("query")
     inspector = commands.add_parser("inspect")
@@ -55,6 +55,16 @@ def main(argv=None) -> int:
                 result = store.search(args.query)
             elif args.command == "ask":
                 result = store.ask(args.query)
+            elif args.command == "hybrid":
+                from .semantic import hybrid_search, load_encoder
+
+                encoder, model_error = load_encoder()
+                evidence, mode = hybrid_search(store, args.query, encoder)
+                result = {
+                    "mode": mode,
+                    "model_error": model_error,
+                    "evidence": evidence,
+                }
             elif args.command == "inspect":
                 result = store.inspect(args.source_id)
             elif args.command == "forget":

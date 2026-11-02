@@ -95,6 +95,18 @@ def create_server(db: Path, notes_root: Path, port: int = 8765) -> HTTPServer:
                         result = store.sources()
                     elif url.path == "/api/search":
                         result = store.ask(query.get("q", [""])[0])
+                    elif url.path == "/api/hybrid":
+                        from .semantic import hybrid_search, load_encoder
+
+                        encoder, model_error = load_encoder()
+                        evidence, mode = hybrid_search(
+                            store, query.get("q", [""])[0], encoder
+                        )
+                        result = {
+                            "mode": mode,
+                            "model_error": model_error,
+                            "evidence": evidence,
+                        }
                     elif url.path == "/api/inspect":
                         result = store.inspect(query.get("id", [""])[0])
                     elif url.path == "/api/preview":

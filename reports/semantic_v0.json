@@ -1,0 +1,24 @@
+{
+  "name": "neurobrain-semantic-v0",
+  "encoder": "sentence-transformers/all-MiniLM-L6-v2",
+  "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+  "semantic_available": true,
+  "fallback": null,
+  "model_error": null,
+  "cases": 2,
+  "lexical_recall_at_5": 1.0,
+  "semantic_recall_at_5": 1.0,
+  "fallback_recall_at_5": null,
+  "results": [
+    {
+      "case_id": "database_engine",
+      "lexical": true,
+      "semantic": true
+    },
+    {
+      "case_id": "source_references",
+      "lexical": true,
+      "semantic": true
+    }
+  ]
+}

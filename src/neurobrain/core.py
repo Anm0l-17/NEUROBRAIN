@@ -333,6 +333,12 @@ class MemoryStore:
                 raise MemoryError(
                     "Deletion integrity check failed; transaction rolled back."
                 )
+        try:
+            from .semantic import invalidate_cache
+
+            invalidate_cache(self)
+        except ImportError:
+            pass
         return {
             "receipt_id": receipt_id,
             "completed_at": completed,

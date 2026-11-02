@@ -1,1 +1,9 @@
-[]
+[
+  {
+    "id": "001",
+    "title": "Measure offline semantic retrieval against the lexical baseline",
+    "priority": 1,
+    "passes": true,
+    "spec": ".agent/tasks/TASK-001.json"
+  }
+]

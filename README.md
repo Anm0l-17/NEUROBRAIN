@@ -48,6 +48,12 @@ PYTHONPATH=src python3 scripts/evaluate_baseline.py --output reports/baseline_v0
 
 The evaluator measures answerable retrieval, unsupported-query abstention, citation validity, and deletion of a canary while retaining unrelated evidence. It is a deterministic lifecycle gate, not a semantic-quality or real-user benchmark.
 
+The next experiment compares the lexical baseline with the pinned offline embedding model:
+
+```bash
+PYTHONPATH=src .venv/bin/python scripts/evaluate_semantic.py --output reports/semantic_v0.json
+```
+
 ## Privacy boundary
 
 Only explicitly selected TXT/Markdown notes are accepted by the current prototype. Original files are not deleted when saved memory is forgotten. Deletion removes the selected source from the application database and search index, but it does not erase backups, copied text, browser history, or old database copies. This is application-level deletion, not forensic erasure or model unlearning.

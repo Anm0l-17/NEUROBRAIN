@@ -7,6 +7,7 @@ import tempfile
 import threading
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from neurobrain.cli import main
 from neurobrain.web import create_server
@@ -47,6 +48,18 @@ class InterfaceTests(unittest.TestCase):
         )
         self.assertEqual(self.cli("search", "WebCanary")[1], [])
         self.assertEqual(self.cli("import", str(self.root / "demo.md"))[0], 1)
+
+    def test_cli_hybrid_reports_lexical_fallback(self):
+        self.cli("import", str(self.root / "demo.md"))
+        with patch(
+            "neurobrain.semantic.load_encoder",
+            return_value=(None, "model unavailable"),
+        ):
+            code, result = self.cli("hybrid", "SQLite")
+        self.assertEqual(code, 0)
+        self.assertEqual(result["mode"], "lexical-fallback")
+        self.assertEqual(result["model_error"], "model unavailable")
+        self.assertTrue(result["evidence"])
 
     def test_http_cli_parity_and_browser_request_protection(self):
         server = create_server(self.db, self.root, 0)

@@ -1,0 +1,14 @@
+{
+  "id": "001",
+  "title": "Measure offline semantic retrieval against the lexical baseline",
+  "priority": 1,
+  "passes": true,
+  "spec": ".agent/tasks/TASK-001.json",
+  "steps": [
+    "Add paraphrased fictional evaluation cases without changing the existing baseline cases.",
+    "Implement the smallest offline embedding retrieval path using the pinned MiniLM model.",
+    "Validate dimensions, finite values, citations, source filtering, and deletion after restart.",
+    "Report paired lexical versus semantic Recall@5 and fallback behavior.",
+    "Add focused tests and run the existing full verification suite."
+  ]
+}
