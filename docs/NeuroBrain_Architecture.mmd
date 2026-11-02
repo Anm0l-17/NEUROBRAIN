@@ -1,48 +1,58 @@
+%% NeuroBrain planned cloud architecture
 flowchart LR
     U[User]
-    UI[CLI or local web interface]
+    UI[Web or CLI interface]
+    AUTH[Supabase Auth]
+    G[Google Drive\nselected notes folder]
     P[Privacy and input policy]
-    G[Google Drive folder\nplanned cloud source]
-    L[Local TXT/Markdown files\nimplemented source]
     I[Import and chunk service]
-    S[(SQLite + FTS5\nimplemented baseline)]
-    DB[(Supabase PostgreSQL\nplanned cloud store)]
-    Q[Question]
-    R[Lexical retrieval\nimplemented]
-    H[Hybrid/vector retrieval\nplanned]
-    E[Exact cited excerpts]
-    F[Forget selected source]
-    X[Deletion verification]
-    M[Admission model\nplanned suggestion mode]
-    A[Cited answer or abstention\nplanned generation]
+    M[Memory-admission model\nsuggestion or gated admission]
+    DB[(Supabase PostgreSQL\nversions, chunks, provenance)]
+    V[(pgvector\nembeddings)]
+    Q[User question]
+    R[Hybrid retrieval\nkeyword + semantic + time filters]
+    L[Local language model]
+    A[Cited answer or abstention]
+    F[Forget request]
+    X[Deletion service\npurge and verify]
+    T[Training and evaluation data\nfictional and versioned]
+    C[Versioned model checkpoint]
 
     U --> UI
-    UI --> L
-    UI --> G
-    L --> P
+    UI --> AUTH
+    AUTH --> UI
+
     G --> P
+    UI --> P
     P --> I
-    I --> S
-    I -. future cloud write .-> DB
+    I --> M
+    M --> DB
+    I --> V
+    DB --> V
 
     Q --> R
-    R --> S
-    S --> E
-    Q -. future semantic search .-> H
-    H -.-> DB
-    H -.-> A
+    R --> DB
+    R --> V
+    R --> L
+    L --> A
+    R --> A
 
     F --> X
-    X --> S
-    X -. future cloud purge .-> DB
+    X --> DB
+    X --> V
+    X --> G
 
-    I -. optional future scoring .-> M
-    M -. gated admission .-> S
+    T --> C
+    C --> M
 
-    classDef implemented fill:#d9f7e8,stroke:#16824b,color:#123b26;
-    classDef planned fill:#fff0c2,stroke:#b7791f,color:#5b3a00,stroke-dasharray: 5 5;
-    classDef neutral fill:#eef2f7,stroke:#64748b,color:#1e293b;
+    classDef service fill:#dbeafe,stroke:#2563eb,color:#172554;
+    classDef storage fill:#dcfce7,stroke:#16a34a,color:#14532d;
+    classDef security fill:#fef3c7,stroke:#d97706,color:#78350f;
+    classDef model fill:#f3e8ff,stroke:#9333ea,color:#581c87;
+    classDef user fill:#f1f5f9,stroke:#64748b,color:#1e293b;
 
-    class UI,P,L,I,S,R,E,F,X implemented;
-    class G,DB,H,M,A planned;
-    class U,Q neutral;
+    class UI,P,I,R,X service;
+    class G,DB,V storage;
+    class AUTH security;
+    class M,L,T,C model;
+    class U,Q,A user;
