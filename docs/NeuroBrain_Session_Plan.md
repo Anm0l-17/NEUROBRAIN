@@ -2,7 +2,7 @@
 
 **Revision:** 27 October 2026. **Status:** authoritative full-project schedule; first deterministic application checkpoint implemented, datasets and trained checkpoints outstanding. This document supersedes the execution schedule in `NeuroBrain_Working_Plan.md`. That document remains background context, not a second competing schedule.
 
-**Implementation update, 27 October 2026:** the user has now authorized building. A first deterministic CLI/web baseline is implemented; see [presentation checkpoint](Presentation_Checkpoint.md), [current system design](System_Design_v0.1.md), and [session log](../reports/session_log.md). Training data, neural checkpoints, embeddings, generation, and full release gates remain outstanding. The presentation checkpoint brings forward parts of sessions 17–24 and 43–44; it does not mark their prerequisite stages complete.
+**Implementation update, 2 November 2026:** a first deterministic CLI/web baseline is implemented locally. The next prototype stage is a cloud storage path using Google Drive for original notes and Supabase PostgreSQL for evidence, while SQLite remains the tested reference backend. Training data, neural checkpoints, embeddings, generation, cloud integration and full release gates remain outstanding. The presentation checkpoint brings forward parts of sessions 17–24 and 43–44; it does not mark their prerequisite stages complete.
 
 ## 1. Project outcome and neural contribution
 
@@ -43,6 +43,7 @@ Sessions are work units, not guaranteed completion deadlines. If an exit test fa
 | A | 01–06 | 12 | Scope, foundations, machine and design ready |
 | B | 07–16 | 20 | Labeled, validated, leakage-controlled datasets ready |
 | C | 17–24 | 16 | Working deterministic memory/deletion baseline |
+| C2 | next | focused prototype slice | Cloud import/storage parity with the local baseline |
 | D | 25–36 | 24 | Neural training, selection and model report complete |
 | E | 37–46 | 20 | Neural admission integrated with local assistant |
 | F | 47–54 | 16 | Held-out, privacy, failure and performance testing complete |

@@ -1,6 +1,6 @@
 # NeuroBrain system design — implementation checkpoint v0.1
 
-**Date:** 27 October 2026. **Purpose:** present system design with a working basic implementation of the core memory lifecycle.
+**Date:** 27 October 2026; cloud direction updated 2 November 2026. **Purpose:** present the working local baseline and the next cloud prototype without confusing planned components with implemented ones.
 
 ## 1. Charter
 
@@ -119,14 +119,25 @@ The tombstone stores a SHA-256 fingerprint, not raw content. It blocks identical
 
 All API requests require the launch token. HTTP errors use JSON with an `error` field. The web server has bounded request bodies and read timeouts; it is for one local user, not a public production API. Note contents render with `textContent` so Markdown/HTML is displayed literally. Source text is never executed or treated as an instruction.
 
-## 6. Full proposed neural design and what remains
+## 6. Next cloud prototype and what remains
+
+The local SQLite/FTS5 implementation above is the verified baseline. The next prototype stage will keep the same service contract while moving storage to Google Drive plus Supabase:
+
+- Google Drive stores original TXT/Markdown files in one user-selected folder.
+- Supabase PostgreSQL stores source versions, chunks, citations, tombstones and deletion receipts.
+- The application validates downloaded Drive content before writing it to Supabase.
+- Row-level security limits cloud records to the signed-in user.
+
+This cloud path is planned, not implemented. SQLite remains the local reference backend until import, search, inspection and deletion have equivalent tests.
+
+## 7. Full proposed neural design and what remains
 
 The existing `NeuroBrain_Architecture.mmd` and `NeuroBrain_OOM.mmd` describe the full proposed system. They are not claims that every box is implemented.
 
 The planned head takes a frozen 384-dimensional MiniLM embedding plus four metadata features, then uses **388 → 128 → 32 → 1**, with ReLU and dropout, totalling **53,953 trainable parameters**. It learns usefulness from fictional, grouped train/validation/test data; deterministic privacy rules always run first. Initial deployment is suggestion mode, with automatic exclusion gated by measured recall and downstream QA quality. No head, dataset, checkpoint, or reported accuracy exists at this checkpoint.
 
-Next additions are dataset annotation and split validation, model/hardware trials, embeddings and hybrid retrieval, neural baselines and MLP training, source-grounded local generation, then temporal facts and richer provenance. Screen capture stays an extension. See the presentation checkpoint for session mapping and priorities.
+Next additions are the cloud prototype, dataset annotation and split validation, embeddings and hybrid retrieval, neural baselines and MLP training, source-grounded local generation, then temporal facts and richer provenance. Screen capture stays an extension. See the presentation checkpoint for session mapping and priorities.
 
-## 7. Evidence and open limits
+## 8. Evidence and open limits
 
 See `reports/verification.md` for executed checks. No benchmark QA accuracy, neural recall, 10k-chunk latency, full offline network-block test, encryption, hostile local filesystem race protection, or general privacy proof is claimed. The allowlist checks assume ordinary local use; simultaneous malicious filesystem replacement is outside this demo's threat model.

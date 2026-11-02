@@ -11,3 +11,10 @@
 - **Versions/checks/errors:** see `verification.md`. Initial local HTTP test needed additional runtime permission to bind loopback; the permitted run passed. No source-control repository was present, so no commit or diff claim is made.
 - **Exit:** basic demonstration works; this is not the final research release.
 - **Next prerequisite:** student review of the checkpoint, model/hardware feasibility, and session-07 annotation pilot with reviewed labels before training.
+
+## 2 November 2026 — cloud prototype direction checkpoint
+
+- **Decision:** use Google Drive for original note files and Supabase PostgreSQL for cloud evidence storage; keep SQLite as the tested local reference until parity is demonstrated.
+- **Prepared:** cloud setup guide and Supabase schema with per-user row-level security, source versions, chunks, search vectors, tombstones and deletion receipts.
+- **Not implemented:** Google OAuth, Drive import, Supabase authentication, cloud `MemoryStore`, migration, or cloud verification tests.
+- **Next prerequisite:** create the Supabase project and Drive folder, then implement authenticated cloud import while preserving the existing policy, citation and deletion behavior.

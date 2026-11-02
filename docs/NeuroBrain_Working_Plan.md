@@ -1,6 +1,6 @@
 # NeuroBrain: working plan from scratch
 
-> **Updated plan:** The expanded neural-training and session-by-session roadmap is in [NeuroBrain_Session_Plan.md](NeuroBrain_Session_Plan.md). It supersedes this document’s schedule and adds a trained admission network. This earlier document remains architectural background.
+> **Updated plan:** The expanded neural-training and session-by-session roadmap is in [NeuroBrain_Session_Plan.md](NeuroBrain_Session_Plan.md). It supersedes this document’s schedule and adds a trained admission network. The current implementation uses SQLite locally; the next prototype stage uses Google Drive for original files and Supabase PostgreSQL for cloud evidence storage. This earlier document remains architectural background.
 
 Prepared 27 October 2026. Status: proposed implementation plan; no application has been implemented by this planning task.
 
