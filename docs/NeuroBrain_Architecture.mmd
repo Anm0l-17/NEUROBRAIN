@@ -1,18 +1,48 @@
-flowchart TD
-    T[Selected TXT or Markdown] --> P[Hard privacy policy]
-    S[Later: approved window capture] --> O[Local OCR and preview]
-    O --> P
-    P --> C[Candidates with evidence and time]
-    C --> E[Frozen text encoder and features]
-    E --> N[Trained admission MLP]
-    N --> R[Suggestion or gated admission]
-    R --> D[(Evidence and provenance memory)]
-    D --> H[Lexical and vector retrieval with temporal filters]
-    Q[User question] --> H
-    H --> L[Frozen local language model]
-    L --> A[Cited answer or abstention]
-    U[Forget request] --> X[Dependency purge and verification]
-    X --> D
-    F[Fictional labeled training corpus] --> TR[Train and validate MLP]
-    TR --> K[Versioned checkpoint and threshold]
-    K --> N
+flowchart LR
+    U[User]
+    UI[CLI or local web interface]
+    P[Privacy and input policy]
+    G[Google Drive folder\nplanned cloud source]
+    L[Local TXT/Markdown files\nimplemented source]
+    I[Import and chunk service]
+    S[(SQLite + FTS5\nimplemented baseline)]
+    DB[(Supabase PostgreSQL\nplanned cloud store)]
+    Q[Question]
+    R[Lexical retrieval\nimplemented]
+    H[Hybrid/vector retrieval\nplanned]
+    E[Exact cited excerpts]
+    F[Forget selected source]
+    X[Deletion verification]
+    M[Admission model\nplanned suggestion mode]
+    A[Cited answer or abstention\nplanned generation]
+
+    U --> UI
+    UI --> L
+    UI --> G
+    L --> P
+    G --> P
+    P --> I
+    I --> S
+    I -. future cloud write .-> DB
+
+    Q --> R
+    R --> S
+    S --> E
+    Q -. future semantic search .-> H
+    H -.-> DB
+    H -.-> A
+
+    F --> X
+    X --> S
+    X -. future cloud purge .-> DB
+
+    I -. optional future scoring .-> M
+    M -. gated admission .-> S
+
+    classDef implemented fill:#d9f7e8,stroke:#16824b,color:#123b26;
+    classDef planned fill:#fff0c2,stroke:#b7791f,color:#5b3a00,stroke-dasharray: 5 5;
+    classDef neutral fill:#eef2f7,stroke:#64748b,color:#1e293b;
+
+    class UI,P,L,I,S,R,E,F,X implemented;
+    class G,DB,H,M,A planned;
+    class U,Q neutral;
