@@ -1,0 +1,55 @@
+{
+  "name": "neurobrain-lexical-extractive-v0",
+  "cases": 6,
+  "answerable_recall": 1.0,
+  "unsupported_abstention": 1.0,
+  "citation_validity": 1.0,
+  "deletions": [
+    {
+      "case_id": "delete_canary",
+      "passed": true,
+      "receipt_verified": true,
+      "deleted_hits_after": false,
+      "retained_hits_after": true
+    }
+  ],
+  "answerable": [
+    {
+      "case_id": "current_database",
+      "passed": true,
+      "hits": 1,
+      "citation_valid": true
+    },
+    {
+      "case_id": "updated_database",
+      "passed": true,
+      "hits": 1,
+      "citation_valid": true
+    },
+    {
+      "case_id": "preference",
+      "passed": true,
+      "hits": 1,
+      "citation_valid": true
+    },
+    {
+      "case_id": "delete_canary",
+      "passed": true,
+      "hits": 1,
+      "citation_valid": true
+    },
+    {
+      "case_id": "retained_after_delete",
+      "passed": true,
+      "hits": 1,
+      "citation_valid": true
+    }
+  ],
+  "unsupported": [
+    {
+      "case_id": "unsupported",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

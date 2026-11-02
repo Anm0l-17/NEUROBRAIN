@@ -18,3 +18,12 @@
 - **Prepared:** cloud setup guide and Supabase schema with per-user row-level security, source versions, chunks, search vectors, tombstones and deletion receipts.
 - **Not implemented:** Google OAuth, Drive import, Supabase authentication, cloud `MemoryStore`, migration, or cloud verification tests.
 - **Next prerequisite:** create the Supabase project and Drive folder, then implement authenticated cloud import while preserving the existing policy, citation and deletion behavior.
+
+## 2 November 2026 — Step 1 baseline lock and evaluation gate
+
+- **Objective:** establish a repeatable fictional evaluation gate before semantic retrieval or admission-model integration.
+- **Implemented:** `data/evaluation_v0.jsonl`, `scripts/evaluate_baseline.py`, `tests/test_evaluation.py`, README usage instructions, and `reports/baseline_v0.json`.
+- **Measured baseline:** 5/5 answerable cases retrieved, unsupported-query abstention 1.0, citation validity 1.0, deletion canary removed after forget, and unrelated retained evidence remained available.
+- **Verification:** evaluator passed; full unittest suite passed 23/23 with loopback permission; Ruff check and format check passed; Git diff check passed; CodeRabbit reviewed the tracked README change and raised 0 issues.
+- **Boundary:** this is a deterministic lexical/extractive lifecycle gate over fictional notes, not evidence of semantic-search quality, temporal reasoning, generation quality, or real-user performance.
+- **Next prerequisite:** add the measured semantic-retrieval experiment while preserving this baseline as the regression control.

@@ -38,6 +38,16 @@ The next prototype stage moves original note files to a selected Google Drive fo
 
 See the [cloud setup guide](docs/Cloud_Setup.md), [system design](docs/System_Design_v0.1.md), [working plan](docs/NeuroBrain_Working_Plan.md), [full session plan](docs/NeuroBrain_Session_Plan.md), and [verification report](reports/verification.md).
 
+## Baseline evaluation
+
+Run the fictional baseline corpus before changing retrieval or admission behavior:
+
+```bash
+PYTHONPATH=src python3 scripts/evaluate_baseline.py --output reports/baseline_v0.json
+```
+
+The evaluator measures answerable retrieval, unsupported-query abstention, citation validity, and deletion of a canary while retaining unrelated evidence. It is a deterministic lifecycle gate, not a semantic-quality or real-user benchmark.
+
 ## Privacy boundary
 
 Only explicitly selected TXT/Markdown notes are accepted by the current prototype. Original files are not deleted when saved memory is forgotten. Deletion removes the selected source from the application database and search index, but it does not erase backups, copied text, browser history, or old database copies. This is application-level deletion, not forensic erasure or model unlearning.
