@@ -3,6 +3,25 @@
 80 assistant-authored English examples in 16 independently authored scenario families.
 Every example is fictional, and every label is a **draft pending human review**.
 No personal notes, application memory, Kaggle data, or benchmark gold answers were used.
+The author's provisional `action`/`type`/`scope`/`sensitivity`/`source` labels
+are in `admission_pilot_v0_draft_labels.csv`, all marked `draft`. For a new
+review, use a copy of `admission_pilot_v0_blind_review.csv` and
+`../docs/Admission_Annotation_Guide.md`; keep the draft-label table hidden
+until the review is complete. Audit findings are in
+`../reports/stage_b_pilot_review_prep.md`.
+
+The user's single completed review is `../admission_pilot_v0_blind_review (1).xlsx`.
+Its completeness check and draft comparison are in
+`../reports/admission_pilot_review_2026-11-06.md`; the guide now describes the
+solo-review path. The original pilot JSONL and draft labels remain unchanged.
+The accepted resolutions are in `admission_pilot_v1_labels.csv`, with every
+row still marked `draft`. The frozen v1 rules are in
+`../docs/Admission_Annotation_Guide.md`. A 20-row masked-label repeat sheet is
+`admission_pilot_v1_repeat_sample.csv`.
+The completed repeat is `admission_pilot_v1_repeat_completed.csv`. Its one
+scope difference and the resulting v1.1 label file are documented in
+`../reports/admission_pilot_repeat_2026-11-06.md`; use
+`../docs/Admission_Annotation_Guide_v1_1.md` for subsequent annotation.
 
 Each family has five chronologically ordered candidates (three positive, two negative).
 Row order within each family was deterministically shuffled before assigning timestamps;

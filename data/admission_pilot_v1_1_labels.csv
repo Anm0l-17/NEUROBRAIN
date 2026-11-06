@@ -1,0 +1,81 @@
+example_id,action,type,scope,sensitivity,source,review_rationale,adjudication_note,status
+pilot-00-00,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A reproducible bug that is still open and affects the storage choice.,,draft
+pilot-00-01,keep,decision,project,ordinary,fictional_assistant_authored,A clear storage choice with its reason.,,draft
+pilot-00-02,skip,acknowledgment,session,ordinary,fictional_assistant_authored,Polite thanks with no new detail.,,draft
+pilot-00-03,skip,transient,session,ordinary,fictional_assistant_authored,A passing screen observation with no lasting value.,,draft
+pilot-00-04,keep,requirement,project,ordinary,fictional_assistant_authored,A rule the import feature must satisfy.,,draft
+pilot-01-00,keep,preference,person,personal,fictional_assistant_authored,"Explicit request to remember how they work, useful across tools.",,draft
+pilot-01-01,skip,transient,session,ordinary,fictional_assistant_authored,Describes a momentary mouse movement only.,,draft
+pilot-01-02,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A usability bug in this interface that needs fixing.,,draft
+pilot-01-03,keep,requirement,project,ordinary,fictional_assistant_authored,A design rule every delete control must follow.,,draft
+pilot-01-04,skip,acknowledgment,session,ordinary,fictional_assistant_authored,Just agrees and moves the walkthrough along.,,draft
+pilot-02-00,skip,transient,session,ordinary,fictional_assistant_authored,A scroll action that only matters right now.,,draft
+pilot-02-01,skip,transient,session,ordinary,fictional_assistant_authored,A tab count that is true only at this moment.,,draft
+pilot-02-02,keep,requirement,project,ordinary,fictional_assistant_authored,A supervisor rule the review must follow.,,draft
+pilot-02-03,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A known export bug that still needs a fix.,,draft
+pilot-02-04,keep,milestone,project,ordinary,fictional_assistant_authored,A fixed deadline worth remembering.,,draft
+pilot-03-00,skip,acknowledgment,session,ordinary,fictional_assistant_authored,A confirmation reply that adds no new detail.,,draft
+pilot-03-01,keep,preference,person,restricted,fictional_assistant_authored,A standing food rule for future meal plans.,,draft
+pilot-03-02,keep,correction,project,personal,fictional_assistant_authored,Explicitly replaces an earlier household size estimate.,Repeat review reaffirmed project scope for the meal-planning context.,draft
+pilot-03-03,keep,fact,person,personal,fictional_assistant_authored,A recurring scheduled event useful for planning.,"A recurring household schedule is a fact across activities, not a one-time milestone.",draft
+pilot-03-04,skip,transient,session,ordinary,fictional_assistant_authored,A passing kitchen moment with no lasting value.,,draft
+pilot-04-00,skip,transient,session,ordinary,fictional_assistant_authored,A momentary physical action.,,draft
+pilot-04-01,skip,transient,session,ordinary,fictional_assistant_authored,A momentary screen detail.,,draft
+pilot-04-02,keep,unresolved_issue,project,personal,fictional_assistant_authored,A knowledge gap that the study routine should address.,This learning gap is specific to the current subject.,draft
+pilot-04-03,keep,decision,project,personal,fictional_assistant_authored,A recurring study slot that is part of the routine.,A newly reserved recurring slot is a decision for this study project; precise availability is personal.,draft
+pilot-04-04,keep,preference,person,ordinary,fictional_assistant_authored,A learning style that applies to future explanations.,A general teaching preference has ordinary sensitivity.,draft
+pilot-05-00,keep,requirement,person,restricted,fictional_assistant_authored,A hard constraint on accommodation that likely applies to future trips.,Step-free access is stated as a requirement; its cause is unknown.,draft
+pilot-05-01,keep,correction,project,ordinary,fictional_assistant_authored,Replaces the earlier venue with the new one.,,draft
+pilot-05-02,skip,transient,session,ordinary,fictional_assistant_authored,A random passing event outside the window.,,draft
+pilot-05-03,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A booking that is still unconfirmed and needs follow-up.,,draft
+pilot-05-04,skip,transient,session,ordinary,fictional_assistant_authored,A momentary physical action.,,draft
+pilot-06-00,skip,acknowledgment,session,ordinary,fictional_assistant_authored,"A filler reply showing understanding, no new detail.",,draft
+pilot-06-01,keep,correction,project,ordinary,fictional_assistant_authored,Changes a character name used across the manuscript.,,draft
+pilot-06-02,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A continuity problem that still needs fixing.,,draft
+pilot-06-03,keep,requirement,project,ordinary,fictional_assistant_authored,A style rule the whole manuscript must follow.,,draft
+pilot-06-04,skip,transient,session,ordinary,fictional_assistant_authored,A momentary text selection action.,,draft
+pilot-07-00,keep,fact,project,ordinary,fictional_assistant_authored,A stable site detail useful for planting plans.,,draft
+pilot-07-01,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A repeatable fault that still needs repair.,,draft
+pilot-07-02,skip,transient,session,ordinary,fictional_assistant_authored,A one-time noise with no lasting value.,,draft
+pilot-07-03,skip,transient,session,ordinary,fictional_assistant_authored,A passing weather moment.,,draft
+pilot-07-04,keep,decision,project,ordinary,fictional_assistant_authored,A clear equipment choice for the greenhouse.,,draft
+pilot-08-00,skip,transient,session,ordinary,fictional_assistant_authored,A momentary physical action.,,draft
+pilot-08-01,skip,acknowledgment,session,ordinary,fictional_assistant_authored,A comment that just moves the conversation on.,,draft
+pilot-08-02,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A consistent hardware fault that blocks recording.,,draft
+pilot-08-03,keep,fact,project,ordinary,fictional_assistant_authored,A stable setup detail that affects practice material.,The tuning applies to this instrument; the setting has ordinary sensitivity.,draft
+pilot-08-04,keep,milestone,project,ordinary,fictional_assistant_authored,A scheduled event with a date.,,draft
+pilot-09-00,keep,fact,project,ordinary,fictional_assistant_authored,A key measurement the design depends on.,,draft
+pilot-09-01,skip,transient,session,ordinary,fictional_assistant_authored,A momentary click action.,,draft
+pilot-09-02,skip,transient,session,ordinary,fictional_assistant_authored,A passing visual effect on the screen.,,draft
+pilot-09-03,keep,requirement,project,ordinary,fictional_assistant_authored,A material rule for the cabinet.,"The imperative states a requirement, not an explicit choice among options.",draft
+pilot-09-04,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A measured defect that is still not fixed.,,draft
+pilot-10-00,keep,fact,project,personal,fictional_assistant_authored,Assigns a person to a role for the event.,The named responsibility is a fact about a person; no assigning decision is stated.,draft
+pilot-10-01,skip,transient,session,ordinary,fictional_assistant_authored,A passing glance at the time.,,draft
+pilot-10-02,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A pending confirmation the event depends on.,,draft
+pilot-10-03,keep,milestone,project,ordinary,fictional_assistant_authored,A time limit that matters on the event day.,,draft
+pilot-10-04,skip,acknowledgment,session,ordinary,fictional_assistant_authored,Simple acknowledgment with no new detail.,,draft
+pilot-11-00,skip,acknowledgment,session,ordinary,fictional_assistant_authored,A thank-you reply with no lasting detail.,,draft
+pilot-11-01,keep,requirement,project,ordinary,fictional_assistant_authored,A delivery rule the images must satisfy.,,draft
+pilot-11-02,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A repeatable export bug that needs attention.,,draft
+pilot-11-03,skip,transient,session,ordinary,fictional_assistant_authored,A brief visual glitch with no lasting value.,,draft
+pilot-11-04,keep,correction,project,ordinary,fictional_assistant_authored,Updates a client requirement to a new value.,,draft
+pilot-12-00,keep,preference,person,ordinary,fictional_assistant_authored,A standing tutoring preference for how feedback is given.,A general feedback preference has ordinary sensitivity.,draft
+pilot-12-01,keep,milestone,project,ordinary,fictional_assistant_authored,A scheduled assessment date.,The date belongs to this tutoring activity and has ordinary sensitivity.,draft
+pilot-12-02,keep,unresolved_issue,project,personal,fictional_assistant_authored,A recurring weakness the tutoring should target.,The learning gap concerns this language subject.,draft
+pilot-12-03,skip,transient,session,ordinary,fictional_assistant_authored,A momentary physical action.,,draft
+pilot-12-04,skip,transient,session,ordinary,fictional_assistant_authored,A short pause with no new information.,,draft
+pilot-13-00,skip,acknowledgment,session,ordinary,fictional_assistant_authored,A confirmation and thanks only.,,draft
+pilot-13-01,keep,correction,project,ordinary,fictional_assistant_authored,Replaces the old meeting place with the new one.,,draft
+pilot-13-02,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A reproducible bug that still needs a fix.,,draft
+pilot-13-03,skip,transient,session,ordinary,fictional_assistant_authored,A passing event with no lasting value.,,draft
+pilot-13-04,keep,preference,person,ordinary,fictional_assistant_authored,A stable habit useful when planning runs.,A broad running preference has ordinary sensitivity.,draft
+pilot-14-00,skip,transient,session,ordinary,fictional_assistant_authored,A momentary physical action.,,draft
+pilot-14-01,skip,transient,session,ordinary,fictional_assistant_authored,A passing screen effect.,,draft
+pilot-14-02,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A known gap in the inventory that must be filled.,,draft
+pilot-14-03,keep,requirement,project,ordinary,fictional_assistant_authored,A rule for how labels must be shown.,,draft
+pilot-14-04,keep,correction,project,ordinary,fictional_assistant_authored,Changes the earlier opening date.,,draft
+pilot-15-00,skip,acknowledgment,session,ordinary,fictional_assistant_authored,A short reply showing understanding only.,,draft
+pilot-15-01,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A repeatable hardware fault that needs fixing.,,draft
+pilot-15-02,keep,fact,project,ordinary,fictional_assistant_authored,A stable specification needed for the build.,,draft
+pilot-15-03,keep,correction,project,ordinary,fictional_assistant_authored,Changes the earlier connection plan.,The sentence explicitly replaces the prior connection choice.,draft
+pilot-15-04,skip,transient,session,ordinary,fictional_assistant_authored,A momentary physical action.,,draft

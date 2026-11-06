@@ -1,0 +1,7 @@
+# Admission pilot repeat review — 6 November 2026
+
+The user supplied `data/admission_pilot_v1_repeat_completed.csv` in chat. It has the 20 expected unique IDs, unchanged context and candidate text, allowed values in all five label fields, and a rationale for every row. It covers all 16 scenario groups: 11 keep and 9 skip. Input SHA-256: `5d210ff755bfe8a2076bdc65f437db796cf1ca5cd547e207c1887145bd5ddd51`.
+
+Against `data/admission_pilot_v1_labels.csv`, 19/20 rows match on every label field. Action, type, sensitivity and source each match 20/20; scope matches 19/20. The only difference is `pilot-03-02`: v1 said `person`, and the repeat review again chose `project`, as in the first human review. Its sentence corrects the old **servings estimate** in the meal-planning context. The v1.1 guide now scopes a correction to the record it changes, and `data/admission_pilot_v1_1_labels.csv` records `project` for this row. The other 79 rows are unchanged from v1. The v1.1 label file SHA-256 is `a641f6cd8d58eaffe4fdb32de1b5d750b9644a808ec5007786771a6a0cc2c6ab`.
+
+This is a same-reviewer, masked-label repeat after the assistant had previously shown labels and explanations. It measures limited label stability on this sample, not independent agreement or generalization. All pilot labels remain `draft`. Stage A learner teach-back and reviewed larger data remain prerequisites to the next data and training gates.
