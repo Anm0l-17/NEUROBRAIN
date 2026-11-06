@@ -4,6 +4,8 @@
 
 **Implementation update, 2 November 2026:** a first deterministic CLI/web baseline is implemented locally. The next prototype stage is a cloud storage path using Google Drive for original notes and Supabase PostgreSQL for evidence, while SQLite remains the tested reference backend. Training data, neural checkpoints, embeddings, generation, cloud integration and full release gates remain outstanding. The presentation checkpoint brings forward parts of sessions 17–24 and 43–44; it does not mark their prerequisite stages complete.
 
+**Generator candidate update, 6 November 2026:** evaluate the locally trialled `qwen3.5:4b` as the first frozen, quantized answer generator. Its image input may also be useful in the later screen extension, but the core remains text-first. This is a candidate choice, not a completed integration or quality claim. Before selecting it for release, compare it with `qwen3:4b` on the same cited-note questions and bounded context; record answer support, abstention, cold/warm latency, peak RAM and offline behavior. Keep the retrieval-only fallback if generation misses these gates. The admission MLP remains the only model trained for v1.
+
 ## 1. Project outcome and neural contribution
 
 Build a local notes-memory assistant with a small neural network trained by us to predict whether a candidate observation is useful as long-term memory. Combine it with inspectable evidence storage, temporal retrieval, cited answers and provenance-aware deletion. Extend to screen observations after the core passes its release gates.

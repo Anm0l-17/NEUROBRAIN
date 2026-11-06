@@ -230,13 +230,13 @@ These numbers are initial settings, not proven optimums. Use normalized cosine s
 | Persistence | SQLite + foreign keys + FTS5; WAL if supported by deployment | Small local dependency footprint |
 | Embeddings | `sentence-transformers/all-MiniLM-L6-v2`, pinned revision | 384-dimensional English baseline; test multilingual alternatives only if required |
 | Similarity | NumPy cosine search over a bounded corpus | Simple to inspect, rebuild and delete |
-| Generation | A locally hosted quantized Qwen3-4B candidate; smaller local model if needed | Frozen pretrained generator; model choice decided by measurements |
+| Generation | Locally hosted quantized `qwen3.5:4b` as the first candidate; `qwen3:4b` as a text-only comparator | Frozen pretrained generator; final choice decided by measured quality, latency and RAM |
 | Runtime | Ollama with explicit local model and loopback endpoint | Separate inference from application logic |
 | Interfaces | Typer CLI; FastAPI + server-rendered HTML and small JavaScript | Avoid a second large frontend stack |
 | Verification | pytest, Ruff, repeatable evaluation runner | Lifecycle correctness plus measured quality |
 | Screen later | macOS window capture and local OCR behind adapters | Reuse the same ingestion and deletion contract |
 
-Candidate sources: [Qwen3-4B model card](https://huggingface.co/Qwen/Qwen3-4B), [MiniLM model card](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2), [Ollama quickstart](https://docs.ollama.com/quickstart), [SQLite FTS5](https://www.sqlite.org/fts5.html). Pin the exact runtime/model artifact and quantization; the model card does not by itself identify an Ollama tag or guarantee laptop performance.
+Candidate sources: [Qwen3.5-4B model card](https://huggingface.co/Qwen/Qwen3.5-4B), [Qwen3-4B model card](https://huggingface.co/Qwen/Qwen3-4B), [Ollama Qwen3.5 tags](https://ollama.com/library/qwen3.5/tags), [MiniLM model card](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2), [Ollama quickstart](https://docs.ollama.com/quickstart), [SQLite FTS5](https://www.sqlite.org/fts5.html). Pin the exact runtime/model artifact and quantization; model cards and download sizes do not guarantee laptop performance.
 
 For 8 GB RAM, first prove lexical retrieval, then embeddings; run a small generator with a short context and one request at a time. For 16 GB, trial a 4B quantized generator with a bounded context. These are feasibility candidates, not hardware guarantees. Measure total process memory including embedding runtime, model and KV cache. Keep a retrieval-only mode if generation is too slow.
 
