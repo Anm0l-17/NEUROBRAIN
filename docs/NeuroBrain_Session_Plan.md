@@ -95,10 +95,12 @@ Engineering targets, to freeze by session 06 before held-out evaluation:
 | `qa_v1.jsonl` | 200 human-checked QA records | 100 dev, 100 held-out; 20 per category in each split |
 | `deletion_v1.jsonl` | 40 scenarios | 20 development, 20 held-out; target/retained facts, dependencies and probes |
 | LongMemEval-S cleaned | Start with 100 fixed questions | 50 development, 50 held-out; group overlapping histories and stratify type where feasible |
-| LoCoMo text | 10 conversations | Two conversations for adapter/dev; eight held-out |
+| LoCoMo text | 10 conversations | Evaluation only: two for developing the evaluation harness, eight held-out; exclude gold answers and evidence annotations from model training and teacher correction |
 | `screen_v1/`, extension | 100 staged images from 20 task sessions | 10 dev sessions, 10 held-out; no real credentials |
 
 Counts are targets, not assets already produced. A tiny synthetic dataset limits generalization: report it as a pilot and retain suggestion mode for real personal notes until validated there with consent.
+
+For keep/skip training, use the frozen reviewed exploratory admission corpus until the planned admission-v1 release exists. [MSC](https://parl.ai/projects/msc/) is the first external supplement to investigate: verify dataset-specific terms before acquisition, then review candidate statements with their original speaker and surrounding turns using the existing admission rubric. Keep conversation groups together across splits and retain uncertain decisions. [DialogSum](https://github.com/cylnlp/DialogSum) is optional for adding reviewed short-dialogue cases. Its summaries identify salient content and require separate usefulness labels. LongMemEval-S and LoCoMo are system evaluations; keep their gold labels scorer-side. Track any shared LongMemEval items in MemoryAgentBench when reporting evaluation coverage. PersonaMem-v2 serves the separate Qwen personalization experiment.
 
 ### Admission labeling specification
 
