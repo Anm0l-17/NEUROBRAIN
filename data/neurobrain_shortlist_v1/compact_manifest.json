@@ -1,0 +1,90 @@
+{
+  "source_revision": "ed956dea41521fc4499acbc63f966e0fd3c053ba",
+  "selection": [
+    {
+      "train_csv_zero_based_row": 60,
+      "persona_id": "98"
+    },
+    {
+      "train_csv_zero_based_row": 123,
+      "persona_id": "487"
+    },
+    {
+      "train_csv_zero_based_row": 145,
+      "persona_id": "712"
+    },
+    {
+      "train_csv_zero_based_row": 187,
+      "persona_id": "104"
+    },
+    {
+      "train_csv_zero_based_row": 324,
+      "persona_id": "931"
+    },
+    {
+      "train_csv_zero_based_row": 532,
+      "persona_id": "272"
+    },
+    {
+      "train_csv_zero_based_row": 3217,
+      "persona_id": "79",
+      "source_prefix_turns": 3
+    },
+    {
+      "train_csv_zero_based_row": 4851,
+      "persona_id": "396",
+      "source_prefix_turns": 3
+    },
+    {
+      "train_csv_zero_based_row": 9873,
+      "persona_id": "707",
+      "source_prefix_turns": 2
+    },
+    {
+      "train_csv_zero_based_row": 12786,
+      "persona_id": "805",
+      "source_prefix_turns": 1
+    },
+    {
+      "train_csv_zero_based_row": 13800,
+      "persona_id": "814",
+      "source_prefix_turns": 1
+    },
+    {
+      "train_csv_zero_based_row": 15253,
+      "persona_id": "104",
+      "source_prefix_turns": 3
+    },
+    {
+      "train_csv_zero_based_row": 16775,
+      "persona_id": "655",
+      "source_prefix_turns": 2
+    }
+  ],
+  "eligible_after_persona_and_sensitive_flag_filters": 1307,
+  "additional_decile_review": [
+    1447,
+    3217,
+    4851,
+    6840,
+    8653,
+    9873,
+    12786,
+    13800,
+    15253,
+    16775
+  ],
+  "excluded": {
+    "1447": "multilingual translation and implied symptom; omitted",
+    "6840": "coping and isolation discussion; omitted",
+    "8653": "third-party work stress; omitted"
+  },
+  "generator_sha256": "06563d7ec80747609a5d4d6d4e56a7a2d4b587d31909dc1375498e3f8dd1e0cd",
+  "development_sha256": "ef479d2a43706540d4897d2929216d7b345661ca6c354c08bdc9db72855b2f32",
+  "admission_pilot_exact_candidate_overlap": 0,
+  "admission_scenario_groups": 75,
+  "admission_start_v1_reused_train_ids": [
+    "batch-a-00-01",
+    "batch-a-00-10"
+  ]
+}

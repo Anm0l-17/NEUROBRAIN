@@ -1,0 +1,37 @@
+{
+  "status": "starter shortlist; not trained or independently adjudicated",
+  "admission_source": "data/admission_reviewed_exploratory_v0_1.jsonl",
+  "admission_sha256": "d91b7314d7e751351f0e6f6e58cd64dfafa4913e7e1be3381ec87599b192dab1",
+  "admission_selection": "100 reviewed train keeps and 100 reviewed train skips sampled round robin across scenario groups. Uncertain examples excluded, not relabeled.",
+  "generator_source": "https://huggingface.co/datasets/bowen-upenn/PersonaMem-v2",
+  "revision": "ed956dea41521fc4499acbc63f966e0fd3c053ba",
+  "license": "CC BY 4.0; excerpts from PersonaMem-v2, adapted with new questions and answers",
+  "generator_rows_in_source": 18549,
+  "generator_selection": [
+    {
+      "train_csv_zero_based_row": 60,
+      "persona_id": "98"
+    },
+    {
+      "train_csv_zero_based_row": 123,
+      "persona_id": "487"
+    },
+    {
+      "train_csv_zero_based_row": 145,
+      "persona_id": "712"
+    },
+    {
+      "train_csv_zero_based_row": 187,
+      "persona_id": "104"
+    },
+    {
+      "train_csv_zero_based_row": 324,
+      "persona_id": "931"
+    },
+    {
+      "train_csv_zero_based_row": 532,
+      "persona_id": "272"
+    }
+  ],
+  "holdout_check": "All six personas absent from upstream text val and benchmark, and generator pilot v0 manifest."
+}

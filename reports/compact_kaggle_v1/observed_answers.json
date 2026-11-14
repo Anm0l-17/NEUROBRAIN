@@ -1,0 +1,25 @@
+{
+  "baseline": [
+    "No, the evidence does not establish a favorite television series. The provided text discusses the functions of elaborate ceremonial codes in royal courts, such as reinforcing hierarchy and political legitimacy, but contains no mention of television series. [E1]\n",
+    "The provided evidence does not contain information about what medication the user takes.\n",
+    "No, the user does not explicitly state that they work at a hospital. The user mentions \"the past few weeks at the hospital,\" which could refer to being a patient, a visitor, or an employee, but it is not a direct statement confirming employment. [E1]\n",
+    "No, the user did not state that they worked in an observatory. The statement \"My years in the observatory taught me patience\" is part of the assistant's draft response, not a user statement [E1].\n",
+    "The user's cousin moved to Kyoto. [E1]\n",
+    "The user maintains wind turbines in Cork [E1].\n",
+    "Yes, tutoring mathematics is confirmed as the user's job based on the user's statement in the evidence. [E1]\n",
+    "The user's work is restoring old maps [E1].\n",
+    "Yes, the statement \"I own a vineyard in Mendoza\" establishes that the user owns a vineyard. [E1]\n"
+  ],
+  "reloaded": [
+    "No, the evidence does not establish a favorite television series. [E1]\n",
+    "The evidence does not state what medication the user takes [E1].\n",
+    "No, the user does not state they work at a hospital. The user asks for help improving a message, and the assistant's draft mentions \"the past few weeks at the hospital,\" but this is part of the assistant's response, not a direct user statement [E1].\n",
+    "No, the user did not state that they worked in an observatory. The assistant's draft [E1] contains the statement \"My years in the observatory taught me patience,\" which is attributed to the assistant, not the user.\n",
+    "The user's cousin moved to Kyoto. [E1]\n",
+    "The user maintains wind turbines in Cork [E1].\n",
+    "Yes, tutoring mathematics is confirmed as the user's job [E1].\n",
+    "The user restores old maps [E1].\n",
+    "Yes, the statement \"I own a vineyard in Mendoza\" establishes that the user owns a vineyard [E1].\n"
+  ],
+  "completion": "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a 20 10.64"
+}
