@@ -155,7 +155,7 @@ class SemanticIndex:
             raise MemoryError("The embedding model returned an invalid query vector.")
         scores = self._vectors @ vector[0]
         order = sorted(allowed_rows, key=lambda i: (-scores[i], i))[:limit]
-        return [
+        hits = [
             SemanticHit(
                 source_id=self._rows[i]["source_id"],
                 id=self._rows[i]["id"],
@@ -171,6 +171,9 @@ class SemanticIndex:
             ).as_dict()
             for i in order
         ]
+        for hit in hits:
+            hit["observation"] = self.store.observation_reference(hit["source_id"])
+        return hits
 
 
 def hybrid_search(

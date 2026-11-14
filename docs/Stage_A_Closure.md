@@ -1,19 +1,19 @@
 # Stage A: foundations and feasibility
 
-**Review date:** 3 November 2026  
+**Review dates:** 7 and 10 November 2026
 **Source of truth:** [NeuroBrain_Session_Plan.md](NeuroBrain_Session_Plan.md), Stage A sessions 01–06.  
-**Purpose:** record the artifacts and evidence gathered for Stage A. This checklist does not claim the learner has personally completed the study or explanation tasks.
+**Purpose:** record the artifacts and evidence gathered for Stage A, including the learner's 7 November teach-back. Separate practice deliverables remain visible below.
 
 ## Session status
 
 | Session | Deliverable and evidence | Status |
 |---|---|---|
-| 01 — charter | Scope, user, boundaries, trained/frozen components, and deletion limits are stated in [System_Design_v0.1.md](System_Design_v0.1.md), section 1. | Artifact complete; user teach-back pending |
-| 02 — Python foundations | Existing application and lifecycle tests cover file parsing and controlled failures; no isolated learning exercise/notes have been recorded. | Partially evidenced; learner practice pending |
-| 03 — ML foundations | This document includes a shape walkthrough below; no learner calculation or teach-back is recorded. | Study/teach-back pending |
+| 01 — charter | Scope, user, boundaries, trained/frozen components, and deletion limits are stated in [System_Design_v0.1.md](System_Design_v0.1.md), section 1. | Artifact and core concept teach-back complete |
+| 02 — Python foundations | Learner submitted a toy note reader and five passing tests covering valid notes, multiline bodies, absent bodies, blank titles and missing files. Test output supplied by the learner. | Signed off 10 November |
+| 03 — ML foundations | Learner calculated the logit, sigmoid probability, binary decision and loss, annotated single-example and batch shapes, and explained gradients and validation-only threshold choice. | Signed off 10 November |
 | 04 — tiny classifier | [stage_a_toy_classifier.py](../scripts/stage_a_toy_classifier.py) trains a one-feature logistic classifier on four synthetic examples, checks finite gradients, and asserts loss falls and class ordering is correct. | Complete; run evidence below |
 | 05 — hardware and model feasibility | Hardware, installed runtimes, local model availability, and a short encoder/generator trial are recorded below. | Technical measurement complete; longer workload profiling remains a later gate |
-| 06 — design freeze | Scope, architecture, data boundary, risk register, acceptance targets, annotation rules and session budget are summarized below. | Freeze v1 recorded; learner review pending |
+| 06 — design freeze | Scope, architecture, data boundary, risk register, acceptance targets, annotation rules and session budget are summarized below. | Freeze v1 recorded; learner explained privacy and deletion boundaries |
 
 ## Machine and model feasibility snapshot
 
@@ -81,4 +81,6 @@ Label usefulness for future task recall, not safety or permission. Positive exam
 
 ## Exit decision
 
-The technical artifacts for Sessions 01, 04, 05, and 06 are recorded. Session 02 has application evidence but lacks a learner exercise record. Session 03's explanation is provided for review, but the learner teach-back is unobserved. Therefore Stage A is **technically prepared, learner sign-off pending**. Before Stage B annotation begins, the user should be able to explain in their own words what the MLP learns, how grouping prevents leakage, and what deletion does and does not remove.
+On 7 November, the learner correctly explained that the MLP predicts candidate usefulness rather than acting as the whole assistant, that related examples must stay within one split to avoid inflated test results, and that forgetting removes application-controlled source data while leaving original files and outside copies beyond its guarantee. The **core concept teach-back passed**. The statement that an unanswered clarification remains unresolved is a design intention; a clarification workflow is not implemented in the current baseline.
+
+**Stage A signed off on 10 November 2026.** In the submitted parser, reading the first line before stripping whitespace preserves the blank-title error. Catching only UnicodeDecodeError lets FileNotFoundError propagate. In the worked example, x = 2, w = 0.75 and b = −0.5 give z = 1 and p ≈ 0.731. For y = 1 the loss is approximately 0.313. Increasing the batch size from one to four changes the output shape from (1, 1) to (4, 1) while the parameter shapes stay fixed.

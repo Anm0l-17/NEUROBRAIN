@@ -11,6 +11,7 @@ import math
 import random
 import re
 import sys
+from collections import Counter, defaultdict
 from pathlib import Path
 
 import numpy as np
@@ -34,24 +35,64 @@ FEATURES = [
     "list_item",
     "prior_similarity",
 ]
+FEATURE_VERSION = "snapshot-v1"
+HEAD_LABELS = {
+    "action": {"keep", "skip"},
+    "type": {
+        "decision",
+        "preference",
+        "requirement",
+        "milestone",
+        "correction",
+        "unresolved_issue",
+        "fact",
+        "transient",
+        "acknowledgment",
+    },
+    "scope": {"person", "project", "session"},
+    "sensitivity": {"ordinary", "personal", "restricted"},
+}
 
 
 class AdmissionMLP(nn.Sequential):
-    def __init__(self):
+    def __init__(self, dropout=0.2):
         super().__init__(
             nn.Linear(388, 128),
             nn.ReLU(),
-            nn.Dropout(0.2),
+            nn.Dropout(dropout),
             nn.Linear(128, 32),
             nn.ReLU(),
             nn.Linear(32, 1),
         )
 
 
+FROZEN_SHA = "d91b7314d7e751351f0e6f6e58cd64dfafa4913e7e1be3381ec87599b192dab1"
+
+
+def action_value(row):
+    label = row.get("label")
+    if "label" not in row or (
+        label is not None and (type(label) is not int or label not in (0, 1))
+    ):
+        raise ValueError("Expected integer binary label or null")
+    expected = {1: "keep", 0: "skip", None: "uncertain"}[label]
+    if (
+        "action" not in row
+        and row.get("provenance", {}).get("version") == "pilot-v0"
+        and label is not None
+    ):
+        return expected
+    if row.get("action") != expected:
+        raise ValueError("Missing or inconsistent action")
+    return expected
+
+
 def load_rows(path, allow_draft=False):
-    rows = [json.loads(line) for line in path.read_text().splitlines() if line.strip()]
+    payload = path.read_bytes()
+    rows = [json.loads(line) for line in payload.splitlines() if line.strip()]
     if not rows:
         raise ValueError("Empty dataset")
+    data_sha = hashlib.sha256(payload).hexdigest()
     seen_ids, seen_text = set(), set()
     groups, families = {}, {}
     for row in rows:
@@ -70,9 +111,20 @@ def load_rows(path, allow_draft=False):
         ):
             if key not in row:
                 raise ValueError(f"Missing {key}")
-        if row["label"] not in (0, 1) or isinstance(row["label"], bool):
-            raise ValueError("Labels must be integer 0/1")
-        if row["annotation_status"] != "human_reviewed" and not allow_draft:
+        row["action"] = action_value(row)
+        for field, allowed in HEAD_LABELS.items():
+            if field in row and row[field] not in allowed | {"uncertain"}:
+                raise ValueError(f"Invalid {field} label")
+        if row["annotation_status"] == "single_human_reviewed_draft":
+            if data_sha != FROZEN_SHA:
+                raise ValueError(
+                    "Reviewed dataset differs from frozen exploratory release"
+                )
+        elif row["annotation_status"] != "human_reviewed" and not (
+            allow_draft
+            and row["provenance"].get("version") == "pilot-v0"
+            and row["annotation_status"] == "assistant_draft_pending_human_review"
+        ):
             raise ValueError(
                 "Unreviewed labels: use --allow-draft only for a pipeline trial"
             )
@@ -89,10 +141,29 @@ def load_rows(path, allow_draft=False):
             previous = lookup.setdefault(row[key], row["split"])
             if previous != row["split"]:
                 raise ValueError(f"Cross-split leakage in {key}")
+    trainable = [r for r in rows if r["label"] in (0, 1)]
     for split in ("train", "validation", "test"):
-        if {r["label"] for r in rows if r["split"] == split} != {0, 1}:
+        if {r["label"] for r in trainable if r["split"] == split} != {0, 1}:
             raise ValueError(f"Both classes required in {split}")
     return rows
+
+
+def filter_rows_for_head(rows, head):
+    """Keep rows with a known label for one head; preserve the ambiguity set."""
+    if head not in HEAD_LABELS:
+        raise ValueError(f"Unknown head: {head}")
+    if not rows:
+        raise ValueError("Cannot filter an empty dataset")
+    usable, ambiguous = [], []
+    for row in rows:
+        value = action_value(row) if head == "action" else row.get(head)
+        if value == "uncertain":
+            ambiguous.append(row)
+        elif value in HEAD_LABELS[head]:
+            usable.append(row)
+        else:
+            raise ValueError(f"Invalid or missing {head}")
+    return usable, ambiguous
 
 
 def build_features(rows, encoder):
@@ -125,23 +196,24 @@ def build_features(rows, encoder):
     if vectors.shape != (len(rows), 384) or not np.isfinite(vectors).all():
         raise ValueError("Invalid encoder output")
     extra = np.zeros((len(rows), 4), dtype=np.float32)
-    histories = {}
-    # No labels, future candidates, or other scenario groups enter the features.
-    for i in sorted(
-        range(len(rows)), key=lambda j: (rows[j]["event_time"], rows[j]["example_id"])
-    ):
-        row = rows[i]
-        history = histories.setdefault(row["scenario_group"], [])
+    # Snapshot rows are independent; timestamps do not establish conversation history.
+    for i, row in enumerate(rows):
         text = row["candidate_text"]
-        similarity = max((float(vectors[i] @ vectors[j]) for j in history), default=0.0)
         extra[i] = [
             min(math.log1p(len(text.split())) / math.log1p(256), 1.0),
             bool(re.match(r"^\s*#{1,6}\s", text)),
             bool(re.match(r"^\s*(?:[-*+] |\d+[.)] )", text)),
-            similarity,
+            0.0,
         ]
-        history.append(i)
     return np.concatenate([vectors, extra], axis=1).astype(np.float32), texts, truncated
+
+
+def training_weight(rows):
+    labels = [action_value(r) for r in rows if r["split"] == "train"]
+    keep, skip = labels.count("keep"), labels.count("skip")
+    if not keep or not skip:
+        raise ValueError("Training requires both known action classes")
+    return torch.tensor([skip / keep], dtype=torch.float32)
 
 
 def metrics(labels, scores, threshold):
@@ -174,6 +246,45 @@ def select_threshold(labels, scores):
     return max(eligible, key=lambda m: (m["precision"], m["threshold"]))["threshold"]
 
 
+def validation_baselines(rows, features, texts, labels, train, valid, seed):
+    baselines = {}
+    baseline_scores = {
+        "store_all": np.ones(len(rows)),
+        "majority": np.full(len(rows), float(labels[train].mean() >= 0.5)),
+    }
+    baseline_scores["rules"] = np.array(
+        [
+            float(
+                bool(
+                    re.search(
+                        r"\b(prefer|decided|changed|must|always|deadline|unresolved)\b",
+                        r["candidate_text"],
+                        re.I,
+                    )
+                )
+            )
+            for r in rows
+        ]
+    )
+    tfidf = TfidfVectorizer(ngram_range=(1, 2))
+    tfidf.fit([texts[i] for i in train])
+    for name, values in (
+        ("tfidf_logistic", tfidf.transform(texts)),
+        ("embedding_logistic", features),
+    ):
+        logistic = LogisticRegression(max_iter=1000, random_state=seed)
+        logistic.fit(values[train], labels[train])
+        baseline_scores[name] = logistic.predict_proba(values)[:, 1]
+    for name, values in baseline_scores.items():
+        t = (
+            0.5
+            if name in ("store_all", "majority", "rules")
+            else select_threshold(labels[valid], values[valid])
+        )
+        baselines[name] = {"validation": metrics(labels[valid], values[valid], t)}
+    return baselines
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -183,10 +294,18 @@ def main():
     parser.add_argument("--allow-draft", action="store_true")
     parser.add_argument("--seed", type=int, default=17)
     parser.add_argument("--epochs", type=int, default=30)
+    parser.add_argument("--lr", type=float, choices=(0.001, 0.0003), default=0.001)
+    parser.add_argument("--dropout", type=float, choices=(0.0, 0.2), default=0.2)
+    parser.add_argument("--baselines-only", action="store_true")
     args = parser.parse_args()
     if not 1 <= args.epochs <= 30:
         parser.error("epochs must be in 1..30 for the pilot")
-    rows = load_rows(args.data, args.allow_draft)
+    source_rows = load_rows(args.data, args.allow_draft)
+    development = [r for r in source_rows if r["split"] in ("train", "validation")]
+    rows, ambiguity_rows = filter_rows_for_head(development, "action")
+    if not rows:
+        raise ValueError("No binary action rows available after uncertainty filter")
+    assert all(row.get("action", "keep") != "uncertain" for row in rows)
     args.output.mkdir(parents=True, exist_ok=False)
     random.seed(args.seed)
     np.random.seed(args.seed)
@@ -200,15 +319,36 @@ def main():
     labels = np.array([r["label"] for r in rows], dtype=np.float32)
     indices = {
         s: np.array([i for i, r in enumerate(rows) if r["split"] == s])
-        for s in ("train", "validation", "test")
+        for s in ("train", "validation")
     }
     train, valid = indices["train"], indices["validation"]
     x, y = torch.from_numpy(features), torch.from_numpy(labels).view(-1, 1)
-    model = AdmissionMLP()
+    baselines = validation_baselines(
+        rows, features, texts, labels, train, valid, args.seed
+    )
+    if args.baselines_only:
+        result = {
+            "baselines": baselines,
+            "data_sha256": hashlib.sha256(args.data.read_bytes()).hexdigest(),
+            "train": len(train),
+            "validation_keep": int(labels[valid].sum()),
+            "validation_skip": int(len(valid) - labels[valid].sum()),
+            "seed": args.seed,
+            "encoder_revision": REVISION,
+            "feature_version": FEATURE_VERSION,
+        }
+        (args.output / "report.json").write_text(json.dumps(result, indent=2) + "\n")
+        return
+    model = AdmissionMLP(args.dropout)
     parameter_count = sum(p.numel() for p in model.parameters())
     assert parameter_count == 53953
-    optimizer = torch.optim.AdamW(model.parameters(), lr=0.001, weight_decay=0.0001)
-    criterion = nn.BCEWithLogitsLoss()
+    optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=0.0001)
+    positive = float(labels[train].sum())
+    negative = float(len(train) - positive)
+    if not positive or not negative:
+        raise ValueError("Filtered training split must contain both action classes")
+    pos_weight = training_weight(source_rows)
+    criterion = nn.BCEWithLogitsLoss(pos_weight=pos_weight)
     history, best_loss, stale, best = [], float("inf"), 0, None
     for epoch in range(args.epochs):
         model.train()
@@ -217,10 +357,17 @@ def main():
         for start in range(0, len(order), 32):
             batch = order[start : start + 32]
             optimizer.zero_grad(set_to_none=True)
+            if any(action_value(rows[i]) not in ("keep", "skip") for i in batch):
+                raise ValueError("Ambiguous training batch")
             loss = criterion(model(x[batch]), y[batch])
             if not torch.isfinite(loss):
                 raise ValueError("Non-finite training loss")
             loss.backward()
+            if not all(
+                parameter.grad is None or torch.isfinite(parameter.grad).all()
+                for parameter in model.parameters()
+            ):
+                raise ValueError("Non-finite training gradient")
             optimizer.step()
             total += loss.item() * len(batch)
         model.eval()
@@ -251,64 +398,58 @@ def main():
     with torch.no_grad():
         scores = model(x).sigmoid().flatten().numpy()
     threshold = select_threshold(labels[valid], scores[valid])
-    baselines = {}
-    baseline_scores = {
-        "store_all": np.ones(len(rows)),
-        "majority": np.full(len(rows), float(labels[train].mean() >= 0.5)),
-    }
-    baseline_scores["rules"] = np.array(
-        [
-            float(
-                bool(
-                    re.search(
-                        r"\b(prefer|decided|changed|must|always|deadline|unresolved)\b",
-                        r["candidate_text"],
-                        re.I,
-                    )
-                )
+    counts = defaultdict(Counter)
+    for row in source_rows:
+        counts[row["split"] + "/" + row["provenance"]["version"]][row["action"]] += 1
+    if ambiguity_rows:
+        probe_features, _, _ = build_features(ambiguity_rows, encoder)
+        with torch.no_grad():
+            probe_scores = (
+                model(torch.from_numpy(probe_features)).sigmoid().flatten().tolist()
             )
-            for r in rows
-        ]
-    )
-    tfidf = TfidfVectorizer(ngram_range=(1, 2))
-    tfidf.fit([texts[i] for i in train])
-    for name, values in (
-        ("tfidf_logistic", tfidf.transform(texts)),
-        ("embedding_logistic", features),
-    ):
-        logistic = LogisticRegression(max_iter=1000, random_state=args.seed)
-        logistic.fit(values[train], labels[train])
-        baseline_scores[name] = logistic.predict_proba(values)[:, 1]
-    for name, values in baseline_scores.items():
-        t = (
-            0.5
-            if name in ("store_all", "majority", "rules")
-            else select_threshold(labels[valid], values[valid])
+        (args.output / "development_ambiguity.jsonl").write_text(
+            "".join(
+                json.dumps(
+                    {
+                        "example_id": r["example_id"],
+                        "split": r["split"],
+                        "p_keep": score,
+                    }
+                )
+                + "\n"
+                for r, score in zip(ambiguity_rows, probe_scores, strict=True)
+            )
         )
-        baselines[name] = {
-            s: metrics(labels[ix], values[ix], t)
-            for s, ix in indices.items()
-            if s != "train"
-        }
     report = {
+        "source_action_counts_by_split_batch": counts,
         "status": "pipeline_trial_only",
         "mode": "suggestion_only_not_integrated",
-        "limitations": [
-            "Assistant-authored fictional labels; not human-reviewed.",
-            "80-example convenience fixture; no generalization or release claims.",
-            "No manual near-duplicate audit or downstream QA comparison yet.",
-            "One configuration and seed; no seed-variation study or confidence intervals.",
-        ],
+        "annotation_status": sorted({r["annotation_status"] for r in source_rows}),
+        "limitations": ["Exploratory fictional data with narrow validation support."],
         "data_sha256": hashlib.sha256(args.data.read_bytes()).hexdigest(),
         "encoder": ENCODER,
         "encoder_revision": REVISION,
         "feature_order": FEATURES,
+        "feature_version": FEATURE_VERSION,
         "truncation": "256 wordpieces maximum; candidate first, then recent context",
         "truncated_examples": truncated,
+        "uncertainty_filter": {
+            "head": "action",
+            "source_rows": len(development),
+            "binary_rows": len(rows),
+            "ambiguity_rows": len(ambiguity_rows),
+            "ambiguity_ids": [r["example_id"] for r in ambiguity_rows],
+            "train_keep": int(positive),
+            "train_skip": int(negative),
+            "positive_class_weight": float(pos_weight.item()),
+            "assertion_no_uncertain_rows_reach_loss": True,
+        },
         "parameters": parameter_count,
         "seed": args.seed,
         "device": "cpu",
         "best_epoch": best["epoch"],
+        "learning_rate": args.lr,
+        "dropout": args.dropout,
         "splits": {
             s: {
                 "rows": len(ix),
@@ -336,6 +477,7 @@ def main():
             "seed": args.seed,
             "data_sha256": report["data_sha256"],
             "encoder_revision": REVISION,
+            "feature_version": FEATURE_VERSION,
         }
     )
     torch.save(best, args.output / "checkpoint.pt")
