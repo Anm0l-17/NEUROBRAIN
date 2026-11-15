@@ -1,0 +1,52 @@
+{
+  "paired_base": [
+    "The evidence does not establish that the user tunes church organs. The user statement indicates that the narrator in a radio play they wrote says this line, but it does not confirm whether the user personally tunes church organs. [E1]\n",
+    "Yes, the evidence establishes that the user tunes church organs [E1].\n",
+    "The evidence says the user lives above a puppet theatre [E1].\n",
+    "The evidence states that the user lives above a puppet theatre [E1].\n",
+    "No, the assistant should not use the earlier seating preference because the user explicitly requested to forget it [E1].\n",
+    "Yes, the assistant should use the earlier seating preference. The user explicitly requested to use a window seat when planning trips [E1]. The request to forget the departure time does not override the instruction regarding the seating preference [E1].\n"
+  ],
+  "paired_adapter": [
+    "No, the evidence does not establish that the user tunes church organs. [E1]\n",
+    "Yes [E1].\n",
+    "The evidence says the user lives above a puppet theatre [E1].\n",
+    "The evidence says the user lives above a puppet theatre [E1].\n",
+    "No, the assistant should not use the earlier seating preference because the user explicitly requested to forget it [E1].\n",
+    "Yes, the assistant should use the earlier seating preference when planning the next trip [E1].\n"
+  ],
+  "revised_base": [
+    "No, the evidence does not establish a favorite television series. The provided text discusses the functions of elaborate ceremonial codes in royal courts, such as reinforcing hierarchical order, acting as a political safety valve, and serving as symbolic governance. It mentions historical examples like the Mughal court, Versailles, the Qing Dynasty, and the Ottoman Empire, but does not mention any television series. [E1]\n",
+    "The provided evidence does not contain information about what medication the user takes.\n",
+    "No, the evidence does not confirm that the user works at a hospital. The assistant's draft states, \"The past few weeks at the hospital have been especially busy,\" but this detail is attributed to the assistant's draft, not a direct user statement. [E1]\n",
+    "No, the user did not state that they worked in an observatory. The statement \"My years in the observatory taught me patience\" is attributed to the assistant as a draft or assertion by the assistant, not the user [E1].\n",
+    "My cousin moved to Kyoto. [E1]\n",
+    "The user maintains wind turbines in Cork [E1].\n",
+    "Yes, tutoring mathematics is confirmed as the user's job. The user explicitly stated, \"Yes, tutoring mathematics in Lagos is my actual job\" [E1].\n",
+    "The user's work is restoring old maps [E1].\n",
+    "No, the evidence does not establish that the user owns a vineyard. The user's statement in the screenplay is a line spoken by a character, not a fact asserted by the user about themselves. [E1]\n",
+    "Yes, the evidence establishes that the user tunes church organs. The user asserts in the provided evidence that in a radio play they wrote, the narrator says, \"I tune church organs\" [E1].\n",
+    "Yes, the evidence establishes that the user tunes church organs. This is stated by the user [E1].\n",
+    "The evidence states that the user's comic character lives above a puppet theatre [E1].\n",
+    "The evidence states that the user lives above a puppet theatre [E1].\n",
+    "No, the assistant should not use the earlier seating preference because the user explicitly requested to forget it [E1].\n",
+    "Yes, the assistant should use the earlier seating preference. The user explicitly stated, \"Use a window seat when planning trips for me\" [E1]. The request to forget the departure time does not apply to the seating preference.\n"
+  ],
+  "revised_adapter": [
+    "No, the evidence does not establish a favorite television series [E1].\n",
+    "The evidence does not state what medication the user takes [E1].\n",
+    "No, the user does not directly state they work at a hospital. The assistant's draft mentions \"the past few weeks at the hospital,\" but this is attributed to the assistant, not the user [E1].\n",
+    "No, the user did not state that they worked in an observatory. The assistant drafted the statement \"My years in the observatory taught me patience\" [E1].\n",
+    "The user's cousin moved to Kyoto [E1].\n",
+    "The user maintains wind turbines in Cork [E1].\n",
+    "Yes, tutoring mathematics is confirmed as the user's job [E1].\n",
+    "The user restores old maps [E1].\n",
+    "No, the character saying they own a vineyard does not establish that the user owns one. [E1]\n",
+    "Yes, the evidence establishes that the user tunes church organs [E1].\n",
+    "Yes, the evidence establishes that the user tunes church organs [E1].\n",
+    "The evidence says the user lives above a puppet theatre [E1].\n",
+    "The user lives above a puppet theatre [E1].\n",
+    "No, the assistant should not use the earlier seating preference because the user explicitly requested to forget it [E1].\n",
+    "Yes, the assistant should use the earlier seating preference when planning the next trip [E1].\n"
+  ]
+}
