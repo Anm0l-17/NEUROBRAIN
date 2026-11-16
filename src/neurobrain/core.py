@@ -128,6 +128,11 @@ CREATE TABLE IF NOT EXISTS observation_metadata(
 """
 
 
+def norm(text):
+    """Whitespace-insensitive form, so OCR text and the saved file compare equal."""
+    return " ".join(text.split())
+
+
 def passages(text):
     offset = 0
     while offset < len(text):
@@ -291,8 +296,13 @@ class MemoryStore:
             GROUP BY s.id ORDER BY s.imported_at DESC"""
         ).fetchall()
         sources = []
+        logical = {}
         for row in rows:
             if not self._allowed(row["path"]):
+                continue
+            key = self._logical_key(row["id"]) if row["active"] else None
+            if key and key in logical:
+                logical[key]["linked"].append(row["id"])
                 continue
             source = dict(row)
             metadata = source.pop("metadata")
@@ -301,8 +311,20 @@ class MemoryStore:
                 source["observation"] = {
                     key: observation[key] for key in ("source", "route")
                 }
+            source["linked"] = []
+            if key:
+                logical[key] = source
             sources.append(source)
         return sources
+
+    def _logical_key(self, source_id):
+        texts = frozenset(
+            norm(r[0])
+            for r in self.db.execute(
+                "SELECT text FROM chunks WHERE source_id=?", (source_id,)
+            )
+        )
+        return texts or None
 
     def inspect(self, source_id: str) -> dict:
         row = self.db.execute(
@@ -353,11 +375,19 @@ class MemoryStore:
             (expression,),
         )
         results = []
+        seen = {}
         for row in rows:
             if self._allowed(row["path"]):
+                first = seen.get(norm(row["text"]))
+                if first is not None:
+                    # Same note reached through another route: link, don't repeat.
+                    first["linked"].append(f"{row['source_id']}:{row['id']}")
+                    continue
                 item = dict(row)
                 item["citation"] = f"{item['source_id']}:{item['id']}"
                 item["observation"] = self.observation_reference(item["source_id"])
+                item["linked"] = []
+                seen[norm(item["text"])] = item
                 results.append(item)
                 if len(results) == limit:
                     break
@@ -400,6 +430,30 @@ class MemoryStore:
             )
             if self._allowed(row["path"])
         ]
+        # Same note via another route differs in bytes (trailing newline, OCR spacing):
+        # also take in-scope sources holding a chunk with the same normalized text.
+        # shortcut: scans every chunk, fine at demo size; add a normalized-hash column to scale.
+        wanted = {
+            norm(c[0])
+            for row in rows
+            for c in self.db.execute(
+                "SELECT text FROM chunks WHERE source_id=?", (row["id"],)
+            )
+        }
+        have = {row["id"] for row in rows}
+        for row in self.db.execute(
+            """SELECT s.id,s.path,s.content_hash,count(c.id) AS chunks FROM sources s
+            LEFT JOIN chunks c ON c.source_id=s.id GROUP BY s.id ORDER BY s.path,s.version"""
+        ):
+            if row["id"] in have or not self._allowed(row["path"]):
+                continue
+            if wanted & {
+                norm(c[0])
+                for c in self.db.execute(
+                    "SELECT text FROM chunks WHERE source_id=?", (row["id"],)
+                )
+            }:
+                rows.append(row)
         content_hashes = sorted({row["content_hash"] for row in rows})
         source_ids = [row["id"] for row in rows]
         chunks = sum(row["chunks"] for row in rows)

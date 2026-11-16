@@ -106,9 +106,9 @@ class ExtractionTests(unittest.TestCase):
                     lambda _: {"notes": [{"kind": "decision", "quote": text}]},
                 )
                 store.import_observation(text, extraction)
-                self.assertEqual(
-                    len({r["source_id"] for r in store.search("Thursday")}), 2
-                )
+                found = store.search("Thursday")
+                self.assertEqual(len(found), 1)
+                self.assertEqual(len(found[0]["linked"]), 1)
                 preview = store.preview_forget(plain["source_id"])
                 receipt = store.forget(plain["source_id"], preview["preview_token"])
                 self.assertEqual(receipt["removed_versions"], 2)
@@ -172,6 +172,41 @@ class ExtractionTests(unittest.TestCase):
                 store.forget(a["source_id"], preview["preview_token"])
                 self.assertFalse(store.search("Cedar"))
                 self.assertFalse(store.search("violet"))
+
+    def test_unsaved_screen_fact_then_saved_file_is_one_logical_note(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            ocr = "The amber rehearsal room is Cedar 417."
+            saved = root / "rehearsal.md"
+            saved.write_text(ocr + "\n")  # file bytes differ from OCR text
+            with MemoryStore(root / "memory.sqlite3", root) as store:
+                screen = extract_notes(
+                    ocr,
+                    "window",
+                    "screen-ocr",
+                    lambda _: {"notes": [{"kind": "fact", "quote": ocr}]},
+                )
+                a = store.import_observation(ocr, screen)
+                body = saved.read_text()
+                file = extract_notes(
+                    body,
+                    str(saved),
+                    "selected-file",
+                    lambda _: {"notes": [{"kind": "fact", "quote": ocr}]},
+                )
+                b = store.import_observation(body, file)
+                self.assertNotEqual(a["source_id"], b["source_id"])
+                found = store.search("Cedar")
+                self.assertEqual(len(found), 1)
+                self.assertEqual(len(found[0]["linked"]), 1)
+                active = [s for s in store.sources() if s["active"]]
+                self.assertEqual(len(active), 1)
+                self.assertEqual(len(active[0]["linked"]), 1)
+                preview = store.preview_forget(b["source_id"])
+                self.assertEqual(preview["versions"], 2)
+                store.forget(b["source_id"], preview["preview_token"])
+                self.assertFalse(store.search("Cedar"))
+                self.assertFalse(store.sources())
 
     def test_storage_updates_restart_forgetting_and_citations(self):
         with tempfile.TemporaryDirectory() as directory:
