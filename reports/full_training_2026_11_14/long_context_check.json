@@ -1,0 +1,9 @@
+{
+  "dataset": "MemoryAgentBench",
+  "split": "Test_Time_Learning",
+  "context_characters": 5658996,
+  "qwen_context_tokens": 1683432,
+  "qwen_max_position_embeddings": 262144,
+  "exceeds_model_limit": true,
+  "context_source": "recsys_redial_full"
+}

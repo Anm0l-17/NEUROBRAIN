@@ -1,0 +1,6 @@
+[
+  {"id":"italy-capital","prompt":"What is the capital of Italy?","think":false,"required":["\\brome\\b"]},
+  {"id":"note-code","prompt":"Notes: The approved access code for the fictional demo is R-42. The old draft listed Z-19, which was cancelled. What is the approved code? Answer from these notes only.","think":false,"required":["R-42"],"forbidden":["approved code is Z-19"]},
+  {"id":"compound-price","prompt":"Calculate the final price of a 900 rupee item after a 20 percent discount and then a 15 percent tax on the discounted price.","think":true,"required":["\\b828\\b"]},
+  {"id":"age-logic","prompt":"Analyze these facts: Mia is older than Noa. Leo is younger than Noa. Who is the oldest of these three?","think":true,"required":["\\bmia\\b"]}
+]

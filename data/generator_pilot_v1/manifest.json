@@ -1,0 +1,26 @@
+{
+  "purpose": "small attribution repair only; no scaling",
+  "train_count": 17,
+  "development_count": 9,
+  "original_train_source": "generator_pilot_v0; PersonaMem-v2 CC-BY-4.0 attribution retained",
+  "new_training_source": "12 assistant-authored fictional speaker-attribution examples",
+  "development_cases": [
+    "old_tv_abstention",
+    "old_medication_abstention",
+    "old_hospital_attribution",
+    "assistant_draft",
+    "third_party",
+    "direct_statement",
+    "confirmed_draft",
+    "correction",
+    "fiction"
+  ],
+  "new_evaluation_source": "six assistant-authored fictional scenarios; same task families, different facts; not independent human evaluation",
+  "test_file": "development alias only, not final holdout",
+  "pass_gate": "All nine answers factually supported with correct speaker attribution and E1 citation; confirmed user facts must not be rejected. Compare with both baseline and v0; no scaling regardless of result.",
+  "file_sha256": {
+    "train.jsonl": "85a372693fb0ff098189aa2a484f06dab0d1c75ae0f46ec10d1f96acff52632b",
+    "test.jsonl": "ef479d2a43706540d4897d2929216d7b345661ca6c354c08bdc9db72855b2f32",
+    "valid.jsonl": "ef479d2a43706540d4897d2929216d7b345661ca6c354c08bdc9db72855b2f32"
+  }
+}

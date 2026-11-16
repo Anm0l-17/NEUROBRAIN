@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import re
 import sqlite3
 from datetime import UTC, datetime
@@ -56,7 +57,11 @@ class NotePolicy:
                 raw = stream.read(self.max_bytes + 1)
         except OSError as exc:
             raise MemoryError("The selected note cannot be read.") from exc
-        if len(raw) > self.max_bytes:
+        return resolved, self.decode(raw)
+
+    @classmethod
+    def decode(cls, raw: bytes) -> str:
+        if len(raw) > cls.max_bytes:
             raise MemoryError("Notes must be at most 1 MiB.")
         try:
             text = raw.decode("utf-8")
@@ -75,7 +80,7 @@ class NotePolicy:
             raise MemoryError(
                 "The note contains a possible credential; import refused."
             )
-        return resolved, text
+        return text
 
 
 SCHEMA = """
@@ -116,7 +121,30 @@ CREATE TABLE IF NOT EXISTS deletion_receipts(
     source_count INTEGER NOT NULL,
     chunk_count INTEGER NOT NULL
 );
+CREATE TABLE IF NOT EXISTS observation_metadata(
+    source_id TEXT PRIMARY KEY REFERENCES sources(id) ON DELETE CASCADE,
+    metadata TEXT NOT NULL
+);
 """
+
+
+def passages(text):
+    offset = 0
+    while offset < len(text):
+        end = min(offset + 1200, len(text))
+        if end < len(text):
+            boundary = text.rfind("\n", offset + 600, end)
+            if boundary >= 0:
+                end = boundary + 1
+        if text[offset:end].strip():
+            yield (
+                text[offset:end],
+                offset,
+                end,
+                text.count("\n", 0, offset) + 1,
+                text.count("\n", 0, end - 1) + 1,
+            )
+        offset = end
 
 
 class MemoryStore:
@@ -150,6 +178,39 @@ class MemoryStore:
 
     def import_note(self, path: Path) -> dict:
         path, text = self.policy.read(path)
+        return self._import(path, text, list(passages(text)))
+
+    def import_observation(self, text: str, extraction: dict) -> dict:
+        from .extract import extract_notes
+
+        # Validate evidence again at persistence, even for caller-supplied extraction.
+        checked = extract_notes(
+            text,
+            extraction["source"],
+            extraction["route"],
+            lambda _: {
+                "notes": [
+                    {"kind": n["kind"], "quote": n["text"]} for n in extraction["notes"]
+                ]
+            },
+        )
+        if checked["source_sha256"] != extraction["source_sha256"]:
+            raise MemoryError("Observation changed after extraction")
+        if checked["notes"] != extraction["notes"]:
+            raise MemoryError("Observation evidence offsets differ")
+        checked["status"] = "saved_by_explicit_extraction_request"
+        path = self.policy.root / (
+            "observation-"
+            + digest(json.dumps([extraction["route"], extraction["source"]]))
+            + ".md"
+        )
+        rows = [
+            (n["text"], n["char_start"], n["char_end"], n["line_start"], n["line_end"])
+            for n in checked["notes"]
+        ]
+        return self._import(path, text, rows, checked)
+
+    def _import(self, path, text, rows, metadata=None):
         content_hash = digest(text)
         with self.db:
             self.db.execute("BEGIN IMMEDIATE")
@@ -163,7 +224,22 @@ class MemoryStore:
                 "SELECT * FROM sources WHERE path=? ORDER BY version DESC LIMIT 1",
                 (str(path),),
             ).fetchone()
-            if previous and previous["content_hash"] == content_hash:
+            same_observation = True
+            if previous and metadata is not None:
+                stored = self.db.execute(
+                    "SELECT metadata FROM observation_metadata WHERE source_id=?",
+                    (previous["id"],),
+                ).fetchone()
+                old = json.loads(stored["metadata"]) if stored else {}
+                # Observation time changes on retries; evidence and policy identity matter.
+                same_observation = {
+                    k: v for k, v in metadata.items() if k != "observed_at"
+                } == {k: v for k, v in old.items() if k != "observed_at"}
+            if (
+                previous
+                and previous["content_hash"] == content_hash
+                and same_observation
+            ):
                 return {
                     "source_id": previous["id"],
                     "version": previous["version"],
@@ -176,30 +252,19 @@ class MemoryStore:
                 "INSERT INTO sources VALUES(?,?,?,?,?,1)",
                 (source_id, str(path), content_hash, version, now()),
             )
-            offset, ordinal = 0, 0
-            while offset < len(text):
-                end = min(offset + 1200, len(text))
-                if end < len(text):
-                    boundary = text.rfind("\n", offset + 600, end)
-                    if boundary >= 0:
-                        end = boundary + 1
-                passage = text[offset:end]
-                if passage.strip():
-                    self.db.execute(
-                        """INSERT INTO chunks(source_id,ordinal,text,char_start,char_end,line_start,line_end)
-                        VALUES(?,?,?,?,?,?,?)""",
-                        (
-                            source_id,
-                            ordinal,
-                            passage,
-                            offset,
-                            end,
-                            text.count("\n", 0, offset) + 1,
-                            text.count("\n", 0, end - 1) + 1,
-                        ),
-                    )
-                    ordinal += 1
-                offset = end
+            ordinal = 0
+            for passage in rows:
+                self.db.execute(
+                    """INSERT INTO chunks(source_id,ordinal,text,char_start,char_end,line_start,line_end)
+                    VALUES(?,?,?,?,?,?,?)""",
+                    (source_id, ordinal, *passage),
+                )
+                ordinal += 1
+            if metadata is not None:
+                self.db.execute(
+                    "INSERT INTO observation_metadata VALUES(?,?)",
+                    (source_id, json.dumps(metadata)),
+                )
         return {
             "source_id": source_id,
             "version": version,
@@ -220,10 +285,24 @@ class MemoryStore:
 
     def sources(self) -> list[dict]:
         rows = self.db.execute(
-            """SELECT s.*,count(c.id) AS chunks FROM sources s LEFT JOIN chunks c ON c.source_id=s.id
+            """SELECT s.*,count(c.id) AS chunks,m.metadata FROM sources s
+            LEFT JOIN chunks c ON c.source_id=s.id
+            LEFT JOIN observation_metadata m ON m.source_id=s.id
             GROUP BY s.id ORDER BY s.imported_at DESC"""
         ).fetchall()
-        return [dict(row) for row in rows if self._allowed(row["path"])]
+        sources = []
+        for row in rows:
+            if not self._allowed(row["path"]):
+                continue
+            source = dict(row)
+            metadata = source.pop("metadata")
+            if metadata is not None:
+                observation = json.loads(metadata)
+                source["observation"] = {
+                    key: observation[key] for key in ("source", "route")
+                }
+            sources.append(source)
+        return sources
 
     def inspect(self, source_id: str) -> dict:
         row = self.db.execute(
@@ -231,7 +310,11 @@ class MemoryStore:
         ).fetchone()
         if not row or not self._allowed(row["path"]):
             raise MemoryError("Source not found in the allowed notes scope.")
+        metadata = self.db.execute(
+            "SELECT metadata FROM observation_metadata WHERE source_id=?", (source_id,)
+        ).fetchone()
         return {
+            "observation": json.loads(metadata[0]) if metadata else None,
             "source": dict(row),
             "chunks": [
                 dict(r)
@@ -241,6 +324,15 @@ class MemoryStore:
                 )
             ],
         }
+
+    def observation_reference(self, source_id: str):
+        row = self.db.execute(
+            "SELECT metadata FROM observation_metadata WHERE source_id=?", (source_id,)
+        ).fetchone()
+        if row is None:
+            return None
+        metadata = json.loads(row["metadata"])
+        return {key: metadata[key] for key in ("source", "route")}
 
     def search(self, query: str, limit: int = 5) -> list[dict]:
         if not 1 <= limit <= 20 or len(query) > 2000:
@@ -265,6 +357,7 @@ class MemoryStore:
             if self._allowed(row["path"]):
                 item = dict(row)
                 item["citation"] = f"{item['source_id']}:{item['id']}"
+                item["observation"] = self.observation_reference(item["source_id"])
                 results.append(item)
                 if len(results) == limit:
                     break

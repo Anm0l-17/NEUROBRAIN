@@ -1,0 +1,13 @@
+{
+  "id": "002",
+  "title": "Diagnose local extraction runtime and establish reproducible evidence demo",
+  "priority": 2,
+  "passes": false,
+  "spec": ".agent/tasks/TASK-002.json",
+  "steps": [
+    "Inspect Ollama runtime without exposing private logs",
+    "Reproduce the timeout on fictional input",
+    "Fix established causes only; verify failure behavior",
+    "Record code review and actual local results"
+  ]
+}

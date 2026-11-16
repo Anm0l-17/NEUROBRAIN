@@ -1,0 +1,9 @@
+{
+  "id": "008",
+  "scope": "Source-by-source curation and a compact generator test only. Preserve the deployed runtime and held-out benchmarks.",
+  "exit_checks": [
+    "Audit ten source decisions, attribution, privacy and prior-pilot overlap",
+    "Verify the 200 reviewed admission IDs separately from Qwen training",
+    "Compare fresh baseline with reloaded compact adapter on matched development prompts and report failures"
+  ]
+}

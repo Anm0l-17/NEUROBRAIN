@@ -23,7 +23,7 @@
 <body><main>
   <header><div class="eyebrow">Private by selection · Prototype 0.1</div><h1>NeuroBrain</h1>
     <p>Your notes, with evidence you can inspect and memory you can remove.</p>
-    <p class="muted">Baseline: local text search and exact excerpts. Neural admission and generated answers are planned.</p></header>
+    <p class="muted">This view provides local text search and exact excerpts. Optional Qwen extraction and cited answers use the separate CLI or memory chat connection.</p></header>
   <div class="grid">
     <section class="card"><h2>Remember a note</h2><form id="import-form">
       <label for="path">File within your allowed notes folder</label><input id="path" placeholder="project.md" required maxlength="1000">
@@ -36,11 +36,12 @@
   <section class="card"><h2>Evidence</h2><div id="evidence"><p class="muted">Search your imported notes to see cited excerpts here.</p></div></section>
   <section class="card"><h2>Stored sources</h2><p class="muted">Reimporting an edited note creates a version. Search uses the latest version; inspection can show earlier evidence.</p><div id="sources"></div></section>
   <dialog id="delete-dialog"><h2>Review deletion</h2><p id="delete-summary"></p><p class="muted">All imported versions of this source and their search entries will be removed. Original files, backups, and previously displayed content remain. Identical content is blocked from reimport; edited content can be imported again.</p><button id="confirm-delete" class="danger">Forget these versions</button><button id="cancel-delete" class="secondary">Cancel</button></dialog>
-  <footer class="muted">Nothing is sent to a language model. Your notes are never used for training in this prototype. Storage is local and is not encrypted by NeuroBrain.</footer>
+  <footer class="muted">Search in this view runs locally. Opt-in extraction and the memory chat connection send selected text to local Qwen. Your notes are not used for training. Local storage is not encrypted by NeuroBrain.</footer>
 </main>
 <script nonce="__TOKEN__">
 const token='__TOKEN__', byId=id=>document.getElementById(id);
 let pending=null;
+function sourceLabel(source){return source.observation?`Observation: ${source.observation.source} (${source.observation.route})`:source.path.split('/').pop();}
 async function api(path,payload){
   const response=await fetch(path,{method:payload?'POST':'GET',headers:{'X-NeuroBrain-Token':token,...(payload?{'Content-Type':'application/json'}:{})},...(payload?{body:JSON.stringify(payload)}:{})});
   const data=await response.json();if(!response.ok)throw Error(data.error||'Request failed');return data;
@@ -49,15 +50,15 @@ function status(message){byId('status').textContent=message;}
 function element(tag,text,parent){const node=document.createElement(tag);node.textContent=text;parent.append(node);return node;}
 function showEvidence(data){
   const target=byId('evidence');target.replaceChildren();element('p',data.message,target);
-  for(const hit of data.evidence){const article=element('article','',target);element('small',`${hit.path.split('/').pop()} · version ${hit.version} · lines ${hit.line_start}–${hit.line_end}`,article);element('small',`[${hit.citation}]`,article);element('pre',hit.text,article);}
+  for(const hit of data.evidence){const article=element('article','',target);element('small',`${sourceLabel(hit)} · version ${hit.version} · lines ${hit.line_start}–${hit.line_end}`,article);element('small',`[${hit.citation}]`,article);element('pre',hit.text,article);}
 }
 async function loadSources(){
   const rows=await api('/api/sources'),target=byId('sources');target.replaceChildren();
   if(!rows.length)element('p','No notes imported yet.',target);
   for(const source of rows){
-    const article=element('article','',target);element('strong',source.path.split('/').pop(),article);
+    const article=element('article','',target);element('strong',sourceLabel(source),article);
     element('small',`Version ${source.version} · ${source.chunks} passages · ${source.active?'current':'superseded'}`,article);
-    const inspect=element('button','Inspect',article);inspect.className='secondary';inspect.onclick=()=>run(async()=>{const data=await api('/api/inspect?id='+source.id);showEvidence({message:'Stored source evidence',evidence:data.chunks.map(c=>({...c,path:data.source.path,version:data.source.version,citation:`${source.id}:${c.id}`}))});});
+    const inspect=element('button','Inspect',article);inspect.className='secondary';inspect.onclick=()=>run(async()=>{const data=await api('/api/inspect?id='+source.id);showEvidence({message:'Stored source evidence',evidence:data.chunks.map(c=>({...c,path:data.source.path,observation:data.observation,version:data.source.version,citation:`${source.id}:${c.id}`}))});});
     const forget=element('button','Preview deletion',article);forget.className='secondary';forget.onclick=()=>run(async()=>{const preview=await api('/api/preview?id='+source.id);pending={id:source.id,preview_token:preview.preview_token};byId('delete-summary').textContent=`Remove ${preview.versions} source version(s) and ${preview.chunks} passage(s)?`;byId('delete-dialog').showModal();});
   }
 }

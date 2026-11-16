@@ -1,0 +1,73 @@
+{
+  "source": "https://huggingface.co/datasets/bowen-upenn/PersonaMem-v2",
+  "license": "CC-BY-4.0",
+  "source_sha256": "17548235bc6cc608d687ce0b9c57b4aed30c58bab5714043be67f3da68736b22",
+  "purpose": "tiny pipeline smoke test; no representative benchmark or final holdout",
+  "test_jsonl": "same as validation, for MLX development-loss command only",
+  "examples": [
+    {
+      "preview_row": 19,
+      "persona_id": 869,
+      "split": "train",
+      "target_origin": "assistant-authored evidence QA adaptation; not upstream target",
+      "question": "How does the user currently store spices?"
+    },
+    {
+      "preview_row": 18,
+      "persona_id": 756,
+      "split": "train",
+      "target_origin": "assistant-authored evidence QA adaptation; not upstream target",
+      "question": "What does the user describe doing on Saturday mornings?"
+    },
+    {
+      "preview_row": 11,
+      "persona_id": 205,
+      "split": "train",
+      "target_origin": "assistant-authored evidence QA adaptation; not upstream target",
+      "question": "Who had health difficulties in the user\u2019s writing?"
+    },
+    {
+      "preview_row": 2,
+      "persona_id": 950,
+      "split": "train",
+      "target_origin": "assistant-authored evidence QA adaptation; not upstream target",
+      "question": "Should mobile-only communication remain an active preference?"
+    },
+    {
+      "preview_row": 5,
+      "persona_id": 412,
+      "split": "train",
+      "target_origin": "assistant-authored evidence QA adaptation; not upstream target",
+      "question": "Should watching nature documentaries remain an active preference?"
+    },
+    {
+      "preview_row": 7,
+      "persona_id": 887,
+      "split": "valid",
+      "target_origin": "assistant-authored evidence QA adaptation; not upstream target",
+      "question": "Does this evidence establish a favorite television series?"
+    },
+    {
+      "preview_row": 0,
+      "persona_id": 13,
+      "split": "valid",
+      "target_origin": "assistant-authored evidence QA adaptation; not upstream target",
+      "question": "What medication does the user take?"
+    },
+    {
+      "preview_row": 15,
+      "persona_id": 160,
+      "split": "valid",
+      "target_origin": "assistant-authored evidence QA adaptation; not upstream target",
+      "question": "Can we confirm the user works at a hospital from a direct user statement here?"
+    }
+  ],
+  "file_sha256": {
+    "train.jsonl": "90bbc5872c8e112033e7c281679b46075104c0ca8f0fe4880e00f5e5cda1b4ec",
+    "test.jsonl": "0694dca5ca59cab3eee49c4e13688652c983be23d1bdf1ae9c225e5ff31d3dab",
+    "valid.jsonl": "0694dca5ca59cab3eee49c4e13688652c983be23d1bdf1ae9c225e5ff31d3dab"
+  },
+  "model_repo": "mlx-community/Qwen3.5-4B-4bit",
+  "model_revision": "0e7ffd5c629ef7719d4cbc04069232580bfa9d9c",
+  "scope": "text-only QLoRA adapter smoke test, not full-weight training"
+}

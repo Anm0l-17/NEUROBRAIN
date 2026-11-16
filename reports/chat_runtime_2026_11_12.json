@@ -1,0 +1,30 @@
+{
+  "version": {
+    "version": "0.40.16"
+  },
+  "model": {
+    "capabilities": [
+      "completion",
+      "vision",
+      "thinking",
+      "tools"
+    ],
+    "thinking": {
+      "values": [
+        false,
+        true
+      ],
+      "default": true
+    },
+    "details": {
+      "parent_model": "",
+      "format": "safetensors",
+      "family": "qwen3_5",
+      "families": null,
+      "parameter_size": "4.5B",
+      "quantization_level": "nvfp4",
+      "runner": "mlx"
+    },
+    "parameters": "num_predict                    1024\npresence_penalty               1.5\nrepeat_penalty                 1\ntemperature                    0.2\ntop_k                          20\ntop_p                          0.95\nmin_p                          0\nnum_ctx                        4096"
+  }
+}

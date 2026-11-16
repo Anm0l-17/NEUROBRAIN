@@ -1,0 +1,75 @@
+{
+  "model": "qwen3.5:4b",
+  "scope": "Six developer-authored fictional text smoke cases; not live OCR or independent evaluation",
+  "cases": [
+    {
+      "id": "milestone",
+      "expected": "milestone",
+      "passed": true,
+      "notes": [
+        {
+          "kind": "milestone",
+          "text": "The violet prototype demonstration is on 23 November 2026.",
+          "char_start": 0,
+          "char_end": 58,
+          "line_start": 1,
+          "line_end": 1
+        }
+      ],
+      "seconds": 4.45
+    },
+    {
+      "id": "decision",
+      "expected": "decision",
+      "passed": true,
+      "notes": [
+        {
+          "kind": "decision",
+          "text": "We decided to store the violet prototype notes locally in SQLite.",
+          "char_start": 0,
+          "char_end": 65,
+          "line_start": 1,
+          "line_end": 1
+        }
+      ],
+      "seconds": 3.67
+    },
+    {
+      "id": "chatter",
+      "expected": "empty",
+      "passed": true,
+      "notes": [],
+      "seconds": 0.71
+    },
+    {
+      "id": "ambiguous",
+      "expected": "empty",
+      "passed": false,
+      "notes": [
+        {
+          "kind": "preference",
+          "text": "Move that to there after the thing is finished.",
+          "char_start": 0,
+          "char_end": 47,
+          "line_start": 1,
+          "line_end": 1
+        }
+      ],
+      "seconds": 1.29
+    },
+    {
+      "id": "do-not-store",
+      "expected": "blocked",
+      "passed": true,
+      "error": "The note contains a NeuroBrain do-not-store directive.",
+      "seconds": 0.0
+    },
+    {
+      "id": "credential",
+      "expected": "blocked",
+      "passed": true,
+      "error": "The note contains a possible credential; import refused.",
+      "seconds": 0.0
+    }
+  ]
+}

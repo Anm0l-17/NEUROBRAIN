@@ -1,0 +1,65 @@
+{
+  "passed": true,
+  "scope": "fictional local model smoke; not quality benchmark",
+  "seconds": 5.173,
+  "temporary_database_removed": true,
+  "checks": [
+    {
+      "check": "extract_save",
+      "source": "fictional-demo",
+      "seconds": 0.964,
+      "source_id": "1cc391160c7342d38a7663897734f45c",
+      "version": 1,
+      "chunks": 1,
+      "duplicate": false
+    },
+    {
+      "check": "extract_save",
+      "source": "fictional-preference",
+      "seconds": 0.744,
+      "source_id": "77561adb0de44136abb35705791131ed",
+      "version": 1,
+      "chunks": 1,
+      "duplicate": false
+    },
+    {
+      "check": "restart_citation_duplicate_no_evidence",
+      "answer": {
+        "status": "supported_excerpts",
+        "answers": [
+          {
+            "citation": "1cc391160c7342d38a7663897734f45c:1",
+            "text": "The violet prototype demonstration is on 23 November 2026.",
+            "line_start": 1,
+            "line_end": 1,
+            "source": "/private/var/folders/5t/p3qbfj0s52n1n_1vxxy73j6c0000gn/T/neurobrain-observation-demo-ry3ftgqt/observation-703d64b1e0b1f5588394d4fd285db7b1df819603e3c373d84f6f9e242b59282d.md"
+          }
+        ]
+      }
+    },
+    {
+      "check": "extract_save",
+      "source": "fictional-demo",
+      "seconds": 0.954,
+      "source_id": "177580eeeae74b78b6fba6218c7c33d9",
+      "version": 2,
+      "chunks": 1,
+      "duplicate": false
+    },
+    {
+      "check": "updated_answer_and_all_version_forget",
+      "receipt": {
+        "receipt_id": "fd658fd5131c4124857360c6190634ae",
+        "completed_at": "2026-11-12T19:31:45.306920+00:00",
+        "removed_versions": 2,
+        "removed_chunks": 2,
+        "verified": true,
+        "original_file_deleted": false
+      }
+    },
+    {
+      "check": "restart_deletion_retention_tombstone_privacy",
+      "passed": true
+    }
+  ]
+}

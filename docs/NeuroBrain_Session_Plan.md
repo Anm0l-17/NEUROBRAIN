@@ -1,5 +1,12 @@
 # NeuroBrain: complete session-by-session development and neural training plan
 
+**23 November 2026 prototype deadline:** see
+[deadline execution plan](Prototype_23_November_Plan.md) for the supervised
+CLI demo across two or three approved apps, live window OCR, admission and
+hosted database inspection. A bounded part of H runs alongside C2, D and E. The full
+research schedule below remains the broader roadmap; deadline scope does not
+mark its research gates complete.
+
 **Revision:** 27 October 2026. **Status:** authoritative full-project schedule; first deterministic application checkpoint implemented, datasets and trained checkpoints outstanding. This document supersedes the execution schedule in `NeuroBrain_Working_Plan.md`. That document remains background context, not a second competing schedule.
 
 **Implementation update, 2 November 2026:** a first deterministic CLI/web baseline is implemented locally. The next prototype stage is a cloud storage path using Google Drive for original notes and Supabase PostgreSQL for evidence, while SQLite remains the tested reference backend. Training data, neural checkpoints, embeddings, generation, cloud integration and full release gates remain outstanding. The presentation checkpoint brings forward parts of sessions 17–24 and 43–44; it does not mark their prerequisite stages complete.
@@ -45,12 +52,12 @@ Sessions are work units, not guaranteed completion deadlines. If an exit test fa
 | A | 01–06 | 12 | Scope, foundations, machine and design ready |
 | B | 07–16 | 20 | Labeled, validated, leakage-controlled datasets ready |
 | C | 17–24 | 16 | Working deterministic memory/deletion baseline |
-| C2 | next | focused prototype slice | Cloud import/storage parity with the local baseline |
+| C2 | parallel with D, demo 23 Nov | focused prototype slice | Live Drive → Supabase import, cited search, version update and verified forgetting |
 | D | 25–36 | 24 | Neural training, selection and model report complete |
 | E | 37–46 | 20 | Neural admission integrated with local assistant |
 | F | 47–54 | 16 | Held-out, privacy, failure and performance testing complete |
 | G | 55–60 | 12 | Reproducible release and academic submission |
-| H, extension | 61–72 | 24 | Screen observation path evaluated and demonstrated |
+| H, screen observation | demo slice by 23 Nov, full study 61–72 | 24 for full study | Approved-window capture and local OCR in the mentor demo, broader screen evaluation afterward |
 
 For every two-hour session: review the previous artifact and prerequisite for 10 minutes; study/plan for 15; implement/annotate/run experiments for 70; verify for 20; record results and next actions for five. Training sessions can use the implementation block for machine runs and error analysis; do not silently exceed the time budget.
 
@@ -88,10 +95,12 @@ Engineering targets, to freeze by session 06 before held-out evaluation:
 | `qa_v1.jsonl` | 200 human-checked QA records | 100 dev, 100 held-out; 20 per category in each split |
 | `deletion_v1.jsonl` | 40 scenarios | 20 development, 20 held-out; target/retained facts, dependencies and probes |
 | LongMemEval-S cleaned | Start with 100 fixed questions | 50 development, 50 held-out; group overlapping histories and stratify type where feasible |
-| LoCoMo text | 10 conversations | Two conversations for adapter/dev; eight held-out |
+| LoCoMo text | 10 conversations | Evaluation only: two for developing the evaluation harness, eight held-out; exclude gold answers and evidence annotations from model training and teacher correction |
 | `screen_v1/`, extension | 100 staged images from 20 task sessions | 10 dev sessions, 10 held-out; no real credentials |
 
 Counts are targets, not assets already produced. A tiny synthetic dataset limits generalization: report it as a pilot and retain suggestion mode for real personal notes until validated there with consent.
+
+For keep/skip training, use the frozen reviewed exploratory admission corpus until the planned admission-v1 release exists. [MSC](https://parl.ai/projects/msc/) is the first external supplement to investigate: verify dataset-specific terms before acquisition, then review candidate statements with their original speaker and surrounding turns using the existing admission rubric. Keep conversation groups together across splits and retain uncertain decisions. [DialogSum](https://github.com/cylnlp/DialogSum) is optional for adding reviewed short-dialogue cases. Its summaries identify salient content and require separate usefulness labels. LongMemEval-S and LoCoMo are system evaluations; keep their gold labels scorer-side. Track any shared LongMemEval items in MemoryAgentBench when reporting evaluation coverage. PersonaMem-v2 serves the separate Qwen personalization experiment.
 
 ### Admission labeling specification
 
@@ -130,7 +139,7 @@ These are memory QA evaluation data, not automatically labeled admission trainin
 
 ### Model
 
-Use frozen `sentence-transformers/all-MiniLM-L6-v2` to produce a normalized 384-dimensional vector from candidate/context text. Add four non-label features: capped log token count, Markdown-heading indicator, list-item indicator and maximum similarity to earlier permitted candidates in the same chronological scenario. The last feature uses prior inputs only—never future text, gold labels or held-out examples. On cold start use a documented zero value. Verify whether this feature helps in an ablation.
+Use frozen `sentence-transformers/all-MiniLM-L6-v2` to produce a normalized 384-dimensional vector from candidate/context text. Add four non-label features: capped log token count, Markdown-heading indicator, list-item indicator and a versioned snapshot `prior_similarity` slot fixed at zero. Reviewed candidates are independent snapshots, not conversation turns; timestamps and neighboring rows must not create history. A future explicitly linked history corpus may define a nonzero version after a separate leakage audit. Verify any such change in an ablation.
 
 The encoder normally truncates beyond its supported input length. Cap the composed input at the documented tokenizer limit, initially ≤256 wordpieces including special tokens, reserving room for the candidate; log truncation counts. Do not confuse wordpieces with words or arbitrarily truncate the decisive sentence.
 
@@ -264,7 +273,7 @@ Retrain only on a new versioned fictional/reusable dataset after enough adjudica
 | 59 | 58 | Finalize OOM/architecture diagrams, slides and five-minute demo; rehearse questions | Consistent diagrams and slide numbers; explain why weights are frozen except admission head |
 | 60 | 59 | Final release audit, model/data cards, permissions/licenses and handover; plan next iteration | Versioned release bundle; all gates accounted for; backlog ordered by evidence |
 
-## 7. Screen extension: every session after core release
+## 7. Full screen research schedule (approved-window prototype brought forward for 23 November)
 
 This stage addresses the newer Clicky-inspired direction without pretending notes-only training teaches visual perception. The admission MLP must be evaluated again on OCR observations because they differ from clean notes.
 

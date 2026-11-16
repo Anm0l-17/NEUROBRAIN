@@ -1,0 +1,101 @@
+example_id,action,type,scope,sensitivity,source,review_rationale,adjudication_note,status
+batch-a-00-00,keep,decision,project,ordinary,fictional_assistant_authored,A clear organizing choice for household orders.,,draft
+batch-a-00-01,skip,transient,session,ordinary,fictional_assistant_authored,A passing physical action with no lasting value.,,draft
+batch-a-00-02,keep,requirement,project,ordinary,fictional_assistant_authored,A procedure rule volunteers must follow.,,draft
+batch-a-00-03,skip,acknowledgment,session,ordinary,fictional_assistant_authored,Polite thanks with no new detail.,,draft
+batch-a-00-04,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A recurring problem with chilled orders that still needs a fix.,,draft
+batch-a-00-05,keep,fact,project,ordinary,fictional_assistant_authored,A stable detail about where and when pickup happens.,,draft
+batch-a-00-06,skip,transient,session,ordinary,fictional_assistant_authored,A one-time observation about a sign falling.,,draft
+batch-a-00-07,keep,correction,project,ordinary,fictional_assistant_authored,Changes the earlier collection deadline.,,draft
+batch-a-00-08,keep,preference,project,ordinary,fictional_assistant_authored,A style preference for how labels are written.,,draft
+batch-a-00-09,skip,transient,session,ordinary,fictional_assistant_authored,A sound heard in this moment only.,,draft
+batch-a-00-10,keep,requirement,project,ordinary,fictional_assistant_authored,A reuse rule every returned crate must satisfy.,,draft
+batch-a-00-11,skip,acknowledgment,session,ordinary,fictional_assistant_authored,A confirmation reply with no new detail.,,draft
+batch-a-00-12,keep,milestone,project,ordinary,fictional_assistant_authored,A dated event worth remembering.,,draft
+batch-a-00-13,skip,transient,session,ordinary,fictional_assistant_authored,A momentary sensation with no lasting value.,,draft
+batch-a-00-14,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A repeatable printing bug that still needs fixing.,,draft
+batch-a-00-15,skip,transient,session,ordinary,fictional_assistant_authored,Describes what I am doing right now only.,,draft
+batch-a-00-16,keep,fact,project,ordinary,fictional_assistant_authored,A stable capacity detail for the boxes.,,draft
+batch-a-00-17,skip,acknowledgment,session,ordinary,fictional_assistant_authored,Agrees and moves on with no new detail.,,draft
+batch-a-00-18,keep,correction,project,ordinary,fictional_assistant_authored,Replaces the earlier box size from the supplier.,,draft
+batch-a-00-19,skip,transient,session,ordinary,fictional_assistant_authored,A passing social moment with no lasting value.,,draft
+batch-a-01-00,keep,requirement,project,ordinary,fictional_assistant_authored,A rule every public clip must meet.,,draft
+batch-a-01-01,skip,transient,session,ordinary,fictional_assistant_authored,A momentary window drag with no lasting value.,,draft
+batch-a-01-02,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A known export bug that still needs attention.,,draft
+batch-a-01-03,skip,acknowledgment,session,ordinary,fictional_assistant_authored,Thanks and confirmation only.,,draft
+batch-a-01-04,keep,decision,project,ordinary,fictional_assistant_authored,A clear decision about how files are organized.,,draft
+batch-a-01-05,keep,fact,project,ordinary,fictional_assistant_authored,A stable storage detail for finding the interview.,,draft
+batch-a-01-06,skip,transient,session,ordinary,fictional_assistant_authored,A momentary observation of a progress bar.,,draft
+batch-a-01-07,keep,correction,project,ordinary,fictional_assistant_authored,Replaces the old exhibit title with the new one.,,draft
+batch-a-01-08,keep,requirement,project,ordinary,fictional_assistant_authored,A privacy rule transcripts must satisfy before release.,,draft
+batch-a-01-09,skip,transient,session,ordinary,fictional_assistant_authored,Describes a short wait happening now.,,draft
+batch-a-01-10,keep,milestone,project,ordinary,fictional_assistant_authored,A scheduled review date.,,draft
+batch-a-01-11,skip,acknowledgment,session,ordinary,fictional_assistant_authored,A short go-ahead with no new detail.,,draft
+batch-a-01-12,keep,preference,project,ordinary,fictional_assistant_authored,A stylistic editing preference for clips.,,draft
+batch-a-01-13,skip,transient,session,ordinary,fictional_assistant_authored,Describes an object position at this minute only.,,draft
+batch-a-01-14,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A repeatable editing bug that still needs a fix.,,draft
+batch-a-01-15,keep,fact,project,ordinary,fictional_assistant_authored,A stable detail about what the collection holds.,,draft
+batch-a-01-16,skip,transient,session,ordinary,fictional_assistant_authored,A repeated scroll action with no lasting value.,,draft
+batch-a-01-17,keep,correction,project,ordinary,fictional_assistant_authored,Fixes the earlier interview date.,,draft
+batch-a-01-18,skip,acknowledgment,session,ordinary,fictional_assistant_authored,Confirms understanding with no new detail.,,draft
+batch-a-01-19,keep,requirement,project,ordinary,fictional_assistant_authored,A consent rule that clips must meet to be published.,,draft
+batch-a-02-00,keep,fact,project,ordinary,fictional_assistant_authored,A stable detail about how to reach a site.,,draft
+batch-a-02-01,skip,transient,session,ordinary,fictional_assistant_authored,A passing natural event with no lasting value.,,draft
+batch-a-02-02,keep,requirement,project,ordinary,fictional_assistant_authored,A procedure rule for each site visit.,,draft
+batch-a-02-03,skip,acknowledgment,session,ordinary,fictional_assistant_authored,Thanks and confirmation only.,,draft
+batch-a-02-04,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A repeatable device fault that still needs attention.,,draft
+batch-a-02-05,keep,decision,project,ordinary,fictional_assistant_authored,A clear equipment choice for the samples.,,draft
+batch-a-02-06,skip,transient,session,ordinary,fictional_assistant_authored,A momentary physical action.,,draft
+batch-a-02-07,keep,correction,project,ordinary,fictional_assistant_authored,Fixes the earlier marker location.,,draft
+batch-a-02-08,keep,fact,project,ordinary,fictional_assistant_authored,A stable detail about the survey scope.,,draft
+batch-a-02-09,skip,transient,session,ordinary,fictional_assistant_authored,A passing weather moment.,,draft
+batch-a-02-10,keep,requirement,project,ordinary,fictional_assistant_authored,A data-handling rule readings must follow.,,draft
+batch-a-02-11,skip,acknowledgment,session,ordinary,fictional_assistant_authored,A short go-ahead with no new detail.,,draft
+batch-a-02-12,keep,milestone,project,ordinary,fictional_assistant_authored,A scheduled session with a date.,,draft
+batch-a-02-13,skip,transient,session,ordinary,fictional_assistant_authored,A single screen tap with no lasting value.,,draft
+batch-a-02-14,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A data-loss bug that still needs a fix.,,draft
+batch-a-02-15,keep,fact,project,ordinary,fictional_assistant_authored,A stable detail about where supplies are kept.,,draft
+batch-a-02-16,skip,transient,session,ordinary,fictional_assistant_authored,A passing sound while checking the map.,,draft
+batch-a-02-17,keep,correction,project,ordinary,fictional_assistant_authored,Changes the earlier visit day.,,draft
+batch-a-02-18,keep,preference,project,ordinary,fictional_assistant_authored,A preference for summary format.,,draft
+batch-a-02-19,skip,acknowledgment,session,ordinary,fictional_assistant_authored,Confirms hearing with no new detail.,,draft
+batch-a-03-00,keep,requirement,project,ordinary,fictional_assistant_authored,A record-keeping rule every firing must meet.,,draft
+batch-a-03-01,skip,transient,session,ordinary,fictional_assistant_authored,Describes where a pencil is now.,,draft
+batch-a-03-02,keep,decision,project,ordinary,fictional_assistant_authored,A clear scheduling choice for the large kiln.,,draft
+batch-a-03-03,skip,acknowledgment,session,ordinary,fictional_assistant_authored,Thanks with no new detail.,,draft
+batch-a-03-04,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A repeatable display fault that still needs attention.,,draft
+batch-a-03-05,keep,fact,project,ordinary,fictional_assistant_authored,A stable capacity detail for the shelf.,,draft
+batch-a-03-06,skip,transient,session,ordinary,fictional_assistant_authored,A flickering light seen once.,,draft
+batch-a-03-07,keep,correction,project,ordinary,fictional_assistant_authored,Fixes the earlier workshop start time.,,draft
+batch-a-03-08,keep,preference,project,ordinary,fictional_assistant_authored,A preference for how notices are written.,,draft
+batch-a-03-09,skip,transient,session,ordinary,fictional_assistant_authored,Describes an action happening now.,,draft
+batch-a-03-10,keep,requirement,project,ordinary,fictional_assistant_authored,A storage rule pieces must follow.,,draft
+batch-a-03-11,skip,acknowledgment,session,ordinary,fictional_assistant_authored,"Agrees and asks to continue, no new detail.",,draft
+batch-a-03-12,keep,milestone,project,ordinary,fictional_assistant_authored,A dated event worth remembering.,,draft
+batch-a-03-13,skip,transient,session,ordinary,fictional_assistant_authored,"A page that opened while waiting, no lasting value.",,draft
+batch-a-03-14,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A double-booking bug that still needs fixing.,,draft
+batch-a-03-15,keep,fact,project,ordinary,fictional_assistant_authored,A stable detail about where the log is kept.,,draft
+batch-a-03-16,skip,transient,session,ordinary,fictional_assistant_authored,A passing visitor moment.,,draft
+batch-a-03-17,keep,correction,project,ordinary,fictional_assistant_authored,Replaces the earlier firing temperature setting.,,draft
+batch-a-03-18,keep,requirement,project,ordinary,fictional_assistant_authored,A safety rule members must follow.,,draft
+batch-a-03-19,skip,acknowledgment,session,ordinary,fictional_assistant_authored,A short remark with no new detail.,,draft
+batch-a-04-00,keep,decision,project,ordinary,fictional_assistant_authored,A clear choice about how the circles run.,,draft
+batch-a-04-01,skip,transient,session,ordinary,fictional_assistant_authored,A momentary page turn.,,draft
+batch-a-04-02,keep,requirement,project,ordinary,fictional_assistant_authored,An onboarding rule new members must meet.,,draft
+batch-a-04-03,skip,acknowledgment,session,ordinary,fictional_assistant_authored,Thanks and confirmation only.,,draft
+batch-a-04-04,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,"A bug that drops some members, still needs a fix.",,draft
+batch-a-04-05,keep,fact,project,ordinary,fictional_assistant_authored,A stable detail about where and when a circle meets.,,draft
+batch-a-04-06,skip,transient,session,ordinary,fictional_assistant_authored,A passing glance at the door.,,draft
+batch-a-04-07,keep,correction,project,ordinary,fictional_assistant_authored,Changes the earlier room for the advanced circle.,,draft
+batch-a-04-08,keep,preference,project,ordinary,fictional_assistant_authored,A preference for how feedback is given.,,draft
+batch-a-04-09,skip,transient,session,ordinary,fictional_assistant_authored,A page that loaded during the moment.,,draft
+batch-a-04-10,keep,requirement,project,ordinary,fictional_assistant_authored,A format rule the prompts must meet.,User selected ordinary: general large-print requirement names no person.,draft
+batch-a-04-11,skip,acknowledgment,session,ordinary,fictional_assistant_authored,A go-ahead with no new detail.,,draft
+batch-a-04-12,keep,milestone,project,ordinary,fictional_assistant_authored,A dated event worth remembering.,,draft
+batch-a-04-13,skip,transient,session,ordinary,fictional_assistant_authored,Describes what I am holding right now.,,draft
+batch-a-04-14,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A duplication bug that still needs a fix.,,draft
+batch-a-04-15,keep,fact,project,ordinary,fictional_assistant_authored,A stable detail about where supplies are kept.,,draft
+batch-a-04-16,skip,transient,session,ordinary,fictional_assistant_authored,A passing sound with no lasting value.,,draft
+batch-a-04-17,keep,correction,project,ordinary,fictional_assistant_authored,Changes the earlier end time.,,draft
+batch-a-04-18,keep,preference,project,ordinary,fictional_assistant_authored,A preference for the order of teaching topics.,,draft
+batch-a-04-19,skip,acknowledgment,session,ordinary,fictional_assistant_authored,Confirms hearing with no new detail.,,draft

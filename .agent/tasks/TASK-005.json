@@ -1,0 +1,13 @@
+{
+  "id": "005",
+  "title": "Connect approved observations to tested hosted storage contract",
+  "priority": 5,
+  "passes": false,
+  "spec": ".agent/tasks/TASK-005.json",
+  "steps": [
+    "Extend existing C2 contract for observation provenance while preserving Drive calls",
+    "Add explicit opt-in hosted observation save and same-source version/idempotency behavior",
+    "Validate owner isolation, version replacement, source/route citations and deletion in disposable PostgreSQL",
+    "Test Python adapters without credentials; do not deploy or claim hosted acceptance"
+  ]
+}

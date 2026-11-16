@@ -1,0 +1,11 @@
+{
+  "id": "006",
+  "authorized_scope": "Small theoretical PersonaMem-v2-derived pilot; scale only after verified improvement. Cross-check other datasets before expansion.",
+  "exit_checks": [
+    "Pinned base model and dependency lock",
+    "Evidence-supported tiny data with disjoint development personas",
+    "Baseline loss and adapter training",
+    "Reload checkpoint and compare development loss and answers",
+    "Record failure or improvement honestly; no automatic full-corpus promotion from tiny smoke test"
+  ]
+}
