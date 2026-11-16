@@ -37,7 +37,7 @@ NeuroBrain explores that workflow through a small, inspectable system. Import se
 | **Two interfaces** | Explore the same memory services through the local browser UI or CLI. |
 | **Observed input and extraction** | Read a selected file, a flat Notion page or an approved VS Code window (local OCR); local Qwen3.5 returns exact quotes with source, route, time and evidence spans, validated before saving. |
 | **Open WebUI bridge** | `neurobrain-memory` answers with cited excerpts from the same database; `--hosted` reads the signed-in Supabase rows instead. |
-| **Cross-route linking** | A fact seen on screen and then saved to its file is one logical note; forgetting takes the linked copies together. |
+| **Cross-route linking** | A single-sentence fact seen on screen and then saved to its file shows as one logical note, and forgetting takes both. Multi-line files whose extracted quotes differ from the capture do not link yet. |
 | **Import policy** | Reject unsupported, hidden, oversized, excluded, and obvious credential-containing notes. Credential detection is heuristic. |
 
 ## How it works

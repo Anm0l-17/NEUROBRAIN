@@ -230,7 +230,7 @@ deletion and external benchmark work continues under the research roadmap.
 
 ## 16 November 2026 — Demo-week Day 1, early hosted preparation, Day 5 documentation
 
-- **Done (branch `demo-week-2026-11`):** forget now includes exact-content copies, sibling screen captures and linked cross-route copies; screen-ocr captures are separate sources; the chat guard no longer refuses ordinary questions; short unresolved-reference quotes and acknowledgments are dropped at extraction; hosted SQL search/forget parity and a `--hosted` answer bridge were written and run on a local PostgreSQL 18. 82 tests pass.
+- **Done (branch `demo-week-2026-11`):** forget now includes exact-content copies, sibling screen captures and linked cross-route copies; screen-ocr captures are separate sources; the chat guard refuses fewer ordinary questions (it still misjudges some); short unresolved-reference quotes and acknowledgments are dropped at extraction; hosted SQL search/forget parity and a `--hosted` answer bridge were written; the SQL ran on a local PostgreSQL 18, the bridge was tested with mocks only. 82 tests pass.
 - **Evidence:** `reports/demo_week/2026-11-17.md` (real local Qwen, F01-F11 with Notion/OCR simulated) and `reports/demo_week/2026-11-16-hosted-prep.md`.
 - **Not done:** live Notion, screen capture, Open WebUI and any hosted Supabase run; they need the user's tokens, permissions and accounts.
 - **Decisions:** the admission MLP is preview-only and never gates saving; Qwen is the pretrained model, no adapter in the demo; no local cache for hosted answers, because it could serve forgotten notes.
