@@ -199,11 +199,11 @@ class MemoryStore:
         if checked["notes"] != extraction["notes"]:
             raise MemoryError("Observation evidence offsets differ")
         checked["status"] = "saved_by_explicit_extraction_request"
-        path = self.policy.root / (
-            "observation-"
-            + digest(json.dumps([extraction["route"], extraction["source"]]))
-            + ".md"
-        )
+        key = [extraction["route"], extraction["source"]]
+        if extraction["route"] == "screen-ocr":
+            # Each distinct capture is its own source, so scrolling never hides earlier notes.
+            key.append(digest(text))
+        path = self.policy.root / ("observation-" + digest(json.dumps(key)) + ".md")
         rows = [
             (n["text"], n["char_start"], n["char_end"], n["line_start"], n["line_end"])
             for n in checked["notes"]
@@ -377,7 +377,12 @@ class MemoryStore:
         }
 
     def preview_forget(self, source_id: str) -> dict:
-        source = self.inspect(source_id)["source"]
+        inspected = self.inspect(source_id)
+        source = inspected["source"]
+        observation = inspected["observation"] or {}
+        window = (
+            [observation["source"]] if observation.get("route") == "screen-ocr" else []
+        )
         # Plain and extracted imports of one note share content but not path:
         # also take in-scope copies whose exact content matches any version.
         rows = [
@@ -387,8 +392,11 @@ class MemoryStore:
                 LEFT JOIN chunks c ON c.source_id=s.id
                 WHERE s.path=? OR s.content_hash IN
                     (SELECT content_hash FROM sources WHERE path=?)
+                    OR s.id IN (SELECT source_id FROM observation_metadata
+                        WHERE json_extract(metadata,'$.route')='screen-ocr'
+                        AND json_extract(metadata,'$.source') IN (SELECT value FROM json_each(?)))
                 GROUP BY s.id ORDER BY s.path,s.version""",
-                (source["path"], source["path"]),
+                (source["path"], source["path"], json.dumps(window)),
             )
             if self._allowed(row["path"])
         ]
@@ -401,7 +409,7 @@ class MemoryStore:
             "versions": len(rows),
             "chunks": chunks,
             "preview_token": token,
-            "scope": "All imported versions of this source, copies with identical content, and their FTS entries",
+            "scope": "All imported versions of this source, copies with identical content, other captures of the same screen window, and their FTS entries",
             "boundary": "Original files, backups, and previously displayed answers remain outside this deletion.",
         }
 

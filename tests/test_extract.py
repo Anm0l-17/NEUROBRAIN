@@ -144,6 +144,35 @@ class ExtractionTests(unittest.TestCase):
                 self.assertFalse(store.search("Thursday"))
                 self.assertTrue(store.search("Monday"))
 
+    def test_screen_captures_are_separate_sources_and_forget_together(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+
+            def capture(body):
+                return extract_notes(
+                    body,
+                    "window",
+                    "screen-ocr",
+                    lambda _: {"notes": [{"kind": "fact", "quote": body}]},
+                )
+
+            first = "The amber rehearsal room is Cedar 417."
+            second = "The violet demonstration is on 23 November."
+            with MemoryStore(root / "memory.sqlite3", root) as store:
+                a = store.import_observation(first, capture(first))
+                b = store.import_observation(second, capture(second))
+                self.assertNotEqual(a["source_id"], b["source_id"])
+                self.assertTrue(
+                    store.import_observation(first, capture(first))["duplicate"]
+                )
+                self.assertTrue(store.search("Cedar"))
+                self.assertTrue(store.search("violet"))
+                preview = store.preview_forget(a["source_id"])
+                self.assertEqual(preview["versions"], 2)
+                store.forget(a["source_id"], preview["preview_token"])
+                self.assertFalse(store.search("Cedar"))
+                self.assertFalse(store.search("violet"))
+
     def test_storage_updates_restart_forgetting_and_citations(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
