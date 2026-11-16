@@ -183,6 +183,36 @@ def save_observation(text, extraction):
     return {**result, "storage": "supabase", "source_key": source_key}
 
 
+class HostedMemory:
+    """Read-only search over the signed-in user's hosted observations.
+
+    Same `search()` rows as MemoryStore, so `extract.answer` and the chat bridge work
+    unchanged. There is no local copy: a forgotten note cannot be served from a cache.
+    """
+
+    def __init__(self):
+        # The bridge serves many requests; never prompt for a password per request.
+        if not os.environ.get("NEUROBRAIN_USER_TOKEN"):
+            raise MemoryError("Set NEUROBRAIN_USER_TOKEN locally for hosted answers")
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *_):
+        pass
+
+    def search(self, query, limit=5):
+        rows = rpc(dict(op="search", folder="observations", query_text=query))
+        if not isinstance(rows, list):
+            raise MemoryError("Unexpected hosted search response")
+        for row in rows:
+            if not isinstance(row, dict) or not {"citation", "text", "path"} <= set(
+                row
+            ):
+                raise MemoryError("Unexpected hosted search response")
+        return rows[:limit]
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(prog="python -m neurobrain.cloud")
     cmds = parser.add_subparsers(dest="op", required=True)
