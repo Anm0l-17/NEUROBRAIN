@@ -445,11 +445,14 @@ class MemoryStore:
                 )
             }
 
-        wanted = set().union(*(texts(r) for r in base))
+        # Whole chunk sets must match: one shared short quote ("Approved.") is not the same note.
+        wanted = [frozenset(texts(r)) for r in base]
         rows = [
             r
             for r in everything
-            if r in base or r["content_hash"] in hashes or wanted & texts(r)
+            if r in base
+            or r["content_hash"] in hashes
+            or (texts(r) and frozenset(texts(r)) in wanted)
         ]
         content_hashes = sorted({row["content_hash"] for row in rows})
         source_ids = [row["id"] for row in rows]

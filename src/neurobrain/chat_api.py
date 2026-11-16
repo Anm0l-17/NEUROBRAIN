@@ -31,7 +31,7 @@ def unresolved_reference(question: str) -> bool:
 
     Personal pronouns always count. that/this/those count only when fewer than two
     content words remain, so "the room that Ravi booked" passes but "What about this?" does not.
-    shortcut: word list heuristic, not parsing; "What did Ravi say about that?" passes.
+    shortcut: word list heuristic, not parsing; "How much does that cost?" passes.
     """
     if _PERSONAL.search(question):
         return True

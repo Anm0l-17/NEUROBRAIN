@@ -169,6 +169,28 @@ class ExtractionTests(unittest.TestCase):
                 store.forget(a["source_id"], preview["preview_token"])
                 self.assertFalse(store.search("Cedar"))
 
+    def test_forget_keeps_note_sharing_only_one_short_quote(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+
+            def save(store, name, quotes):
+                body = "\n".join(quotes) + "\n"
+                extraction = extract_notes(
+                    body,
+                    name,
+                    "selected-file",
+                    lambda _: {"notes": [{"kind": "fact", "quote": q} for q in quotes]},
+                )
+                return store.import_observation(body, extraction)
+
+            with MemoryStore(root / "memory.sqlite3", root) as store:
+                trip = save(store, "trip", ["Trip to Pune.", "Approved."])
+                save(store, "budget", ["Budget for Q4 is 2 lakh.", "Approved."])
+                preview = store.preview_forget(trip["source_id"])
+                self.assertEqual(preview["versions"], 1)
+                store.forget(trip["source_id"], preview["preview_token"])
+                self.assertTrue(store.search("lakh"))
+
     def test_forgotten_term_is_absent_from_database_file(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory).resolve()
