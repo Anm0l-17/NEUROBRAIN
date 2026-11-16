@@ -91,6 +91,59 @@ class ExtractionTests(unittest.TestCase):
                     {"status": "no_evidence", "answers": []},
                 )
 
+    def test_forget_removes_plain_and_extracted_copies_of_same_note(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            note = root / "plan.md"
+            text = "The fictional launch moved to Thursday."
+            note.write_text(text)
+            with MemoryStore(root / "memory.sqlite3", root) as store:
+                plain = store.import_note(note)
+                extraction = extract_notes(
+                    text,
+                    str(note),
+                    "selected-file",
+                    lambda _: {"notes": [{"kind": "decision", "quote": text}]},
+                )
+                store.import_observation(text, extraction)
+                self.assertEqual(
+                    len({r["source_id"] for r in store.search("Thursday")}), 2
+                )
+                preview = store.preview_forget(plain["source_id"])
+                receipt = store.forget(plain["source_id"], preview["preview_token"])
+                self.assertEqual(receipt["removed_versions"], 2)
+                self.assertFalse(store.search("Thursday"))
+                with self.assertRaises(MemoryError):
+                    store.import_note(note)
+                with self.assertRaises(MemoryError):
+                    store.import_observation(text, extraction)
+
+    def test_forget_keeps_linked_copy_versions_with_different_content(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            note = root / "plan.md"
+            text = "The fictional launch moved to Thursday."
+            note.write_text(text)
+            with MemoryStore(root / "memory.sqlite3", root) as store:
+                plain = store.import_note(note)
+
+                def extraction(body):
+                    return extract_notes(
+                        body,
+                        "screen-window",
+                        "screen-ocr",
+                        lambda _: {"notes": [{"kind": "fact", "quote": body}]},
+                    )
+
+                store.import_observation(text, extraction(text))
+                later = "The fictional budget review is on Monday."
+                store.import_observation(later, extraction(later))
+                preview = store.preview_forget(plain["source_id"])
+                receipt = store.forget(plain["source_id"], preview["preview_token"])
+                self.assertEqual(receipt["removed_versions"], 2)
+                self.assertFalse(store.search("Thursday"))
+                self.assertTrue(store.search("Monday"))
+
     def test_storage_updates_restart_forgetting_and_citations(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

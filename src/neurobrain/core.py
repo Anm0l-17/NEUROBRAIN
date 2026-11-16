@@ -378,11 +378,20 @@ class MemoryStore:
 
     def preview_forget(self, source_id: str) -> dict:
         source = self.inspect(source_id)["source"]
-        rows = self.db.execute(
-            """SELECT s.id,s.content_hash,count(c.id) AS chunks FROM sources s
-            LEFT JOIN chunks c ON c.source_id=s.id WHERE s.path=? GROUP BY s.id ORDER BY s.version""",
-            (source["path"],),
-        ).fetchall()
+        # Plain and extracted imports of one note share content but not path:
+        # also take in-scope copies whose exact content matches any version.
+        rows = [
+            row
+            for row in self.db.execute(
+                """SELECT s.id,s.path,s.content_hash,count(c.id) AS chunks FROM sources s
+                LEFT JOIN chunks c ON c.source_id=s.id
+                WHERE s.path=? OR s.content_hash IN
+                    (SELECT content_hash FROM sources WHERE path=?)
+                GROUP BY s.id ORDER BY s.path,s.version""",
+                (source["path"], source["path"]),
+            )
+            if self._allowed(row["path"])
+        ]
         content_hashes = sorted({row["content_hash"] for row in rows})
         source_ids = [row["id"] for row in rows]
         chunks = sum(row["chunks"] for row in rows)
@@ -392,7 +401,7 @@ class MemoryStore:
             "versions": len(rows),
             "chunks": chunks,
             "preview_token": token,
-            "scope": "All imported versions of this source and their FTS entries",
+            "scope": "All imported versions of this source, copies with identical content, and their FTS entries",
             "boundary": "Original files, backups, and previously displayed answers remain outside this deletion.",
         }
 
