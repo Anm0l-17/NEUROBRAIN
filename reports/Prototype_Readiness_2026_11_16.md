@@ -10,7 +10,7 @@
 | Local persistence, retrieval, versions, forgetting | 15% | 90% | 93% | Exact-content copies, sibling captures and raw-file residue are now forgotten. |
 | Hosted persistence and provenance | 15% | 30% | 50% | Observation SQL, search and forget parity tested on local PostgreSQL 18; bridge `--hosted` exists. Never run on Supabase: no signed-in write, F12 or F13 evidence. |
 | Chat and presentation interface | 10% | 65% | 70% | Reference guard narrowed (still refuses some ordinary questions, e.g. about the IT team); local bridge HTTP verified; `--hosted` bridge tested with mocks only. Real Open WebUI untested. |
-| Privacy, admission and failure behaviour | 10% | 60% | 68% | Two reviewer rounds closed over-forgetting and resurfacing bugs. Live denied-window and revoked-permission checks still open. |
+| Privacy, admission and failure behaviour | 10% | 60% | 68% | Reviewer rounds closed over-forgetting bugs and a stale-version bug (forgetting a current text used to reactivate an outdated version; older versions now stay history only). Related gaps remain: whitespace-variant re-import is not blocked. Live denied-window and revoked-permission checks still open. |
 | Integrated acceptance, timing, rehearsal | 10% | 20% | 20% | No live two-app walkthrough or route timing yet (Day 2). |
 | **Total (weighted)** | **100%** | 57% | **64%** | Report as about 65%. |
 

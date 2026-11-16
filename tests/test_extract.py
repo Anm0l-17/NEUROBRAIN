@@ -247,27 +247,38 @@ class ExtractionTests(unittest.TestCase):
             self.assertNotIn(b"zqxmarkerwvu", raw)
             self.assertIn(b"mira", raw)
 
-    def test_forget_of_linked_active_version_reactivates_older_version(self):
+    def test_forgetting_current_text_does_not_bring_back_an_outdated_version(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory).resolve()
-            note = root / "plan.md"
-            note.write_text("Old budget review on Monday.")
-            with MemoryStore(root / "memory.sqlite3", root) as store:
-                store.import_note(note)
-                new = "The budget review moved to Thursday."
-                note.write_text(new)
-                store.import_note(note)
-                extraction = extract_notes(
-                    new,
-                    "screen-window",
-                    "screen-ocr",
-                    lambda _: {"notes": [{"kind": "fact", "quote": new}]},
+            v1 = "The violet demonstration is on 23 November 2026."
+            v2 = "The violet demonstration is on 24 November 2026."
+
+            def page(text):
+                return extract_notes(
+                    text,
+                    "demo-page",
+                    "page-api",
+                    lambda _: {"notes": [{"kind": "milestone", "quote": text}]},
                 )
-                copy = store.import_observation(new, extraction)
-                preview = store.preview_forget(copy["source_id"])
-                store.forget(copy["source_id"], preview["preview_token"])
-                self.assertFalse(store.search("Thursday"))
-                self.assertTrue(store.search("Monday"))
+
+            copy = root / "copy.md"
+            copy.write_text(v2)
+            with MemoryStore(root / "memory.sqlite3", root) as store:
+                store.import_observation(v1, page(v1))
+                store.import_observation(v2, page(v2))
+                plain = store.import_note(copy)
+                self.assertIn(
+                    "24 November", store.search("violet demonstration")[0]["text"]
+                )
+                preview = store.preview_forget(plain["source_id"])
+                store.forget(plain["source_id"], preview["preview_token"])
+                self.assertEqual(store.search("violet demonstration"), [])
+                # The old text is not tombstoned: importing it again makes a new current version.
+                again = store.import_observation(v1, page(v1))
+                self.assertFalse(again["duplicate"])
+                self.assertIn(
+                    "23 November", store.search("violet demonstration")[0]["text"]
+                )
 
     def test_screen_captures_are_separate_sources_and_forget_together(self):
         with tempfile.TemporaryDirectory() as directory:

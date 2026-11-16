@@ -242,6 +242,7 @@ class MemoryStore:
                 } == {k: v for k, v in old.items() if k != "observed_at"}
             if (
                 previous
+                and previous["active"]
                 and previous["content_hash"] == content_hash
                 and same_observation
             ):
@@ -485,13 +486,8 @@ class MemoryStore:
                     "INSERT OR IGNORE INTO tombstones VALUES(?,?)", (row[0], completed)
                 )
                 self.db.execute("DELETE FROM sources WHERE id=?", (sid,))
-            # Removing a copy's active version must not hide the path's older versions.
-            self.db.execute(
-                """UPDATE sources SET active=1 WHERE version=
-                (SELECT max(version) FROM sources n WHERE n.path=sources.path)
-                AND NOT EXISTS (SELECT 1 FROM sources a
-                    WHERE a.path=sources.path AND a.active=1)"""
-            )
+            # Older versions are never reactivated: forgetting a current text must not
+            # bring an outdated one back as the answer. They remain history only.
             receipt_id = uuid4().hex
             self.db.execute(
                 "INSERT INTO deletion_receipts VALUES(?,?,?,?)",

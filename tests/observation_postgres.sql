@@ -80,13 +80,17 @@ begin
     r := pg_temp.forget('obs_t');
     assert r->>'versions'='1', r::text;
     assert pg_temp.hits('lakh')=1;
-    -- Forgetting a copy must not leave another file with no active version.
+    -- Forgetting a copy's current text leaves the file with history only; no older version comes back.
     perform pg_temp.obs('multi','selected-file','/n/m.md',repeat('7',64),array['Monday review']);
     perform pg_temp.obs('multi','selected-file','/n/m.md',repeat('8',64),array['Thursday review']);
     perform pg_temp.obs('obs_c','screen-ocr','w2',repeat('8',64),array['Thursday review']);
     r := pg_temp.forget('obs_c');
     assert r->>'versions'='2', r::text;
-    assert pg_temp.hits('Monday')=1 and pg_temp.hits('Thursday')=0;
+    -- The older Monday version must NOT come back as the current answer.
+    assert pg_temp.hits('Monday')=0 and pg_temp.hits('Thursday')=0;
+    -- Re-importing the old text (not forgotten) makes a new current version, not a hidden duplicate.
+    assert pg_temp.obs('multi','selected-file','/n/m.md',repeat('7',64),array['Monday review'])->>'duplicate'='false';
+    assert pg_temp.hits('Monday')=1;
     -- Lone short notes ("Approved.", "OK") never link distinct pages; windows do not drag them in.
     perform pg_temp.obs('p1','selected-file','Trip page',repeat('a1',32),array['Approved.']);
     perform pg_temp.obs('p2','selected-file','Budget page',repeat('b2',32),array['Approved.']);

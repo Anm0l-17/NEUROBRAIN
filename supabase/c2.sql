@@ -115,7 +115,7 @@ begin
         if exists(select 1 from public.tombstones where owner_id=uid and content_hash=body_hash) then
             raise exception 'Content previously forgotten';
         end if;
-        if latest.content_hash=body_hash and
+        if latest.active and latest.content_hash=body_hash and
            (latest.observation - 'observed_at') is not distinct from (observation - 'observed_at') then
             return jsonb_build_object('source_id',latest.id,'version',latest.version,'duplicate',true);
         end if;
@@ -148,11 +148,8 @@ begin
             select uid,s.content_hash from public.sources s where s.owner_id=uid and s.id = any(ids)
             on conflict do nothing;
         delete from public.sources where owner_id=uid and id = any(ids);
-        -- A removed copy's active version must not hide an older version of another file.
-        update public.sources s set active=true where s.owner_id=uid and not exists (
-                select 1 from public.sources a where a.owner_id=uid and a.drive_file_id=s.drive_file_id and a.active)
-            and s.version=(select max(m.version) from public.sources m
-                           where m.owner_id=uid and m.drive_file_id=s.drive_file_id);
+        -- Older versions are never reactivated: forgetting a current text must not bring an
+        -- outdated one back as the answer. They remain history only.
         insert into public.deletion_receipts(owner_id,source_count,chunk_count)
             values(uid,versions,passages) returning id into receipt;
         return jsonb_build_object('receipt',receipt,'versions',versions,'chunks',passages);
