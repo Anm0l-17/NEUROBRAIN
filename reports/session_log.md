@@ -227,3 +227,10 @@ deletion and external benchmark work continues under the research roadmap.
 - **Decision:** user withdrew the individual clarification approach: all 28 rows remain uncertain in action/type/scope, judged independently from their original context. No answers will be invented. The Spanish-session keep and easier-version skip are withdrawn; no clarification responses are populated.
 - **Saved:** current labels in `data/admission_batch_b_adjudicated_v1_1.csv`, preserving the previous snapshot. Latest user instruction restores `batch-b-07-01` sensitivity to uncertain, superseding its earlier restricted adjudication; the explicit privacy warning remains and no sensitive reason is inferred. Eight sensitivity labels are uncertain. This specific override does not revise guide v1.2 globally.
 - **Exit:** 319 keep, 153 skip, 28 uncertain; all rows draft. The current-decision section of the clarification log supersedes its historical entries. Preserve uncertain examples and explicitly exclude them from a later binary input rather than relabeling them skip. No binary export, split or training run performed; original workbooks unchanged.
+
+## 16 November 2026 — Demo-week Day 1, early hosted preparation, Day 5 documentation
+
+- **Done (branch `demo-week-2026-11`):** forget now includes exact-content copies, sibling screen captures and linked cross-route copies; screen-ocr captures are separate sources; the chat guard no longer refuses ordinary questions; short unresolved-reference quotes and acknowledgments are dropped at extraction; hosted SQL search/forget parity and a `--hosted` answer bridge were written and run on a local PostgreSQL 18. 82 tests pass.
+- **Evidence:** `reports/demo_week/2026-11-17.md` (real local Qwen, F01-F11 with Notion/OCR simulated) and `reports/demo_week/2026-11-16-hosted-prep.md`.
+- **Not done:** live Notion, screen capture, Open WebUI and any hosted Supabase run; they need the user's tokens, permissions and accounts.
+- **Decisions:** the admission MLP is preview-only and never gates saving; Qwen is the pretrained model, no adapter in the demo; no local cache for hosted answers, because it could serve forgotten notes.
