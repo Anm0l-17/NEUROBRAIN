@@ -90,17 +90,23 @@ def structured_request(payload):
 
 
 _VAGUE = re.compile(r"\b(that|this|those|them|it|there|thing|things|stuff)\b", re.I)
+_ACK = frozenset(
+    "ok okay thanks thank you sounds good sure noted got it yes yeah will do".split()
+)
 
 
 def unresolved_quote(quote):
-    """A short quote built on pronouns or placeholders with no name, number or date.
+    """Acknowledgments, or a short quote leaning on two or more pronouns/placeholders
+    with no name or number ("Move that to there after the thing is finished.").
 
-    shortcut: lexical heuristic for the F07 abstain case; a long quote or one with
-    a name/number is kept even if it is still vague. Replace with a model abstain head.
+    shortcut: lexical heuristic for the F07 abstain case; one pronoun alone is kept
+    ("Keep this file under version control."). Replace with a model abstain head.
     """
+    if set(re.findall(r"[a-z]+", quote.lower())) <= _ACK:
+        return True
     words = quote.split()
     named = any(w[0].isupper() or any(c.isdigit() for c in w) for w in words[1:])
-    return bool(_VAGUE.search(quote)) and not named and len(words) <= 14
+    return len(_VAGUE.findall(quote)) >= 2 and not named and len(words) <= 14
 
 
 def extract_notes(text, source, route, generator=generate):

@@ -5,7 +5,7 @@
   "expected": "retained, cited 23 November",
   "actual": "exit=0 answers=['The violet demonstration is on 23 November 2026.']",
   "ok": true,
-  "seconds": 1.0
+  "seconds": 0.93
  },
  {
   "id": "F02",
@@ -13,7 +13,7 @@
   "expected": "preference retained",
   "actual": "exit=0 answers=['Mira prefers concise answers with references.']",
   "ok": true,
-  "seconds": 0.78
+  "seconds": 0.74
  },
  {
   "id": "F03",
@@ -21,15 +21,15 @@
   "expected": "screen-only fact queryable before save",
   "actual": "exit=0 answers=[('The amber rehearsal room is Cedar 417.', {'source': 'fictional', 'route': 'screen-ocr'})]",
   "ok": true,
-  "seconds": 0.84
+  "seconds": 0.79
  },
  {
   "id": "F04",
   "mode": "SIMULATED OCR then LOCAL file save (trailing newline differs)",
   "expected": "one logical note, linked routes",
-  "actual": "exit=0 search_hits=1 linked=[['2f06b11d5bbd45dda751848c67fc51da:4']] answers=1",
+  "actual": "exit=0 search_hits=1 linked=[['825450f9844e4cbcaf7bac912377d5ed:4']] answers=1",
   "ok": true,
-  "seconds": 0.8
+  "seconds": 0.79
  },
  {
   "id": "F05",
@@ -37,7 +37,7 @@
   "expected": "v2 current answer says 24, not 23",
   "actual": "exit=0 answers=['The violet demonstration is on 24 November 2026.']",
   "ok": true,
-  "seconds": 0.94
+  "seconds": 0.92
  },
  {
   "id": "F06",
@@ -45,7 +45,7 @@
   "expected": "no useful retained excerpt",
   "actual": "exit=0 extracted_notes=[] stored_chunks_with_phrase=[]",
   "ok": true,
-  "seconds": 0.23
+  "seconds": 0.22
  },
  {
   "id": "F07",
@@ -53,7 +53,7 @@
   "expected": "abstain/no keep",
   "actual": "exit=0 extracted_notes=[] stored_chunks_with_phrase=[]",
   "ok": true,
-  "seconds": 0.8
+  "seconds": 0.79
  },
  {
   "id": "F08",
@@ -69,7 +69,7 @@
   "expected": "no_evidence",
   "actual": "{\"status\": \"no_evidence\", \"answers\": []}",
   "ok": true,
-  "seconds": 0.46
+  "seconds": 0.45
  },
  {
   "id": "F10",
@@ -77,13 +77,13 @@
   "expected": "no capture saved",
   "actual": "exit=1 stderr='Approved window capture: switch to the selected VS Code window within five seconds after start.\\nScreen observation stopped: check recording permission and approved foreground window' sources_before=5 after=5 hits=0",
   "ok": true,
-  "seconds": 0.79
+  "seconds": 0.76
  },
  {
   "id": "F11",
   "mode": "LOCAL, fresh store handle (restart)",
   "expected": "all violet versions gone, Mira kept, file intact",
-  "actual": "receipt={'receipt_id': 'a1e4a205b3574d29bc41f54578a08ae3', 'completed_at': '2026-11-16T17:30:11.909075+00:00', 'removed_versions': 2, 'removed_chunks': 2, 'verified': True, 'original_file_deleted': False} violet_gone=True mira_kept=True reimport_blocked=True file_exists=True",
+  "actual": "receipt={'receipt_id': '0d8d684d057e4d9da73a9729edc90b90', 'completed_at': '2026-11-16T17:31:59.047745+00:00', 'removed_versions': 2, 'removed_chunks': 2, 'verified': True, 'original_file_deleted': False} violet_gone=True mira_kept=True reimport_blocked=True file_exists=True",
   "ok": true,
   "seconds": null
  }
