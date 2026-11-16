@@ -18,11 +18,18 @@ declare
     versions integer;
     passages integer;
     receipt uuid;
+    tsq tsquery;
 begin
     if uid is null or folder is null or folder !~ '^[a-zA-Z0-9_-]+$' then
         raise exception 'Invalid session or folder';
     end if;
     if op = 'search' then
+        -- OR the words like the local FTS: plainto_tsquery ANDs every word, so a natural
+        -- question ("When is the violet demonstration?") would match nothing.
+        select to_tsquery('simple', string_agg(t, ' | ')) into tsq from (
+            select m[1] as t from regexp_matches(left(coalesce(query_text,''),2000),
+                '([[:alnum:]]+)', 'g') as m limit 32) w;
+        if tsq is null then return '[]'::jsonb; end if;
         select coalesce(jsonb_agg(to_jsonb(h)), '[]'::jsonb) into result from (
             select s.path, s.version, s.id as source_id, c.line_start, c.line_end,
                    c.text, concat(s.id, ':', c.ordinal) as citation,
@@ -31,8 +38,8 @@ begin
                    end as observation
             from public.sources s join public.chunks c on s.id=c.source_id
             where s.owner_id=uid and c.owner_id=uid and s.folder_id=folder and s.active
-              and c.search_vector @@ plainto_tsquery('simple', query_text)
-            order by ts_rank(c.search_vector, plainto_tsquery('simple', query_text)) desc,
+              and c.search_vector @@ tsq
+            order by ts_rank(c.search_vector, tsq) desc,
                      s.id, c.ordinal limit 5
         ) h;
         return result;

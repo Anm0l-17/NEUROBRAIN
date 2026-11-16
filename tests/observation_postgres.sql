@@ -12,6 +12,9 @@ begin
         body_hash=>repeat('d',64),pieces=>'[["violet",0,6,1,1]]',observation=>meta);
     assert first->>'version'='1';
     assert public.c2_memory('search','observations',query_text=>'violet')->0->'observation'->>'route'='page-api';
+    -- A natural question must reach the note even though most of its words are not in it.
+    assert public.c2_memory('search','observations',query_text=>'When is the violet demonstration?')->0->>'text'='violet';
+    assert public.c2_memory('search','observations',query_text=>'?!')='[]';
     meta := jsonb_set(meta,'{observed_at}','"2026-11-13T01:00:00Z"');
     assert public.c2_memory('import','observations','obs_fixture','Fictional Notion page',
         body_hash=>repeat('d',64),pieces=>'[["violet",0,6,1,1]]',observation=>meta)->>'duplicate'='true';
