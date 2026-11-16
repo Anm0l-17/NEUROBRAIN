@@ -191,6 +191,26 @@ class ExtractionTests(unittest.TestCase):
                 store.forget(trip["source_id"], preview["preview_token"])
                 self.assertTrue(store.search("lakh"))
 
+    def test_unresolved_reference_quotes_are_dropped_not_stored(self):
+        text = "Move that to there after the thing is finished.\nMira booked it for Friday."
+        out = extract_notes(
+            text,
+            "f07",
+            "selected-file",
+            lambda _: {
+                "notes": [
+                    {
+                        "kind": "decision",
+                        "quote": "Move that to there after the thing is finished.",
+                    },
+                    {"kind": "fact", "quote": "Mira booked it for Friday."},
+                ]
+            },
+        )
+        self.assertEqual(
+            [n["text"] for n in out["notes"]], ["Mira booked it for Friday."]
+        )
+
     def test_forgotten_term_is_absent_from_database_file(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory).resolve()
