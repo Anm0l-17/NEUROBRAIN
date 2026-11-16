@@ -8,7 +8,8 @@ drop function if exists public.c2_memory(text,text,text,text,text,text,jsonb,tex
 -- Everything one forget removes, mirroring MemoryStore.preview_forget: all versions of the file,
 -- every capture of the same screen window, then one hop to copies reached by another route
 -- whose content hash matches, or whose whole chunk set matches after whitespace normalising.
--- One shared short chunk is never enough ("Approved." must not take another note with it).
+-- Whole-chunk-set matches count only for substantial text (24+ chars): a lone "Approved." or
+-- "OK" must not take another note with it. Scope is the whole owner, like tombstones.
 create or replace function public.c2_forget_set(uid uuid, folder text, file_id text)
 returns table(id uuid, content_hash text) language sql stable security definer set search_path = '' as $f$
     with s as (
@@ -16,7 +17,7 @@ returns table(id uuid, content_hash text) language sql stable security definer s
                coalesce((select array_agg(n order by n) from (
                    select distinct btrim(regexp_replace(c.text, '\s+', ' ', 'g')) as n
                    from public.chunks c where c.source_id = src.id) x), '{}'::text[]) as cs
-        from public.sources src where src.owner_id = uid and src.folder_id = folder),
+        from public.sources src where src.owner_id = uid),
     target as (select * from s where s.drive_file_id = file_id order by s.version desc limit 1),
     base as (
         select b.* from s b, target t
@@ -26,7 +27,7 @@ returns table(id uuid, content_hash text) language sql stable security definer s
     select distinct s.id, s.content_hash from s
     where s.id in (select base.id from base)
        or s.content_hash in (select base.content_hash from base)
-       or (s.cs <> '{}'::text[] and s.cs in (select base.cs from base))
+       or s.cs in (select base.cs from base where length(array_to_string(base.cs, '')) >= 24)
 $f$;
 revoke all on function public.c2_forget_set(uuid,text,text) from public, anon, authenticated;
 

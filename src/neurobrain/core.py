@@ -446,7 +446,8 @@ class MemoryStore:
             }
 
         # Whole chunk sets must match: one shared short quote ("Approved.") is not the same note.
-        wanted = [frozenset(texts(r)) for r in base]
+        # shortcut: 24 characters is a guess for "substantial"; short notes link by exact hash only.
+        wanted = [frozenset(texts(r)) for r in base if sum(map(len, texts(r))) >= 24]
         rows = [
             r
             for r in everything

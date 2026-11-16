@@ -108,7 +108,7 @@ def create_server(db, notes_root, token, port=8766, answerer=answer, hosted=Fals
                         )
                         return
                     self.send(200, value, content_type)
-            except (MemoryError, sqlite3.Error, OSError):
+            except (MemoryError, sqlite3.Error, OSError, ValueError):
                 self.send(503, {"error": {"message": "Evidence service unavailable"}})
 
         def do_GET(self):
@@ -195,7 +195,7 @@ def create_server(db, notes_root, token, port=8766, answerer=answer, hosted=Fals
                     )
                     or "I could not find stored evidence that answers this question."
                 )
-            except (MemoryError, sqlite3.Error, OSError):
+            except (MemoryError, sqlite3.Error, OSError, ValueError):
                 self.send(503, {"error": {"message": "Evidence service unavailable"}})
                 return
             common = {

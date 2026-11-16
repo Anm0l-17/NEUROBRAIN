@@ -75,7 +75,7 @@ begin
     assert pg_temp.hits('Cedar417')=0 and pg_temp.hits('Zebra99')=0 and pg_temp.hits('keepword')=1;
     -- A single shared short chunk must not take an unrelated note.
     perform pg_temp.obs('obs_t','selected-file','/n/t.md',repeat('5',64),array['Trip Pune','Approved.']);
-    perform pg_temp.obs('obs_u','selected-file','/n/u.md',repeat('6',64),array['Budget lakh','Approved.']);
+    perform pg_temp.obs('obs_u','selected-file','/n/u.md',repeat('6',64),array['Budget lakh for the Q4 review','Approved.']);
     r := pg_temp.forget('obs_t');
     assert r->>'versions'='1', r::text;
     assert pg_temp.hits('lakh')=1;
@@ -86,10 +86,25 @@ begin
     r := pg_temp.forget('obs_c');
     assert r->>'versions'='2', r::text;
     assert pg_temp.hits('Monday')=1 and pg_temp.hits('Thursday')=0;
+    -- Lone short notes ("Approved.", "OK") never link distinct pages; windows do not drag them in.
+    perform pg_temp.obs('p1','selected-file','Trip page',repeat('a1',32),array['Approved.']);
+    perform pg_temp.obs('p2','selected-file','Budget page',repeat('b2',32),array['Approved.']);
+    perform pg_temp.obs('w1','screen-ocr','Slack',repeat('c3',32),array['Real secret Cedarmark here']);
+    perform pg_temp.obs('w2','screen-ocr','Slack',repeat('d4',32),array['OK']);
+    perform pg_temp.obs('u1','selected-file','/n/u1.md',repeat('e5',32),array['OK']);
+    assert pg_temp.forget('p1')->>'versions'='1';
+    assert pg_temp.hits('Approved')=1;
+    assert pg_temp.forget('w1')->>'versions'='2';
+    assert pg_temp.hits('OK')=1;
+    -- Identical content in another folder goes too: tombstones are owner-wide.
+    perform public.c2_memory('import','folderY','y1','y.md',body_hash=>repeat('f6',32),pieces=>'[["gamma three",0,12,1,1]]');
+    perform public.c2_memory('import','observations','x1','x.md',body_hash=>repeat('f6',32),pieces=>'[["gamma three",0,12,1,1]]');
+    assert pg_temp.forget('x1')->>'versions'='2';
+    assert jsonb_array_length(public.c2_memory('search','folderY',query_text=>'gamma'))=0;
     -- A copy added after the preview makes the confirmation stale.
     declare tok uuid := (public.c2_memory('preview','observations','obs_u')->>'confirmation')::uuid;
     begin
-        perform pg_temp.obs('obs_late','selected-file','/n/late.md',repeat('9',64),array['Budget lakh','Approved.']);
+        perform pg_temp.obs('obs_late','selected-file','/n/late.md',repeat('9',64),array['Budget lakh for the Q4 review','Approved.']);
         begin
             perform public.c2_memory('forget','observations','obs_u',confirmation=>tok);
             raise exception 'accepted stale preview';

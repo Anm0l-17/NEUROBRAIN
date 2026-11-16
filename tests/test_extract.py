@@ -211,6 +211,24 @@ class ExtractionTests(unittest.TestCase):
             [n["text"] for n in out["notes"]], ["Mira booked it for Friday."]
         )
 
+    def test_lone_short_notes_do_not_link_distinct_sources(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+
+            def save(store, name, body):
+                extraction = extract_notes(
+                    body,
+                    name,
+                    "selected-file",
+                    lambda _: {"notes": [{"kind": "fact", "quote": body}]},
+                )
+                return store.import_observation(body, extraction)
+
+            with MemoryStore(root / "memory.sqlite3", root) as store:
+                one = save(store, "trip", "Approved.")
+                save(store, "budget", "Approved.!")
+                self.assertEqual(store.preview_forget(one["source_id"])["versions"], 1)
+
     def test_forgotten_term_is_absent_from_database_file(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory).resolve()
