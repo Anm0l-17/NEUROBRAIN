@@ -43,6 +43,8 @@ def request(url, token, *, payload=None, key=None, raw=False, headers=None):
             ):
                 if message.encode() in body:
                     detail = ": " + message
+        if exc.code == 401:
+            detail = ": sign-in expired or invalid, renew NEUROBRAIN_USER_TOKEN"
         raise MemoryError(f"Cloud request failed (HTTP {exc.code}){detail}") from exc
     except (URLError, OSError) as exc:
         raise MemoryError("Cloud service unreachable") from exc
@@ -192,8 +194,12 @@ class HostedMemory:
 
     def __init__(self):
         # The bridge serves many requests; never prompt for a password per request.
-        if not os.environ.get("NEUROBRAIN_USER_TOKEN"):
-            raise MemoryError("Set NEUROBRAIN_USER_TOKEN locally for hosted answers")
+        for name in (
+            "NEUROBRAIN_USER_TOKEN",
+            "SUPABASE_URL",
+            "SUPABASE_PUBLISHABLE_KEY",
+        ):
+            setting(name)
 
     def __enter__(self):
         return self

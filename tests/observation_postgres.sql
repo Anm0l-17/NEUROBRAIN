@@ -15,6 +15,7 @@ begin
     -- A natural question must reach the note even though most of its words are not in it.
     assert public.c2_memory('search','observations',query_text=>'When is the violet demonstration?')->0->>'text'='violet';
     assert public.c2_memory('search','observations',query_text=>'?!')='[]';
+    assert public.c2_memory('search','observations',query_text=>$q$violet' & !x:* \ "$q$) is not null;
     meta := jsonb_set(meta,'{observed_at}','"2026-11-13T01:00:00Z"');
     assert public.c2_memory('import','observations','obs_fixture','Fictional Notion page',
         body_hash=>repeat('d',64),pieces=>'[["violet",0,6,1,1]]',observation=>meta)->>'duplicate'='true';
@@ -101,6 +102,17 @@ begin
     perform public.c2_memory('import','observations','x1','x.md',body_hash=>repeat('f6',32),pieces=>'[["gamma three",0,12,1,1]]');
     assert pg_temp.forget('x1')->>'versions'='2';
     assert jsonb_array_length(public.c2_memory('search','folderY',query_text=>'gamma'))=0;
+    -- Punctuated terms stay searchable as whole lexemes (index and query share one parser).
+    perform pg_temp.obs('dots','selected-file','/n/dots.md',repeat('c7',32),array['Cost 3.14 at a@b.com see example.com v2.0']);
+    assert pg_temp.hits('3.14')=1 and pg_temp.hits('a@b.com')=1 and pg_temp.hits('v2.0')=1;
+    -- Forgetting through one folder must not reactivate a tombstoned copy in another.
+    perform public.c2_memory('import','folderA','fa','fa.md',body_hash=>repeat('a8',32),pieces=>'[["resurface me please now",0,24,1,1]]');
+    perform public.c2_memory('import','folderB','fb','fb.md',body_hash=>repeat('a8',32),pieces=>'[["resurface me please now",0,24,1,1]]');
+    perform public.c2_memory('import','folderB','fb','fb.md',body_hash=>repeat('b9',32),pieces=>'[["second version text here",0,25,1,1]]');
+    perform public.c2_memory('import','folderB','fk','fk.md',body_hash=>repeat('b9',32),pieces=>'[["second version text here",0,25,1,1]]');
+    perform public.c2_memory('forget','folderA','fa',confirmation=>(public.c2_memory('preview','folderA','fa')->>'confirmation')::uuid);
+    perform public.c2_memory('forget','folderB','fk',confirmation=>(public.c2_memory('preview','folderB','fk')->>'confirmation')::uuid);
+    assert jsonb_array_length(public.c2_memory('search','folderB',query_text=>'resurface'))=0;
     -- A copy added after the preview makes the confirmation stale.
     declare tok uuid := (public.c2_memory('preview','observations','obs_u')->>'confirmation')::uuid;
     begin

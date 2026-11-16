@@ -53,7 +53,14 @@ class ChatAPITests(unittest.TestCase):
         key = "test-only-" * 4
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp).resolve()
-            with patch.dict(os.environ, {"NEUROBRAIN_USER_TOKEN": "user"}):
+            with patch.dict(
+                os.environ,
+                {
+                    "NEUROBRAIN_USER_TOKEN": "user",
+                    "SUPABASE_URL": "https://demo.supabase.co",
+                    "SUPABASE_PUBLISHABLE_KEY": "key",
+                },
+            ):
                 server = create_server(
                     root / "unused.sqlite3", root, key, 0, answerer, hosted=True
                 )

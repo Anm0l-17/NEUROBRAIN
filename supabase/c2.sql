@@ -54,9 +54,11 @@ begin
     if op = 'search' then
         -- OR the words like the local FTS: plainto_tsquery ANDs every word, so a natural
         -- question ("When is the violet demonstration?") would match nothing.
-        select to_tsquery('simple', string_agg(t, ' | ')) into tsq from (
-            select m[1] as t from regexp_matches(left(coalesce(query_text,''),2000),
-                '([[:alnum:]]+)', 'g') as m limit 32) w;
+        -- Parse the question with the same parser as the index, so "3.14", "a@b.com" or "v2.0"
+        -- stay whole lexemes. Cap at 32 distinct lexemes.
+        select to_tsquery('simple', string_agg(quote_literal(l), ' | ')) into tsq from (
+            select lexeme as l from unnest(to_tsvector('simple', left(coalesce(query_text,''),2000)))
+            limit 32) w;
         if tsq is null then return '[]'::jsonb; end if;
         -- Whitespace-equal chunks reached through another route collapse into one hit with `linked`.
         select coalesce(jsonb_agg(to_jsonb(h) - 'rk' - 'ord' - 'rn' order by h.rk desc, h.source_id, h.ord),

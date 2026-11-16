@@ -36,4 +36,13 @@ Rejected by CodeRabbit check:
 Deferred:
 - Forgotten text can be re-imported with a whitespace variant (new hash; tombstones are exact-hash only). Same locally. Needs a normalised-hash tombstone.
 - The confirmation token is computable by the caller (md5 of ids); it only covers the caller's own set. Low.
-- The tests/edge checker had not reported when this was written (see end of file if updated).
+
+## Tests/edge checker (reported after the first write-up)
+
+Fixed in the follow-up commit (fixtures extended, all pass on the private Postgres):
+- Forgotten content resurfacing in search after an unrelated forget in another folder: already closed by the owner-wide scope; a fixture now pins it.
+- Hosted search no longer found punctuated terms (`3.14`, `a@b.com`, `v2.0`, `note.md`) because I split the query on non-alphanumerics while the index keeps them whole. The query now goes through the same parser as the index; a hostile query string (`violet' & !x:* \ "`) is still harmless.
+- Malformed (non-JSON) Supabase replies: bridge answers 503 (fixed earlier with the `ValueError` catch).
+- Expired token: error now says "sign-in expired or invalid, renew NEUROBRAIN_USER_TOKEN"; `--hosted` also refuses to start without `SUPABASE_URL` and the publishable key. Supabase access tokens last about an hour, so a long-running bridge needs the token renewed.
+
+Not testable here: UTF-8/locale behaviour. The private instance is C locale/SQL_ASCII, so non-ASCII search results (`café`, `日本語`) are unverified for Supabase. Performance on 5000 sources x 6 chunks: preview about 80 ms, forget about 170 ms, search about 110 ms (short chunks, understates real passages).
