@@ -18,6 +18,29 @@ from .extract import answer
 MODEL = "neurobrain-memory"
 
 
+_PERSONAL = re.compile(r"\b(it|its|they|their|them)\b", re.I)
+_DEMONSTRATIVE = re.compile(r"\b(that|this|those)\b", re.I)
+_FILLER = frozenset(
+    "a an the is are was were be do does did what which who whom whose when where why "
+    "how about of to in on at for with and or me my i you tell say said".split()
+)
+
+
+def unresolved_reference(question: str) -> bool:
+    """True when the question leans on chat history instead of naming a subject.
+
+    Personal pronouns always count. that/this/those count only when fewer than two
+    content words remain, so "the room that Ravi booked" passes but "What about this?" does not.
+    shortcut: word list heuristic, not parsing; "What did Ravi say about that?" passes.
+    """
+    if _PERSONAL.search(question):
+        return True
+    if not _DEMONSTRATIVE.search(question):
+        return False
+    words = re.findall(r"[^\W_]+", _DEMONSTRATIVE.sub(" ", question.lower()))
+    return sum(w not in _FILLER for w in words) < 2
+
+
 def literal(text):
     # Source text must not become active links, images or HTML in the chat client.
     return re.sub(r"([\\`*_{}\[\]()#+.!|>~\-])", r"\\\1", html.escape(text))
@@ -129,9 +152,7 @@ def create_server(db, notes_root, token, port=8766, answerer=answer):
                     raise ValueError
                 if type(data.get("stream", False)) is not bool:
                     raise ValueError
-                if re.search(
-                    r"\b(it|its|they|their|that|those|them|this)\b", question, re.I
-                ):
+                if unresolved_reference(question):
                     self.send(
                         400,
                         {

@@ -6,7 +6,7 @@ from pathlib import Path
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
-from neurobrain.chat_api import MODEL, create_server, literal
+from neurobrain.chat_api import MODEL, create_server, literal, unresolved_reference
 from neurobrain.core import MemoryStore
 
 
@@ -16,6 +16,22 @@ class ChatAPITests(unittest.TestCase):
         self.assertNotIn("![", rendered)
         self.assertNotIn("<img", rendered)
         self.assertIn(r"\!\[image\]\(https://example\.com\)", rendered)
+
+    def test_reference_guard_refuses_only_history_dependent_questions(self):
+        for ok in (
+            "What is the room number that Ravi booked?",
+            "Which budget review is this quarter?",
+            "Is the amber rehearsal room that Mira booked free?",
+        ):
+            self.assertFalse(unresolved_reference(ok), ok)
+        for bad in (
+            "What about it?",
+            "When is its deadline?",
+            "What did they decide?",
+            "What about this?",
+            "Which room is that?",
+        ):
+            self.assertTrue(unresolved_reference(bad), bad)
 
     def test_auth_discovery_streaming_and_forgetting(self):
         with tempfile.TemporaryDirectory() as temp:
