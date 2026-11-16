@@ -1,0 +1,90 @@
+[
+ {
+  "id": "F01",
+  "mode": "SIMULATED route (Notion API not called; selected-file + real Qwen)",
+  "expected": "retained, cited 23 November",
+  "actual": "exit=0 answers=['The violet demonstration is on 23 November 2026.']",
+  "ok": true,
+  "seconds": 1.0
+ },
+ {
+  "id": "F02",
+  "mode": "LOCAL selected-file route, real Qwen",
+  "expected": "preference retained",
+  "actual": "exit=0 answers=['Mira prefers concise answers with references.']",
+  "ok": true,
+  "seconds": 0.76
+ },
+ {
+  "id": "F03",
+  "mode": "SIMULATED OCR (helper mocked; real Qwen)",
+  "expected": "screen-only fact queryable before save",
+  "actual": "exit=0 answers=[('The amber rehearsal room is Cedar 417.', {'source': 'fictional', 'route': 'screen-ocr'})]",
+  "ok": true,
+  "seconds": 0.83
+ },
+ {
+  "id": "F04",
+  "mode": "SIMULATED OCR then LOCAL file save (trailing newline differs)",
+  "expected": "one logical note, linked routes",
+  "actual": "exit=0 search_hits=1 linked=[['80d003eb6b14412bac6e8d3119838a3b:4']] answers=1",
+  "ok": true,
+  "seconds": 0.82
+ },
+ {
+  "id": "F05",
+  "mode": "SIMULATED Notion route (selected-file); same path new text",
+  "expected": "v2 current answer says 24, not 23",
+  "actual": "exit=0 answers=['The violet demonstration is on 24 November 2026.']",
+  "ok": true,
+  "seconds": 0.96
+ },
+ {
+  "id": "F06",
+  "mode": "LOCAL selected-file, real Qwen",
+  "expected": "no useful retained excerpt",
+  "actual": "exit=0 extracted_notes=[] stored_chunks_with_phrase=[]",
+  "ok": true,
+  "seconds": 0.24
+ },
+ {
+  "id": "F07",
+  "mode": "LOCAL selected-file, real Qwen",
+  "expected": "abstain/no keep",
+  "actual": "exit=0 extracted_notes=['Move that to there after the thing is finished.'] stored_chunks_with_phrase=['Move that to there after the thing is finished.']",
+  "ok": false,
+  "seconds": 0.82
+ },
+ {
+  "id": "F08",
+  "mode": "LOCAL selected-file",
+  "expected": "rejected before model/persist; marker absent",
+  "actual": "exit=1 stderr='The note contains a NeuroBrain do-not-store directive.' hits=0 marker_in_db_file=False (app logs: none written)",
+  "ok": true,
+  "seconds": 0.0
+ },
+ {
+  "id": "F09",
+  "mode": "LOCAL answer path, real Qwen",
+  "expected": "no_evidence",
+  "actual": "{\"status\": \"no_evidence\", \"answers\": []}",
+  "ok": true,
+  "seconds": 0.53
+ },
+ {
+  "id": "F10",
+  "mode": "SIMULATED helper refusal (check exit 1); pause/stop NOT run (needs interactive tty)",
+  "expected": "no capture saved",
+  "actual": "exit=1 stderr='Approved window capture: switch to the selected VS Code window within five seconds after start.\\nScreen observation stopped: check recording permission and approved foreground window' sources_before=5 after=5 hits=0",
+  "ok": true,
+  "seconds": 0.78
+ },
+ {
+  "id": "F11",
+  "mode": "LOCAL, fresh store handle (restart)",
+  "expected": "all violet versions gone, Mira kept, file intact",
+  "actual": "receipt={'receipt_id': '3aca900d9f1e4198aa6894ece4dfbd0a', 'completed_at': '2026-11-16T17:26:46.976671+00:00', 'removed_versions': 2, 'removed_chunks': 2, 'verified': True, 'original_file_deleted': False} violet_gone=True mira_kept=True reimport_blocked=True file_exists=True",
+  "ok": true,
+  "seconds": null
+ }
+]
