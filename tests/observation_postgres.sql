@@ -42,3 +42,59 @@ begin
         if sqlerrm <> 'Content previously forgotten' then raise; end if;
     end;
 end $$;
+
+-- Forget parity with MemoryStore.preview_forget (Day 1 review findings).
+create function pg_temp.obs(file text, route text, source text, hash text, quotes text[])
+returns jsonb language plpgsql as $$
+declare pieces jsonb; meta jsonb;
+begin
+    select jsonb_agg(jsonb_build_array(q,0,length(q),1,1)) into pieces from unnest(quotes) q;
+    select jsonb_build_object('source',source,'route',route,'source_sha256',hash,'model','fixture',
+        'observed_at','2026-11-16T00:00:00Z',
+        'notes',(select jsonb_agg(jsonb_build_object('kind','fact','text',q)) from unnest(quotes) q)) into meta;
+    return public.c2_memory('import','observations',file,source,body_hash=>hash,pieces=>pieces,observation=>meta);
+end $$;
+create function pg_temp.forget(file text) returns jsonb language sql as $$
+    select public.c2_memory('forget','observations',file,confirmation=>
+        (public.c2_memory('preview','observations',file)->>'confirmation')::uuid) $$;
+create function pg_temp.hits(q text) returns int language sql as $$
+    select jsonb_array_length(public.c2_memory('search','observations',query_text=>q)) $$;
+do $$
+declare r jsonb;
+begin
+    perform set_config('test.owner','00000000-0000-0000-0000-000000000001',true);
+    -- Two captures of one window forget together; a file copy of one (trailing newline) goes too.
+    perform pg_temp.obs('obs_a','screen-ocr','win',repeat('1',64),array['Cedar417 is the amber room']);
+    perform pg_temp.obs('obs_b','screen-ocr','win',repeat('2',64),array['Zebra99 other capture']);
+    perform pg_temp.obs('obs_f','selected-file','/n/a.md',repeat('3',64),array[E'Cedar417  is the amber room\n']);
+    perform pg_temp.obs('obs_x','selected-file','/n/x.md',repeat('4',64),array['Unrelated keepword']);
+    assert pg_temp.hits('Cedar417')=1, 'whitespace-equal copies collapse into one hit';
+    assert jsonb_array_length(public.c2_memory('search','observations',query_text=>'Cedar417')->0->'linked')=1;
+    r := pg_temp.forget('obs_a');
+    assert r->>'versions'='3', r::text;
+    assert pg_temp.hits('Cedar417')=0 and pg_temp.hits('Zebra99')=0 and pg_temp.hits('keepword')=1;
+    -- A single shared short chunk must not take an unrelated note.
+    perform pg_temp.obs('obs_t','selected-file','/n/t.md',repeat('5',64),array['Trip Pune','Approved.']);
+    perform pg_temp.obs('obs_u','selected-file','/n/u.md',repeat('6',64),array['Budget lakh','Approved.']);
+    r := pg_temp.forget('obs_t');
+    assert r->>'versions'='1', r::text;
+    assert pg_temp.hits('lakh')=1;
+    -- Forgetting a copy must not leave another file with no active version.
+    perform pg_temp.obs('multi','selected-file','/n/m.md',repeat('7',64),array['Monday review']);
+    perform pg_temp.obs('multi','selected-file','/n/m.md',repeat('8',64),array['Thursday review']);
+    perform pg_temp.obs('obs_c','screen-ocr','w2',repeat('8',64),array['Thursday review']);
+    r := pg_temp.forget('obs_c');
+    assert r->>'versions'='2', r::text;
+    assert pg_temp.hits('Monday')=1 and pg_temp.hits('Thursday')=0;
+    -- A copy added after the preview makes the confirmation stale.
+    declare tok uuid := (public.c2_memory('preview','observations','obs_u')->>'confirmation')::uuid;
+    begin
+        perform pg_temp.obs('obs_late','selected-file','/n/late.md',repeat('9',64),array['Budget lakh','Approved.']);
+        begin
+            perform public.c2_memory('forget','observations','obs_u',confirmation=>tok);
+            raise exception 'accepted stale preview';
+        exception when raise_exception then
+            if sqlerrm <> 'Invalid operation or stale confirmation' then raise; end if;
+        end;
+    end;
+end $$;

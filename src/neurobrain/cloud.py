@@ -156,7 +156,11 @@ def save_observation(text, extraction):
     if checked["route"] not in {"selected-file", "page-api", "screen-ocr"}:
         raise MemoryError("Unsupported hosted observation route")
     checked["status"] = "saved_by_explicit_hosted_request"
-    source_key = "obs_" + digest(json.dumps([checked["route"], checked["source"]]))
+    key = [checked["route"], checked["source"]]
+    if checked["route"] == "screen-ocr":
+        # Same keying as MemoryStore: each distinct capture is its own hosted source.
+        key.append(digest(text))
+    source_key = "obs_" + digest(json.dumps(key))
     params = dict(
         op="import",
         folder="observations",
