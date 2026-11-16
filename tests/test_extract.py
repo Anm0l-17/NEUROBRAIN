@@ -144,6 +144,71 @@ class ExtractionTests(unittest.TestCase):
                 self.assertFalse(store.search("Thursday"))
                 self.assertTrue(store.search("Monday"))
 
+    def test_forgetting_a_capture_also_takes_a_plain_copy_of_a_sibling_capture(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            note = root / "plan.md"
+            b_text = "The amber rehearsal room is Cedar 417."
+            note.write_text(b_text)
+
+            def capture(body):
+                return extract_notes(
+                    body,
+                    "window",
+                    "screen-ocr",
+                    lambda _: {"notes": [{"kind": "fact", "quote": body}]},
+                )
+
+            with MemoryStore(root / "memory.sqlite3", root) as store:
+                a_text = "The violet demonstration is on 23 November."
+                a = store.import_observation(a_text, capture(a_text))
+                store.import_observation(b_text, capture(b_text))
+                store.import_note(note)
+                preview = store.preview_forget(a["source_id"])
+                self.assertEqual(preview["versions"], 3)
+                store.forget(a["source_id"], preview["preview_token"])
+                self.assertFalse(store.search("Cedar"))
+
+    def test_forgotten_term_is_absent_from_database_file(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            db = root / "memory.sqlite3"
+            for name, text in (
+                ("keep.md", "Mira likes tea."),
+                ("gone.md", "Zqxmarkerwvu is fictional."),
+            ):
+                (root / name).write_text(text)
+            with MemoryStore(db, root) as store:
+                store.import_note(root / "keep.md")
+                gone = store.import_note(root / "gone.md")["source_id"]
+                preview = store.preview_forget(gone)
+                store.forget(gone, preview["preview_token"])
+            raw = db.read_bytes().lower()
+            self.assertNotIn(b"zqxmarkerwvu", raw)
+            self.assertIn(b"mira", raw)
+
+    def test_forget_of_linked_active_version_reactivates_older_version(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            note = root / "plan.md"
+            note.write_text("Old budget review on Monday.")
+            with MemoryStore(root / "memory.sqlite3", root) as store:
+                store.import_note(note)
+                new = "The budget review moved to Thursday."
+                note.write_text(new)
+                store.import_note(note)
+                extraction = extract_notes(
+                    new,
+                    "screen-window",
+                    "screen-ocr",
+                    lambda _: {"notes": [{"kind": "fact", "quote": new}]},
+                )
+                copy = store.import_observation(new, extraction)
+                preview = store.preview_forget(copy["source_id"])
+                store.forget(copy["source_id"], preview["preview_token"])
+                self.assertFalse(store.search("Thursday"))
+                self.assertTrue(store.search("Monday"))
+
     def test_screen_captures_are_separate_sources_and_forget_together(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory).resolve()

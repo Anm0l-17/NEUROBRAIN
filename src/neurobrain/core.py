@@ -413,47 +413,44 @@ class MemoryStore:
         window = (
             [observation["source"]] if observation.get("route") == "screen-ocr" else []
         )
-        # Plain and extracted imports of one note share content but not path:
-        # also take in-scope copies whose exact content matches any version.
-        rows = [
+        # Base: every version of this path, plus every capture of the same screen window.
+        # Then one more hop: in-scope copies reached by another route, whose bytes match
+        # exactly (content hash) or after whitespace normalisation (trailing newline, OCR spacing).
+        # shortcut: scans every chunk, fine at demo size; add a normalized-hash column to scale.
+        everything = [
             row
             for row in self.db.execute(
-                """SELECT s.id,s.path,s.content_hash,count(c.id) AS chunks FROM sources s
-                LEFT JOIN chunks c ON c.source_id=s.id
-                WHERE s.path=? OR s.content_hash IN
-                    (SELECT content_hash FROM sources WHERE path=?)
-                    OR s.id IN (SELECT source_id FROM observation_metadata
-                        WHERE json_extract(metadata,'$.route')='screen-ocr'
-                        AND json_extract(metadata,'$.source') IN (SELECT value FROM json_each(?)))
-                GROUP BY s.id ORDER BY s.path,s.version""",
-                (source["path"], source["path"], json.dumps(window)),
+                """SELECT s.id,s.path,s.content_hash,count(c.id) AS chunks,
+                    json_extract(m.metadata,'$.route') AS route,
+                    json_extract(m.metadata,'$.source') AS origin
+                FROM sources s LEFT JOIN chunks c ON c.source_id=s.id
+                LEFT JOIN observation_metadata m ON m.source_id=s.id
+                GROUP BY s.id ORDER BY s.path,s.version"""
             )
             if self._allowed(row["path"])
         ]
-        # Same note via another route differs in bytes (trailing newline, OCR spacing):
-        # also take in-scope sources holding a chunk with the same normalized text.
-        # shortcut: scans every chunk, fine at demo size; add a normalized-hash column to scale.
-        wanted = {
-            norm(c[0])
-            for row in rows
-            for c in self.db.execute(
-                "SELECT text FROM chunks WHERE source_id=?", (row["id"],)
-            )
-        }
-        have = {row["id"] for row in rows}
-        for row in self.db.execute(
-            """SELECT s.id,s.path,s.content_hash,count(c.id) AS chunks FROM sources s
-            LEFT JOIN chunks c ON c.source_id=s.id GROUP BY s.id ORDER BY s.path,s.version"""
-        ):
-            if row["id"] in have or not self._allowed(row["path"]):
-                continue
-            if wanted & {
+        base = [
+            r
+            for r in everything
+            if r["path"] == source["path"]
+            or (window and r["route"] == "screen-ocr" and r["origin"] == window[0])
+        ]
+        hashes = {r["content_hash"] for r in base}
+
+        def texts(r):
+            return {
                 norm(c[0])
                 for c in self.db.execute(
-                    "SELECT text FROM chunks WHERE source_id=?", (row["id"],)
+                    "SELECT text FROM chunks WHERE source_id=?", (r["id"],)
                 )
-            }:
-                rows.append(row)
+            }
+
+        wanted = set().union(*(texts(r) for r in base))
+        rows = [
+            r
+            for r in everything
+            if r in base or r["content_hash"] in hashes or wanted & texts(r)
+        ]
         content_hashes = sorted({row["content_hash"] for row in rows})
         source_ids = [row["id"] for row in rows]
         chunks = sum(row["chunks"] for row in rows)
@@ -484,6 +481,13 @@ class MemoryStore:
                     "INSERT OR IGNORE INTO tombstones VALUES(?,?)", (row[0], completed)
                 )
                 self.db.execute("DELETE FROM sources WHERE id=?", (sid,))
+            # Removing a copy's active version must not hide the path's older versions.
+            self.db.execute(
+                """UPDATE sources SET active=1 WHERE version=
+                (SELECT max(version) FROM sources n WHERE n.path=sources.path)
+                AND NOT EXISTS (SELECT 1 FROM sources a
+                    WHERE a.path=sources.path AND a.active=1)"""
+            )
             receipt_id = uuid4().hex
             self.db.execute(
                 "INSERT INTO deletion_receipts VALUES(?,?,?,?)",
@@ -497,6 +501,9 @@ class MemoryStore:
                 raise MemoryError(
                     "Deletion integrity check failed; transaction rolled back."
                 )
+        # FTS5 keeps deleted terms in old index segments until they are merged away.
+        with self.db:
+            self.db.execute("INSERT INTO chunks_fts(chunks_fts) VALUES('optimize')")
         try:
             from .semantic import invalidate_cache
 
