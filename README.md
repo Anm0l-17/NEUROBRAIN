@@ -1,6 +1,6 @@
 <div align="center">
 
-# NeuroBrain
+# NEUROBRAIN
 ### Your notes. Evidence you can trace. Memory you control.
 
 A local research prototype for turning selected notes into searchable, cited memory—with deliberate, verifiable forgetting.
