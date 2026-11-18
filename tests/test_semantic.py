@@ -3,6 +3,7 @@ import unittest
 from pathlib import Path
 
 from neurobrain.core import MemoryStore
+from neurobrain.extract import extract_notes
 from neurobrain.semantic import SemanticIndex, hybrid_search, load_encoder
 from scripts.evaluate_semantic import ENCODER, REVISION, load_cases, run
 
@@ -12,6 +13,31 @@ MODEL_AVAILABLE = MODEL is not None
 
 @unittest.skipUnless(MODEL_AVAILABLE, "Pinned semantic model is unavailable locally")
 class SemanticModelTests(unittest.TestCase):
+    def test_observation_provenance_survives_semantic_and_hybrid_retrieval(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            text = "The violet demonstration is on Friday."
+            with MemoryStore(root / "memory.sqlite3", root) as store:
+                store.import_observation(
+                    text,
+                    extract_notes(
+                        text,
+                        "Fictional page",
+                        "page-api",
+                        lambda _: {"notes": [{"kind": "fact", "quote": text}]},
+                    ),
+                )
+                index = SemanticIndex(store, MODEL)
+                index.rebuild()
+                for hits in (
+                    index.search("demonstration"),
+                    hybrid_search(store, "demonstration", MODEL)[0],
+                ):
+                    self.assertEqual(
+                        hits[0]["observation"],
+                        {"source": "Fictional page", "route": "page-api"},
+                    )
+
     def test_offline_semantic_experiment_returns_finite_scores(self):
         path = Path(__file__).parents[1] / "data/semantic_evaluation_v0.jsonl"
         result = run(load_cases(path))

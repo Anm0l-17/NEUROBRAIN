@@ -1,0 +1,121 @@
+{
+  "status": "acquisition and data audit; no full-corpus training started",
+  "datasets": {
+    "PersonaMem-v2": {
+      "train": {
+        "rows": 18549,
+        "personas": 800,
+        "history32k_tokens": 587797240
+      },
+      "val": {
+        "rows": 2061,
+        "personas": 735,
+        "history32k_tokens": 65349523
+      },
+      "benchmark": {
+        "rows": 5000,
+        "personas": 200,
+        "history32k_tokens": 157778380
+      },
+      "train_val_persona_overlap": 735,
+      "train_benchmark_persona_overlap": [
+        "78"
+      ],
+      "policy": "Keep benchmark personas out of training; repartition development by persona; do not use multimodal duplicates as additional independent examples."
+    },
+    "PersonaMem-v3": {
+      "queries": 15791,
+      "personas": 100,
+      "task_types": {
+        "chatbot_personalized_response": 1256,
+        "personalized_recommendation": 2676,
+        "over_personalization_chatbot_text": 837,
+        "over_personalization_sycophancy": 851,
+        "hidden_persona_recommendation": 555,
+        "agentic_send_post": 422,
+        "agentic_vague_refind": 461,
+        "over_personalization_sensitive_event": 1026,
+        "agentic_cross_app_repost": 400,
+        "active_mistake_prevention": 492,
+        "agentic_auto_reply": 440,
+        "agentic_community_post": 429,
+        "agentic_dm_digest": 40,
+        "agentic_group_dm_summary": 8,
+        "agentic_proactive_daily_catchup": 167,
+        "agentic_trending_alert": 110,
+        "at_ai_directive_followup": 764,
+        "hidden_persona_implicit_qa": 376,
+        "local_recommendation_geo_shift": 370,
+        "new_suggestions_chatbot": 614,
+        "over_personalization_context_shift": 475,
+        "over_personalization_repetition_chatbot": 198,
+        "over_personalization_repetition_recsys": 294,
+        "personal_qa_hallucination": 587,
+        "preference_shift_followthrough": 62,
+        "proactive_close_friend_update": 132,
+        "proactive_friend_feed_react": 162,
+        "proactive_overactive_check": 102,
+        "proactive_trending_feed_react": 55,
+        "restraint_sensitive_event_silence": 563,
+        "short_vs_long_term_lifecycle": 867
+      },
+      "missing_golden_response": 857,
+      "tool_call_rows": 2477,
+      "policy": "Split personas before adaptation; inputs must contain only events preceding query time. Exclude preference/scoring labels from input. Missing response is not automatically a silence label."
+    },
+    "LifeDialBench": {
+      "EgoMem": {
+        "groups": 6,
+        "questions": 939,
+        "history_chunks": 1697,
+        "date_only_query_times": 939
+      },
+      "LifeMem": {
+        "groups": 1,
+        "questions": 1717,
+        "history_chunks": 3081,
+        "date_only_query_times": 1717
+      },
+      "policy": "Temporal split required for the single LifeMem stream; EgoMem viewpoints can share conversations, so random row/person splitting alone is insufficient. Resolve same-day query timing without future leakage.",
+      "revision": "b553f01bf8220555687f6828c73216743c5d20a2"
+    },
+    "MemoryAgentBench": {
+      "Long_Range_Understanding": {
+        "contexts": 110,
+        "questions": 171,
+        "max_context_characters": 3171853
+      },
+      "Accurate_Retrieval": {
+        "contexts": 22,
+        "questions": 2000,
+        "max_context_characters": 3171853
+      },
+      "Conflict_Resolution": {
+        "contexts": 8,
+        "questions": 800,
+        "max_context_characters": 1118123
+      },
+      "Test_Time_Learning": {
+        "contexts": 6,
+        "questions": 700,
+        "max_context_characters": 5658996
+      },
+      "policy": "Group shared documents and adapted upstream benchmark sources across all partitions. Use streaming memory/retrieval for over-limit context, never silent truncation."
+    },
+    "PerLTQA": {
+      "qa_characters": 32,
+      "memory_characters": 141,
+      "questions_by_category": {
+        "profile": 357,
+        "social_relationship": 294,
+        "events": 628,
+        "dialogues": 626
+      },
+      "missing_character_memories": [
+        "dragon beautiful"
+      ],
+      "revision": "8d9e19868e239740ef701e603ec205cd581f221b",
+      "policy": "Use updated English v2; do not count old/translated variants as independent examples. Check cross-character relationships before defining final held-out entities."
+    }
+  }
+}

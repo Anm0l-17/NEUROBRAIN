@@ -23,8 +23,13 @@ def main(argv=None) -> int:
     commands.add_parser("init")
     importer = commands.add_parser("import")
     importer.add_argument("path", type=Path)
+    importer.add_argument(
+        "--extract",
+        action="store_true",
+        help="Use local Qwen to extract and save supported notes",
+    )
     commands.add_parser("sources")
-    for name in ("search", "ask", "hybrid"):
+    for name in ("search", "ask", "hybrid", "answer"):
         sub = commands.add_parser(name)
         sub.add_argument("query")
     inspector = commands.add_parser("inspect")
@@ -48,13 +53,25 @@ def main(argv=None) -> int:
             if args.command == "init":
                 result = {"status": "ready", "mode": "lexical/extractive", "schema": 1}
             elif args.command == "import":
-                result = store.import_note(args.path)
+                if args.extract:
+                    from .extract import extract_notes
+
+                    path, text = store.policy.read(args.path)
+                    result = store.import_observation(
+                        text, extract_notes(text, str(path), "selected-file")
+                    )
+                else:
+                    result = store.import_note(args.path)
             elif args.command == "sources":
                 result = store.sources()
             elif args.command == "search":
                 result = store.search(args.query)
             elif args.command == "ask":
                 result = store.ask(args.query)
+            elif args.command == "answer":
+                from .extract import answer
+
+                result = answer(store, args.query)
             elif args.command == "hybrid":
                 from .semantic import hybrid_search, load_encoder
 
