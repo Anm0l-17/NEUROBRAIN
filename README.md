@@ -62,6 +62,7 @@ The default path uses SQLite full-text search and extracts evidence from stored 
 ```bash
 git clone https://github.com/Anm0l-17/NEUROBRAIN.git
 cd NEUROBRAIN
+gh repo clone yalongwastaken/git-koi
 ```
 
 ### 1. Run the guided demo
