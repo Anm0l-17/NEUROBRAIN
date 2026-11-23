@@ -1,0 +1,75 @@
+W1113 08:12:42.784000 89977 .venv/lib/python3.13/site-packages/torch/distributed/elastic/multiprocessing/redirects.py:35] NOTE: Redirects are currently not supported in MacOs.
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 4913.37it/s]
+test_review_corrections_notes_and_independent_label_states_survive (test_admission_assembly.AssemblyTests.test_review_corrections_notes_and_independent_label_states_survive) ... ok
+test_paraphrase_reference_connects_to_original_row (test_admission_overlap.OriginGroupingTests.test_paraphrase_reference_connects_to_original_row) ... ok
+test_parent_and_paraphrase_links (test_admission_overlap.OriginGroupingTests.test_parent_and_paraphrase_links) ... ok
+test_scenario_and_family_links_are_transitive (test_admission_overlap.OriginGroupingTests.test_scenario_and_family_links_are_transitive) ... ok
+test_exploratory_freeze_keeps_uncertainty_and_groups (test_admission_release.AdmissionReleaseTests.test_exploratory_freeze_keeps_uncertainty_and_groups) ... ok
+test_access_code_is_a_lookup_but_programming_uses_thinking (test_chat.ChatTests.test_access_code_is_a_lookup_but_programming_uses_thinking) ... ok
+test_accuracy_score_rejects_missing_or_conflicting_answer (test_chat.ChatTests.test_accuracy_score_rejects_missing_or_conflicting_answer) ... ok
+test_failed_interactive_turn_preserves_successful_history (test_chat.ChatTests.test_failed_interactive_turn_preserves_successful_history) ... ok
+test_fixture_routes (test_chat.ChatTests.test_fixture_routes) ... ok
+test_followups_use_thinking_and_greetings_stay_fast (test_chat.ChatTests.test_followups_use_thinking_and_greetings_stay_fast) ... ok
+test_launcher_defaults_to_auto (test_chat.ChatTests.test_launcher_defaults_to_auto) ... ok
+test_payload_modes_and_hidden_trace (test_chat.ChatTests.test_payload_modes_and_hidden_trace) ... ok
+test_reject_invalid_input (test_chat.ChatTests.test_reject_invalid_input) ... ok
+test_unseen_difficult_and_ambiguous_requests (test_chat.ChatTests.test_unseen_difficult_and_ambiguous_requests) ... ok
+test_auth_discovery_streaming_and_forgetting (test_chat_api.ChatAPITests.test_auth_discovery_streaming_and_forgetting) ... ok
+test_source_markup_is_literal (test_chat_api.ChatAPITests.test_source_markup_is_literal) ... ok
+test_connection_reset_during_read_is_controlled (test_cloud.CloudImportTests.test_connection_reset_during_read_is_controlled) ... ok
+test_import_posts_policy_checked_chunks (test_cloud.CloudImportTests.test_import_posts_policy_checked_chunks) ... ok
+test_refusal_precedes_cloud_storage (test_cloud.CloudImportTests.test_refusal_precedes_cloud_storage) ... ok
+test_fictional_corpus_passes_current_baseline (test_evaluation.BaselineEvaluationTests.test_fictional_corpus_passes_current_baseline) ... ok
+test_loader_rejects_duplicate_case_ids (test_evaluation.BaselineEvaluationTests.test_loader_rejects_duplicate_case_ids) ... ok
+test_loader_rejects_missing_or_duplicate_fixture_notes (test_evaluation.BaselineEvaluationTests.test_loader_rejects_missing_or_duplicate_fixture_notes) ... ok
+test_loader_rejects_note_path_escape (test_evaluation.BaselineEvaluationTests.test_loader_rejects_note_path_escape) ... ok
+test_runner_checks_nested_and_multiple_deletions (test_evaluation.BaselineEvaluationTests.test_runner_checks_nested_and_multiple_deletions) ... ok
+test_runner_requires_deletion_and_retained_cases (test_evaluation.BaselineEvaluationTests.test_runner_requires_deletion_and_retained_cases) ... ok
+test_answer_constrains_citations_and_rechecks_concurrent_forgetting (test_extract.ExtractionTests.test_answer_constrains_citations_and_rechecks_concurrent_forgetting) ... ok
+test_changed_extraction_versions_unchanged_source_text (test_extract.ExtractionTests.test_changed_extraction_versions_unchanged_source_text) ... ok
+test_empty_current_snapshot_hides_old_evidence_without_erasing_history (test_extract.ExtractionTests.test_empty_current_snapshot_hides_old_evidence_without_erasing_history) ... ok
+test_evidence_offsets_and_duplicate_suppression (test_extract.ExtractionTests.test_evidence_offsets_and_duplicate_suppression) ... ok
+test_invented_evidence_and_malformed_response_rejected (test_extract.ExtractionTests.test_invented_evidence_and_malformed_response_rejected) ... ok
+test_privacy_precedes_inference (test_extract.ExtractionTests.test_privacy_precedes_inference) ... ok
+test_storage_updates_restart_forgetting_and_citations (test_extract.ExtractionTests.test_storage_updates_restart_forgetting_and_citations) ... ok
+test_cli_hybrid_reports_lexical_fallback (test_interfaces.InterfaceTests.test_cli_hybrid_reports_lexical_fallback) ... ok
+test_cli_lifecycle_and_controlled_error (test_interfaces.InterfaceTests.test_cli_lifecycle_and_controlled_error) ... ok
+test_http_cli_parity_and_browser_request_protection (test_interfaces.InterfaceTests.test_http_cli_parity_and_browser_request_protection) ... ok
+test_delete_all_versions_and_restart_preserves_unrelated_source (test_memory.MemoryLifecycleTests.test_delete_all_versions_and_restart_preserves_unrelated_source) ... ok
+test_delete_failure_rolls_back_receipts_tombstones_and_evidence (test_memory.MemoryLifecycleTests.test_delete_failure_rolls_back_receipts_tombstones_and_evidence) ... ok
+test_duplicate_import_and_restart_preserve_evidence (test_memory.MemoryLifecycleTests.test_duplicate_import_and_restart_preserve_evidence) ... ok
+test_foreign_keys_and_fts_integrity (test_memory.MemoryLifecycleTests.test_foreign_keys_and_fts_integrity) ... ok
+test_import_failure_rolls_back_old_version_and_index (test_memory.MemoryLifecycleTests.test_import_failure_rolls_back_old_version_and_index) ... ok
+test_long_notes_have_exact_character_and_line_spans (test_memory.MemoryLifecycleTests.test_long_notes_have_exact_character_and_line_spans) ... ok
+test_outside_root_and_symlink_are_rejected (test_memory.MemoryLifecycleTests.test_outside_root_and_symlink_are_rejected) ... ok
+test_policy_rejections_persist_no_source_text (test_memory.MemoryLifecycleTests.test_policy_rejections_persist_no_source_text) ... ok
+test_query_scope_filters_previously_imported_notes (test_memory.MemoryLifecycleTests.test_query_scope_filters_previously_imported_notes) ... ok
+test_search_treats_special_syntax_as_literal_tokens (test_memory.MemoryLifecycleTests.test_search_treats_special_syntax_as_literal_tokens) ... ok
+test_single_long_line_remains_bounded (test_memory.MemoryLifecycleTests.test_single_long_line_remains_bounded) ... ok
+test_stale_preview_refuses_deletion (test_memory.MemoryLifecycleTests.test_stale_preview_refuses_deletion) ... ok
+test_update_keeps_history_but_searches_current_version (test_memory.MemoryLifecycleTests.test_update_keeps_history_but_searches_current_version) ... ok
+test_notion_scopes_pages_and_checks_whole_snapshot (test_observe.ObservationTests.test_notion_scopes_pages_and_checks_whole_snapshot) ... ok
+test_selected_saved_file_preview_excludes_content (test_observe.ObservationTests.test_selected_saved_file_preview_excludes_content) ... ok
+test_agreement_and_disagreement_fields (test_pilot_review.PilotReviewTests.test_agreement_and_disagreement_fields) ... ok
+test_kappa_undefined_when_both_reviewers_use_one_class (test_pilot_review.PilotReviewTests.test_kappa_undefined_when_both_reviewers_use_one_class) ... ok
+test_rejects_changed_window_and_privacy_directive (test_screen.ScreenTests.test_rejects_changed_window_and_privacy_directive) ... ok
+test_screen_to_database_and_changed_focus_rejection (test_screen.ScreenTests.test_screen_to_database_and_changed_focus_rejection) ... ok
+test_hybrid_search_has_explicit_lexical_fallback (test_semantic.SemanticFallbackTests.test_hybrid_search_has_explicit_lexical_fallback) ... ok
+test_observation_provenance_survives_semantic_and_hybrid_retrieval (test_semantic.SemanticModelTests.test_observation_provenance_survives_semantic_and_hybrid_retrieval) ... ok
+test_offline_semantic_experiment_returns_finite_scores (test_semantic.SemanticModelTests.test_offline_semantic_experiment_returns_finite_scores) ... ok
+test_rebuild_after_restart_excludes_forgotten_source (test_semantic.SemanticModelTests.test_rebuild_after_restart_excludes_forgotten_source) ... ok
+test_action_and_binary_label_must_agree (test_training.TrainingDataTests.test_action_and_binary_label_must_agree) ... ok
+test_action_filter_rejects_invalid_or_missing_nonlegacy_values (test_training.TrainingDataTests.test_action_filter_rejects_invalid_or_missing_nonlegacy_values) ... ok
+test_draft_cannot_accidentally_be_treated_as_reviewed (test_training.TrainingDataTests.test_draft_cannot_accidentally_be_treated_as_reviewed) ... ok
+test_duplicate_text_is_rejected_even_with_new_id (test_training.TrainingDataTests.test_duplicate_text_is_rejected_even_with_new_id) ... ok
+test_non_integer_binary_labels_are_rejected (test_training.TrainingDataTests.test_non_integer_binary_labels_are_rejected) ... ok
+test_private_provenance_not_accepted (test_training.TrainingDataTests.test_private_provenance_not_accepted) ... ok
+test_related_scenarios_cannot_cross_partitions (test_training.TrainingDataTests.test_related_scenarios_cannot_cross_partitions) ... ok
+test_snapshot_features_do_not_depend_on_row_order (test_training.TrainingDataTests.test_snapshot_features_do_not_depend_on_row_order) ... ok
+test_template_origins_cannot_cross_partitions (test_training.TrainingDataTests.test_template_origins_cannot_cross_partitions) ... ok
+test_uncertain_action_is_kept_as_ambiguity_not_binary_label (test_training.TrainingDataTests.test_uncertain_action_is_kept_as_ambiguity_not_binary_label) ... ok
+
+----------------------------------------------------------------------
+Ran 68 tests in 1.635s
+
+OK

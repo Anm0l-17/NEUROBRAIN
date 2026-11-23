@@ -1,0 +1,91 @@
+{
+  "baselines": {
+    "store_all": {
+      "validation": {
+        "precision": 0.6666666666666666,
+        "recall": 1.0,
+        "f1": 0.8,
+        "average_precision": 0.6666666666666666,
+        "confusion_matrix_tn_fp_fn_tp": [
+          0,
+          6,
+          0,
+          12
+        ],
+        "threshold": 0.5,
+        "count": 18
+      }
+    },
+    "majority": {
+      "validation": {
+        "precision": 0.6666666666666666,
+        "recall": 1.0,
+        "f1": 0.8,
+        "average_precision": 0.6666666666666666,
+        "confusion_matrix_tn_fp_fn_tp": [
+          0,
+          6,
+          0,
+          12
+        ],
+        "threshold": 0.5,
+        "count": 18
+      }
+    },
+    "rules": {
+      "validation": {
+        "precision": 1.0,
+        "recall": 0.08333333333333333,
+        "f1": 0.15384615384615385,
+        "average_precision": 0.6944444444444444,
+        "confusion_matrix_tn_fp_fn_tp": [
+          6,
+          0,
+          11,
+          1
+        ],
+        "threshold": 0.5,
+        "count": 18
+      }
+    },
+    "tfidf_logistic": {
+      "validation": {
+        "precision": 0.6666666666666666,
+        "recall": 1.0,
+        "f1": 0.8,
+        "average_precision": 0.7509983072483073,
+        "confusion_matrix_tn_fp_fn_tp": [
+          0,
+          6,
+          0,
+          12
+        ],
+        "threshold": 0.663968842652584,
+        "count": 18
+      }
+    },
+    "embedding_logistic": {
+      "validation": {
+        "precision": 0.75,
+        "recall": 1.0,
+        "f1": 0.8571428571428571,
+        "average_precision": 0.8673983423983425,
+        "confusion_matrix_tn_fp_fn_tp": [
+          2,
+          4,
+          0,
+          12
+        ],
+        "threshold": 0.6367825865745544,
+        "count": 18
+      }
+    }
+  },
+  "data_sha256": "d91b7314d7e751351f0e6f6e58cd64dfafa4913e7e1be3381ec87599b192dab1",
+  "train": 1422,
+  "validation_keep": 12,
+  "validation_skip": 6,
+  "seed": 17,
+  "encoder_revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+  "feature_version": "snapshot-v1"
+}

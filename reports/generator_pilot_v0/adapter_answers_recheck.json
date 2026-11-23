@@ -1,0 +1,20 @@
+[
+  {
+    "case": 0,
+    "answer": "The provided evidence does not establish a favorite television series. It does not contain any information about television preferences. [E1]",
+    "expected": "No. It shows a question about royal court ceremonies, but no favorite television series. [E1]",
+    "elapsed_seconds": 1.5825639589966158
+  },
+  {
+    "case": 1,
+    "answer": "The provided evidence does not contain information about the medication the user takes. It only includes a reflection about financial struggles. [E1]",
+    "expected": "The supplied evidence does not identify any medication. [E1]",
+    "elapsed_seconds": 1.1136278329940978
+  },
+  {
+    "case": 2,
+    "answer": "No. The user refers to \"the past few weeks at the hospital\" as a description of their experience, but does not explicitly state that they work there. It could be a patient, a visitor, or a family member. [E1]",
+    "expected": "No. The hospital description appears in an assistant draft, without a confirming user statement. [E1]",
+    "elapsed_seconds": 1.4818831669981591
+  }
+]

@@ -5,5 +5,57 @@
     "priority": 1,
     "passes": true,
     "spec": ".agent/tasks/TASK-001.json"
+  },
+  {
+    "id": "002",
+    "title": "Diagnose local extraction runtime and establish reproducible evidence demo",
+    "priority": 2,
+    "passes": true,
+    "spec": ".agent/tasks/TASK-002.json"
+  },
+  {
+    "id": "003",
+    "title": "Close observation saving and provenance gaps",
+    "priority": 3,
+    "passes": true,
+    "spec": ".agent/tasks/TASK-003.json"
+  },
+  {
+    "id": "004",
+    "title": "Prepare repeatable presentation and morning handoff",
+    "priority": 4,
+    "passes": false,
+    "spec": ".agent/tasks/TASK-004.json"
+  },
+  {
+    "id": "005",
+    "title": "Connect approved observations to tested hosted storage contract",
+    "priority": 5,
+    "passes": false,
+    "spec": ".agent/tasks/TASK-005.json"
+  },
+  {
+    "id": "006",
+    "title": "Train and evaluate a tiny Qwen generator adapter before expansion",
+    "priority": 6,
+    "passes": true,
+    "spec": ".agent/tasks/TASK-006.json",
+    "result": "Pilot executed and reviewed; expansion gate failed attribution regression; not promoted"
+  },
+  {
+    "id": "007",
+    "title": "Strengthen attribution and retest tiny generator pilot without scaling",
+    "priority": 7,
+    "passes": true,
+    "spec": ".agent/tasks/TASK-007.json",
+    "result": "Requested repair/retest completed; MODEL GATE FAILED, 7/9; no scaling or deployment"
+  },
+  {
+    "id": "008",
+    "title": "Curate separate admission and Qwen shortlists and test the compact generator on Kaggle",
+    "priority": 8,
+    "passes": true,
+    "spec": ".agent/tasks/TASK-008.json",
+    "result": "Compact test completed. Base 6/9, reloaded adapter 8/9. Fiction attribution gate failed."
   }
 ]

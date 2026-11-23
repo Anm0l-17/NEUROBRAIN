@@ -3,10 +3,10 @@
 # NEUROBRAIN
 ### Your notes. Evidence you can trace. Memory you control.
 
-A local research prototype for turning selected notes into searchable, cited memory—with deliberate, verifiable forgetting.
+A research prototype for turning selected notes and approved on-screen observations into searchable, cited memory—with deliberate, verifiable forgetting.
 
 ![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&logoColor=white)
-![Storage SQLite](https://img.shields.io/badge/Storage-SQLite-003B57?logo=sqlite&logoColor=white)
+![Storage SQLite + Supabase](https://img.shields.io/badge/Storage-SQLite%20%2B%20Supabase-003B57?logo=sqlite&logoColor=white)
 ![Status Research prototype](https://img.shields.io/badge/Status-Research%20prototype-8250DF)
 ![Mode Local](https://img.shields.io/badge/Mode-Local-238636)
 
@@ -22,7 +22,7 @@ Useful information gets scattered across project notes, decisions, and personal 
 
 NeuroBrain explores that workflow through a small, inspectable system. Import selected Markdown or text files, retrieve exact passages with source references, and preview and verify the removal of a saved source.
 
-> **Current checkpoint:** a working local prototype with a browser interface, command-line tools, SQLite search, and optional offline hybrid retrieval. Cloud integration and learned memory admission remain research work.
+> **Current checkpoint (16 Nov 2026):** a working local prototype with a browser interface, command-line tools, SQLite search, optional offline hybrid retrieval, and a mentor-demo path: selected Notion page, saved file and approved VS Code window → local Qwen3.5 extraction of exact quotes → versioned memory → cited answers in Open WebUI. A Supabase PostgreSQL storage path is written and tested against a local PostgreSQL and mocks, but **has not been run on a hosted Supabase project**, and live Notion and screen capture are not yet verified on the presentation Mac. The admission MLP is a preview score only and never decides what is saved.
 
 ## What works today
 
@@ -35,6 +35,9 @@ NeuroBrain explores that workflow through a small, inspectable system. Import se
 | **Optional hybrid search** | Combine lexical and offline MiniLM retrieval, with explicit lexical fallback when the model is unavailable. |
 | **Controlled forgetting** | Preview source deletion, confirm it with a token, and receive a verification receipt. |
 | **Two interfaces** | Explore the same memory services through the local browser UI or CLI. |
+| **Observed input and extraction** | Read a selected file, a flat Notion page or an approved VS Code window (local OCR); local Qwen3.5 returns exact quotes with source, route, time and evidence spans, validated before saving. |
+| **Open WebUI bridge** | `neurobrain-memory` answers with cited excerpts from the same database; `--hosted` reads the signed-in Supabase rows instead. |
+| **Cross-route linking** | A single-sentence fact seen on screen and then saved to its file shows as one logical note, and forgetting takes both. Multi-line files whose extracted quotes differ from the capture do not link yet. |
 | **Import policy** | Reject unsupported, hidden, oversized, excluded, and obvious credential-containing notes. Credential detection is heuristic. |
 
 ## How it works
@@ -110,7 +113,7 @@ The repository includes reproducible checks and small fictional evaluation sets.
 | --- | --- | --- |
 | [Lifecycle baseline](reports/baseline_v0.json) | Recorded gate passed | Checks retrieval, unsupported-query abstention, citations, and selective deletion on a small fictional corpus. |
 | [Semantic experiment](reports/semantic_v0.json) | Lexical and semantic Recall@5 both 1.0 across two cases | Confirms the retrieval path works; does not demonstrate a semantic improvement. |
-| [Admission pilot](data/README.md) | 80 fictional examples with versioned draft labels | Annotation and consistency work; the pilot does not control real note storage. |
+| [Admission dataset](data/README.md) | 1,584 fictional reviewed records (80-row pilot plus later batches), all labels still draft | Annotation and consistency work; a small experimental MLP preview score exists but did not beat the logistic baseline and does not control storage. |
 
 Run the core tests and baseline evaluation:
 
@@ -130,7 +133,7 @@ See the [verification report](reports/verification.md), [pilot review](reports/a
 ## Privacy & forgetting
 
 - **Explicit selection:** the prototype accepts selected text and Markdown notes from the allowed folder.
-- **Local processing:** the current local prototype does not upload notes or use them for training.
+- **Local by default:** notes and extraction stay on this machine (Ollama). Hosted saving to Supabase happens only with the explicit `--save-hosted` request and a signed-in account; nothing is used for training.
 - **Inspectable evidence:** retrieved passages retain source references rather than relying on an unsupported generated answer.
 - **Application-level deletion:** forgetting removes the selected source's stored versions and derived application data. The original note file remains intact.
 
@@ -143,8 +146,9 @@ Deletion does not erase backups, copied text, browser history, or old database c
 | Local import, versioning, cited search, browser UI, and verified forgetting | Implemented |
 | Offline MiniLM and hybrid retrieval | Implemented as an optional experiment; broader evaluation needed |
 | Memory admission dataset and annotation rules | Fictional pilot under review; labels remain drafts |
-| Google Drive originals + Supabase application data | Design and schema prepared; integration not implemented |
-| Generated answers, temporal reasoning, and automatic learned admission | Future work |
+| Supabase PostgreSQL storage for observations (Drive for original files, optional) | Written and tested on a local PostgreSQL and with mocks; hosted Supabase acceptance (signed-in write, retry, second-user isolation) still open |
+| Live Notion and screen-capture acceptance on the presentation Mac | Open (see [Day 1 evidence](reports/demo_week/2026-11-17.md)) |
+| Fine-tuned generator, temporal reasoning, automatic learned admission, always-on dashboard | Future work |
 
 The local SQLite implementation remains the reference while the planned cloud version works toward feature parity. See the [cloud setup and implementation plan](docs/Cloud_Setup.md).
 
@@ -154,10 +158,10 @@ The local SQLite implementation remains the reference while the planned cloud ve
 | --- | --- |
 | System design | [Design v0.1](docs/System_Design_v0.1.md) · [Architecture diagram source](docs/NeuroBrain_Architecture.mmd) |
 | Development plan | [Working plan](docs/NeuroBrain_Working_Plan.md) · [Session plan](docs/NeuroBrain_Session_Plan.md) |
-| Annotation work | [Dataset overview](data/README.md) · [Annotation guide v1.1](docs/Admission_Annotation_Guide_v1_1.md) |
+| Annotation work | [Dataset overview](data/README.md) · [Annotation guide v1.2](docs/Admission_Annotation_Guide_v1_2.md) |
 | Research reading | [22-paper research spreadsheet](outputs/01a1a787-93d4-7031-a06c-cf0b8e572393/NeuroBrain_22_Research_Papers.xlsx) |
 | Implementation | [Application](src/neurobrain/) · [Scripts](scripts/) · [Tests](tests/) |
-| Progress record | [Session log](reports/session_log.md) |
+| Progress record | [Session log](reports/session_log.md) · [Readiness 16 Nov](reports/Prototype_Readiness_2026_11_16.md) · [Demo run sheet](docs/Prototype_Demo_Runbook.md) |
 
 ---
 

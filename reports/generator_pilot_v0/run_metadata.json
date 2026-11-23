@@ -1,0 +1,32 @@
+{
+  "date": "2026-11-13",
+  "model_repo": "mlx-community/Qwen3.5-4B-4bit",
+  "model_revision": "0e7ffd5c629ef7719d4cbc04069232580bfa9d9c",
+  "model_local_path": "/private/tmp/neurobrain-qwen35-4b-mlx",
+  "venv": "/private/tmp/neurobrain-qwen-pilot-venv",
+  "dataset": "data/generator_pilot_v0",
+  "adapter": "models/generator-pilot-v0",
+  "training": {
+    "iterations": 20,
+    "num_layers": 1,
+    "rank": 8,
+    "learning_rate": 0.0001,
+    "batch_size": 1,
+    "seed": 17,
+    "mask_prompt": true,
+    "max_seq_length": 1024,
+    "gradient_checkpointing": true
+  },
+  "generation": {
+    "temperature": 0,
+    "enable_thinking": false,
+    "max_tokens": 180
+  },
+  "promotion_gate": "No unsupported claims on development cases and improvement over baseline; tiny smoke test alone insufficient for corpus-wide promotion.",
+  "limitations": [
+    "assistant-authored targets from upstream snippets",
+    "three development cases, no final test",
+    "single seed, no production integration",
+    "base model and isolated environment are in temporary storage"
+  ]
+}

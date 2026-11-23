@@ -1,12 +1,14 @@
 import json
+import os
 import tempfile
 import threading
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
-from neurobrain.chat_api import MODEL, create_server, literal
+from neurobrain.chat_api import MODEL, create_server, literal, unresolved_reference
 from neurobrain.core import MemoryStore
 
 
@@ -16,6 +18,97 @@ class ChatAPITests(unittest.TestCase):
         self.assertNotIn("![", rendered)
         self.assertNotIn("<img", rendered)
         self.assertIn(r"\!\[image\]\(https://example\.com\)", rendered)
+
+    def test_reference_guard_refuses_only_history_dependent_questions(self):
+        for ok in (
+            "What is the room number that Ravi booked?",
+            "Which budget review is this quarter?",
+            "Is the amber rehearsal room that Mira booked free?",
+        ):
+            self.assertFalse(unresolved_reference(ok), ok)
+        for bad in (
+            "What about it?",
+            "When is its deadline?",
+            "What did they decide?",
+            "What about this?",
+            "Which room is that?",
+        ):
+            self.assertTrue(unresolved_reference(bad), bad)
+
+    def test_hosted_bridge_answers_from_supabase_and_never_serves_forgotten_rows(self):
+        from neurobrain.core import MemoryError as NBError
+
+        row = dict(
+            citation="s:0",
+            text="The violet demonstration is on 23 November 2026.",
+            path="Notion",
+            line_start=1,
+            line_end=1,
+            observation=dict(source="Notion", route="page-api"),
+        )
+
+        def answerer(store, question):
+            return {"answers": store.search(question)}
+
+        key = "test-only-" * 4
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp).resolve()
+            with patch.dict(
+                os.environ,
+                {
+                    "NEUROBRAIN_USER_TOKEN": "user",
+                    "SUPABASE_URL": "https://demo.supabase.co",
+                    "SUPABASE_PUBLISHABLE_KEY": "key",
+                },
+            ):
+                server = create_server(
+                    root / "unused.sqlite3", root, key, 0, answerer, hosted=True
+                )
+                thread = threading.Thread(target=server.serve_forever)
+                thread.start()
+                try:
+
+                    def ask():
+                        body = dict(
+                            model=MODEL,
+                            messages=[
+                                dict(
+                                    role="user",
+                                    content="When is the violet demonstration?",
+                                )
+                            ],
+                        )
+                        req = Request(
+                            f"http://127.0.0.1:{server.server_port}/v1/chat/completions",
+                            json.dumps(body).encode(),
+                            {
+                                "Authorization": "Bearer " + key,
+                                "Content-Type": "application/json",
+                            },
+                        )
+                        with urlopen(req, timeout=5) as response:
+                            return response.read().decode()
+
+                    with patch("neurobrain.cloud.rpc", return_value=[row]) as rpc:
+                        self.assertIn("s:0", ask())
+                        self.assertEqual(
+                            rpc.call_args.args[0]["folder"], "observations"
+                        )
+                    with patch("neurobrain.cloud.rpc", return_value=[]):
+                        self.assertNotIn("s:0", ask())
+                    with patch("neurobrain.cloud.rpc", side_effect=NBError("down")):
+                        with self.assertRaises(HTTPError) as error:
+                            ask()
+                        self.assertEqual(error.exception.code, 503)
+                finally:
+                    server.shutdown()
+                    server.server_close()
+                    thread.join()
+            with patch.dict(os.environ, {}, clear=True):
+                with self.assertRaises(NBError):
+                    create_server(
+                        root / "u.sqlite3", root, key, 0, answerer, hosted=True
+                    )
 
     def test_auth_discovery_streaming_and_forgetting(self):
         with tempfile.TemporaryDirectory() as temp:

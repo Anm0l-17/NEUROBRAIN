@@ -1,0 +1,501 @@
+example_id,action,type,scope,sensitivity,source,review_rationale,adjudication_note,status
+batch-b-00-00,skip,requirement,session,ordinary,fictional_assistant_authored,"A quoted worksheet exercise, not a need of this commuter's own route.",,draft
+batch-b-00-01,keep,decision,project,ordinary,fictional_assistant_authored,An explicit route choice for the trial week that later planning can build on.,,draft
+batch-b-00-02,uncertain,uncertain,uncertain,ordinary,fictional_assistant_authored,"Which crossing is meant and why it is awkward are missing, so nothing usable can be stored.",Retained submitted interpretation after review. Conservative scope is supported while the referent or application is missing.,draft
+batch-b-00-03,keep,preference,project,ordinary,fictional_assistant_authored,A stated route-planning taste (fewer junctions over shorter distance) that should shape later route suggestions.,"Retained submitted interpretation after review. Submitted interpretation is supported by the context and guide; assistant drafts are comparison material, not gold labels.",draft
+batch-b-00-04,keep,requirement,project,ordinary,fictional_assistant_authored,A firm condition any detour must meet.,,draft
+batch-b-00-05,keep,correction,project,ordinary,fictional_assistant_authored,Replaces the earlier 6.8 km distance with the corrected value.,,draft
+batch-b-00-06,skip,acknowledgment,session,ordinary,fictional_assistant_authored,Polite agreement with no new detail; it does not adopt the canal route.,,draft
+batch-b-00-07,skip,fact,session,ordinary,fictional_assistant_authored,A detail from tutorial material that says nothing about this commuter's route.,,draft
+batch-b-00-08,skip,preference,session,ordinary,fictional_assistant_authored,"A demonstration character's taste, not the commuter's.",,draft
+batch-b-00-09,keep,correction,project,ordinary,fictional_assistant_authored,"Swaps the bridge for the canal path, which changes the planned route.",,draft
+batch-b-00-10,keep,milestone,project,ordinary,fictional_assistant_authored,A dated external inspection worth remembering.,,draft
+batch-b-00-11,keep,preference,project,ordinary,fictional_assistant_authored,A labeling style choice for this map.,,draft
+batch-b-00-12,keep,fact,project,ordinary,fictional_assistant_authored,A stable opening time that affects weekday timing.,,draft
+batch-b-00-13,skip,fact,project,ordinary,fictional_assistant_authored,"Already stated in the stored route note, so it adds nothing new.",,draft
+batch-b-00-14,skip,transient,session,ordinary,fictional_assistant_authored,A momentary map drag with no lasting value.,,draft
+batch-b-00-15,skip,transient,session,ordinary,fictional_assistant_authored,A passing observation unrelated to the plan.,,draft
+batch-b-00-16,keep,requirement,person,restricted,fictional_assistant_authored,A stated personal access need that applies across all outings and should shape any stop choice.,,draft
+batch-b-00-17,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A repeatable export bug that still needs attention.,,draft
+batch-b-00-18,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,An unconfirmed report that matters for route planning and should stay an open question.,"Retained submitted interpretation after review. Supports tracking the identifiable claim as an open verification issue, preserving its uncertainty. Does not establish the claim as a fact or override storage permission. See proposed rule clarification.",draft
+batch-b-00-19,keep,fact,person,personal,fictional_assistant_authored,A precise recurring commitment that constrains the person's mornings.,,draft
+batch-b-01-00,uncertain,uncertain,uncertain,uncertain,fictional_assistant_authored,"Which sessions, and whether this is a schedule limit or something else, is missing.",Retained submitted interpretation after review. Conservative scope is supported while the referent or application is missing.,draft
+batch-b-01-01,keep,preference,person,ordinary,fictional_assistant_authored,"A learning-style preference stated across subjects, useful for any teaching.",,draft
+batch-b-01-02,skip,transient,session,ordinary,fictional_assistant_authored,A one-off microphone test.,,draft
+batch-b-01-03,uncertain,uncertain,uncertain,ordinary,fictional_assistant_authored,It is unclear which version is easier or what it applies to.,Retained submitted interpretation after review. Conservative scope is supported while the referent or application is missing.,draft
+batch-b-01-04,keep,decision,project,ordinary,fictional_assistant_authored,An explicitly agreed structure for each meeting.,,draft
+batch-b-01-05,keep,correction,project,ordinary,fictional_assistant_authored,Records that French was replaced as the exchange language.,,draft
+batch-b-01-06,skip,transient,session,ordinary,fictional_assistant_authored,A momentary audio meter spike.,,draft
+batch-b-01-07,skip,preference,session,ordinary,fictional_assistant_authored,"An example student's taste in a workbook, not the member's.",,draft
+batch-b-01-08,skip,acknowledgment,session,ordinary,fictional_assistant_authored,Shows understanding of a sentence but adds no lasting detail.,,draft
+batch-b-01-09,keep,requirement,project,ordinary,fictional_assistant_authored,A content rule for every practice card.,,draft
+batch-b-01-10,keep,preference,project,ordinary,fictional_assistant_authored,A stated way to receive corrections during conversations.,,draft
+batch-b-01-11,keep,fact,project,ordinary,fictional_assistant_authored,A routine already in effect for every meeting.,,draft
+batch-b-01-12,keep,fact,project,personal,fictional_assistant_authored,"Names the exchange partner, which helps with later scheduling and context.","Retained submitted interpretation after review. Submitted interpretation is supported by the context and guide; assistant drafts are comparison material, not gold labels.",draft
+batch-b-01-13,skip,fact,session,ordinary,fictional_assistant_authored,"A character in sample material, not part of the real exchange.",,draft
+batch-b-01-14,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A repeatable recording bug that still needs a fix.,,draft
+batch-b-01-15,keep,unresolved_issue,project,personal,fictional_assistant_authored,"A specific, recurring learning difficulty that should shape future practice.","Retained submitted interpretation after review. Submitted interpretation is supported by the context and guide; assistant drafts are comparison material, not gold labels.",draft
+batch-b-01-16,keep,correction,project,ordinary,fictional_assistant_authored,Replaces the label tutor with conversation partner on the form.,,draft
+batch-b-01-17,keep,requirement,project,restricted,fictional_assistant_authored,A stated personal access need that later listening materials must meet.,,draft
+batch-b-01-18,skip,fact,project,ordinary,fictional_assistant_authored,Same as the stored note on meeting length.,,draft
+batch-b-01-19,keep,milestone,project,ordinary,fictional_assistant_authored,A scheduled assessment date.,,draft
+batch-b-02-00,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A repeatable app bug that damages the inventory.,,draft
+batch-b-02-01,uncertain,uncertain,uncertain,ordinary,fictional_assistant_authored,Which key and what it might open are missing.,Retained submitted interpretation after review. Conservative scope is supported while the referent or application is missing.,draft
+batch-b-02-02,skip,transient,session,ordinary,fictional_assistant_authored,A doorbell heard once during a call.,,draft
+batch-b-02-03,keep,correction,project,personal,fictional_assistant_authored,Replaces the emergency contact for this move and names a family member.,,draft
+batch-b-02-04,skip,fact,session,ordinary,fictional_assistant_authored,"A feature of a sample lease document, not of this tenant's move.",Retained submitted interpretation after review. A generic sample label or mention without the sensitive contents need not inherit the sensitivity of the material it names; being fictional alone is not a reason to lower sensitivity.,draft
+batch-b-02-05,keep,fact,project,ordinary,fictional_assistant_authored,A physical limit that affects what can be moved in.,,draft
+batch-b-02-06,keep,fact,person,personal,fictional_assistant_authored,A standalone household-size statement can help across household activities. This is not a correction confined to a project record.,User explicitly accepted scope: project -> person. A standalone household-size statement can help across household activities. This is not a correction confined to a project record.,draft
+batch-b-02-07,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,An unconfirmed claim about the loading bay that needs checking.,"Retained submitted interpretation after review. Supports tracking the identifiable claim as an open verification issue, preserving its uncertainty. Does not establish the claim as a fact or override storage permission. See proposed rule clarification.",draft
+batch-b-02-08,keep,correction,project,ordinary,fictional_assistant_authored,Replaces the earlier sofa length in the inventory.,,draft
+batch-b-02-09,skip,acknowledgment,session,ordinary,fictional_assistant_authored,Shows understanding of the loading order only.,,draft
+batch-b-02-10,skip,fact,project,ordinary,fictional_assistant_authored,Already listed in the stored inventory.,,draft
+batch-b-02-11,keep,requirement,person,restricted,fictional_assistant_authored,A standing instruction to keep identity images out of shared summaries.,,draft
+batch-b-02-12,keep,preference,project,ordinary,fictional_assistant_authored,A labeling style for the boxes.,,draft
+batch-b-02-13,skip,decision,session,ordinary,fictional_assistant_authored,A choice made by imaginary movers in a tutorial.,,draft
+batch-b-02-14,skip,transient,session,ordinary,fictional_assistant_authored,A passing action with no later value.,,draft
+batch-b-02-15,keep,requirement,project,ordinary,fictional_assistant_authored,A condition the mover has to satisfy.,,draft
+batch-b-02-16,keep,milestone,project,ordinary,fictional_assistant_authored,A scheduled appointment date.,,draft
+batch-b-02-17,keep,requirement,project,restricted,fictional_assistant_authored,A rule that keeps a private envelope off public lists.,,draft
+batch-b-02-18,keep,decision,project,ordinary,fictional_assistant_authored,An explicit slot choice.,,draft
+batch-b-02-19,skip,fact,session,ordinary,fictional_assistant_authored,"Advertising content, not a choice by this tenant.","Retained submitted interpretation after review. Submitted interpretation is supported by the context and guide; assistant drafts are comparison material, not gold labels.",draft
+batch-b-03-00,keep,milestone,project,ordinary,fictional_assistant_authored,A scheduled listening session.,,draft
+batch-b-03-01,skip,fact,project,ordinary,fictional_assistant_authored,Already fixed by the approved brief.,,draft
+batch-b-03-02,keep,unresolved_issue,project,restricted,fictional_assistant_authored,An unconfirmed consent question that must be settled before the passage is used.,"Retained submitted interpretation after review. Supports tracking the identifiable claim as an open verification issue, preserving its uncertainty. Does not establish the claim as a fact or override storage permission. See proposed rule clarification.",draft
+batch-b-03-03,keep,requirement,project,ordinary,fictional_assistant_authored,A rule for how quotations are handled.,,draft
+batch-b-03-04,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A repeatable export bug that still needs fixing.,,draft
+batch-b-03-05,skip,preference,session,ordinary,fictional_assistant_authored,"A training-video presenter's taste, not the producer's.",,draft
+batch-b-03-06,keep,requirement,project,restricted,fictional_assistant_authored,A protection rule for private family material.,,draft
+batch-b-03-07,keep,correction,project,ordinary,fictional_assistant_authored,Fixes the spelling of a credited name.,,draft
+batch-b-03-08,keep,preference,project,ordinary,fictional_assistant_authored,An editing taste to apply across sections.,,draft
+batch-b-03-09,keep,fact,person,personal,fictional_assistant_authored,"A precise, recurring working window that matters for scheduling.",,draft
+batch-b-03-10,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A repeatable transcript bug that still needs attention.,,draft
+batch-b-03-11,skip,acknowledgment,session,ordinary,fictional_assistant_authored,Shows understanding only.,,draft
+batch-b-03-12,keep,correction,project,ordinary,fictional_assistant_authored,Changes the earlier narration order.,,draft
+batch-b-03-13,keep,decision,project,ordinary,fictional_assistant_authored,An approved opening choice.,,draft
+batch-b-03-14,keep,fact,project,ordinary,fictional_assistant_authored,A stable detail about how the backup recorder works.,,draft
+batch-b-03-15,skip,transient,session,ordinary,fictional_assistant_authored,A brief mute with no lasting value.,,draft
+batch-b-03-16,skip,transient,session,ordinary,fictional_assistant_authored,A momentary cursor event.,,draft
+batch-b-03-17,skip,fact,session,ordinary,fictional_assistant_authored,"An example from a manual, not this documentary.",,draft
+batch-b-03-18,keep,requirement,project,ordinary,fictional_assistant_authored,A rule that separates consent from editorial choices.,,draft
+batch-b-03-19,uncertain,uncertain,uncertain,ordinary,fictional_assistant_authored,"It is not stated which section, and the wording is hedged.",Retained submitted interpretation after review. Conservative scope is supported while the referent or application is missing.,draft
+batch-b-04-00,keep,correction,project,ordinary,fictional_assistant_authored,Fixes a mislabeled sample.,,draft
+batch-b-04-01,skip,transient,session,ordinary,fictional_assistant_authored,A momentary preview rotation.,,draft
+batch-b-04-02,skip,requirement,session,ordinary,fictional_assistant_authored,"A quoted example assignment about a leaf, not about seeds.",,draft
+batch-b-04-03,skip,acknowledgment,session,ordinary,fictional_assistant_authored,Confirms understanding only.,,draft
+batch-b-04-04,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A repeatable indexing bug that still needs a fix.,,draft
+batch-b-04-05,keep,fact,project,ordinary,fictional_assistant_authored,A stable mapping of trays to image sets.,,draft
+batch-b-04-06,skip,transient,session,ordinary,fictional_assistant_authored,A brief preview glitch while cabling.,,draft
+batch-b-04-07,keep,milestone,project,ordinary,fictional_assistant_authored,A scheduled review date.,,draft
+batch-b-04-08,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,An unconfirmed suspicion that could affect the stored scale.,"Retained submitted interpretation after review. Supports tracking the identifiable claim as an open verification issue, preserving its uncertainty. Does not establish the claim as a fact or override storage permission. See proposed rule clarification.",draft
+batch-b-04-09,uncertain,uncertain,uncertain,ordinary,fictional_assistant_authored,Which item looks wrong and why is missing.,Retained submitted interpretation after review. Conservative scope is supported while the referent or application is missing.,draft
+batch-b-04-10,keep,requirement,project,restricted,fictional_assistant_authored,A rule that keeps private accommodation information out of published data.,,draft
+batch-b-04-11,keep,unresolved_issue,project,personal,fictional_assistant_authored,"A specific, ongoing learning difficulty that should shape later help.","Retained submitted interpretation after review. Submitted interpretation is supported by the context and guide; assistant drafts are comparison material, not gold labels.",draft
+batch-b-04-12,keep,correction,project,ordinary,fictional_assistant_authored,Replaces the earlier image count.,,draft
+batch-b-04-13,keep,requirement,project,ordinary,fictional_assistant_authored,A rule against guessing measurements.,,draft
+batch-b-04-14,keep,decision,project,ordinary,fictional_assistant_authored,An explicit lighting choice.,,draft
+batch-b-04-15,keep,requirement,project,ordinary,fictional_assistant_authored,A naming rule for all images.,,draft
+batch-b-04-16,keep,fact,project,ordinary,fictional_assistant_authored,A stable storage detail for calibration.,,draft
+batch-b-04-17,skip,fact,session,ordinary,fictional_assistant_authored,A decorative detail with no bearing on the study.,,draft
+batch-b-04-18,skip,fact,project,ordinary,fictional_assistant_authored,Same as the stored imaging scale.,,draft
+batch-b-04-19,keep,preference,project,ordinary,fictional_assistant_authored,A style preference for figures.,,draft
+batch-b-05-00,keep,decision,project,ordinary,fictional_assistant_authored,An agreed approach to onboarding volunteers.,,draft
+batch-b-05-01,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A repeatable roster bug that misstates confirmations.,,draft
+batch-b-05-02,skip,transient,session,ordinary,fictional_assistant_authored,A brief display glitch in a test.,"Retained submitted interpretation after review. Submitted interpretation is supported by the context and guide; assistant drafts are comparison material, not gold labels.",draft
+batch-b-05-03,keep,preference,project,ordinary,fictional_assistant_authored,A display style for the internal view.,,draft
+batch-b-05-04,skip,preference,session,ordinary,fictional_assistant_authored,"A stock photo's caption, not about the real volunteers.",,draft
+batch-b-05-05,keep,requirement,project,restricted,fictional_assistant_authored,A rule that keeps reasons for accommodations private.,,draft
+batch-b-05-06,skip,transient,session,ordinary,fictional_assistant_authored,A momentary refresh flash.,,draft
+batch-b-05-07,skip,fact,session,ordinary,fictional_assistant_authored,A detail of the training roster only.,,draft
+batch-b-05-08,keep,requirement,project,ordinary,fictional_assistant_authored,A staffing minimum for the desk.,,draft
+batch-b-05-09,skip,acknowledgment,session,ordinary,fictional_assistant_authored,Confirms the table is readable.,,draft
+batch-b-05-10,keep,requirement,project,restricted,fictional_assistant_authored,A stated personal need that should shape this person's shift assignments.,,draft
+batch-b-05-11,keep,correction,project,ordinary,fictional_assistant_authored,Replaces the earlier Saturday start time.,,draft
+batch-b-05-12,uncertain,uncertain,uncertain,ordinary,fictional_assistant_authored,It is unclear which slot and who is meant.,Retained submitted interpretation after review. Conservative scope is supported while the referent or application is missing.,draft
+batch-b-05-13,skip,decision,session,ordinary,fictional_assistant_authored,A team size chosen in a tutorial.,,draft
+batch-b-05-14,keep,milestone,project,ordinary,fictional_assistant_authored,A scheduled orientation date.,,draft
+batch-b-05-15,keep,correction,project,personal,fictional_assistant_authored,Replaces the key holder for the winter roster and names two people.,,draft
+batch-b-05-16,keep,requirement,project,ordinary,fictional_assistant_authored,A scheduling rule for the roster.,,draft
+batch-b-05-17,keep,unresolved_issue,project,personal,fictional_assistant_authored,An unconfirmed change to a named volunteer's availability.,"Retained submitted interpretation after review. Supports tracking the identifiable claim as an open verification issue, preserving its uncertainty. Does not establish the claim as a fact or override storage permission. See proposed rule clarification.",draft
+batch-b-05-18,skip,fact,project,ordinary,fictional_assistant_authored,Already recorded in the roster context.,,draft
+batch-b-05-19,keep,fact,person,personal,fictional_assistant_authored,A precise weekly commitment that limits availability.,,draft
+batch-b-06-00,keep,requirement,project,ordinary,fictional_assistant_authored,A tracking rule for cancelled drafts.,,draft
+batch-b-06-01,skip,acknowledgment,session,ordinary,fictional_assistant_authored,Thanks with no new detail.,,draft
+batch-b-06-02,keep,preference,person,ordinary,fictional_assistant_authored,A working preference stated for any client.,,draft
+batch-b-06-03,keep,fact,project,restricted,fictional_assistant_authored,"A useful budget figure, but confidential and needing separate permission review.",,draft
+batch-b-06-04,keep,correction,project,ordinary,fictional_assistant_authored,Replaces the earlier project code.,,draft
+batch-b-06-05,skip,fact,project,ordinary,fictional_assistant_authored,Already stated in the brief.,,draft
+batch-b-06-06,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A repeatable total error that still needs fixing.,,draft
+batch-b-06-07,skip,transient,session,ordinary,fictional_assistant_authored,A trackpad brush that changed the zoom.,,draft
+batch-b-06-08,skip,transient,session,ordinary,fictional_assistant_authored,A passing selection with no lasting value.,,draft
+batch-b-06-09,keep,requirement,project,restricted,fictional_assistant_authored,A confidentiality rule for the case study.,,draft
+batch-b-06-10,keep,unresolved_issue,project,restricted,fictional_assistant_authored,An unconfirmed client wish about confidentiality that should be checked.,"Retained submitted interpretation after review. Supports tracking the identifiable claim as an open verification issue, preserving its uncertainty. Does not establish the claim as a fact or override storage permission. See proposed rule clarification.",draft
+batch-b-06-11,skip,fact,session,ordinary,fictional_assistant_authored,"A sample invoice figure from a tutorial, unrelated to this project.",Retained submitted interpretation after review. A generic sample label or mention without the sensitive contents need not inherit the sensitivity of the material it names; being fictional alone is not a reason to lower sensitivity.,draft
+batch-b-06-12,keep,milestone,project,ordinary,fictional_assistant_authored,A scheduled client call.,,draft
+batch-b-06-13,keep,correction,project,ordinary,fictional_assistant_authored,Replaces the earlier two-size scope.,,draft
+batch-b-06-14,keep,requirement,project,ordinary,fictional_assistant_authored,A content rule for every invoice line.,,draft
+batch-b-06-15,keep,fact,person,personal,fictional_assistant_authored,A recurring availability window useful for scheduling any client calls.,,draft
+batch-b-06-16,keep,fact,project,ordinary,fictional_assistant_authored,A useful behavior of the exporter.,,draft
+batch-b-06-17,skip,preference,session,ordinary,fictional_assistant_authored,An example designer's taste in a tutorial.,,draft
+batch-b-06-18,keep,decision,project,ordinary,fictional_assistant_authored,An agreed billing approach.,,draft
+batch-b-06-19,uncertain,uncertain,uncertain,ordinary,fictional_assistant_authored,It is not stated which numbers or where they differ.,Retained submitted interpretation after review. Conservative scope is supported while the referent or application is missing.,draft
+batch-b-07-00,keep,correction,project,personal,fictional_assistant_authored,Correcting an interviewee name changes an identifying personal detail; this is not a fictional character rename within the scenario.,User explicitly accepted sensitivity: ordinary -> personal. Correcting an interviewee name changes an identifying personal detail; this is not a fictional character rename within the scenario.,draft
+batch-b-07-01,uncertain,uncertain,uncertain,uncertain,fictional_assistant_authored,The private passage referent is missing. Sensitivity remains uncertain per the latest user instruction; the explicit privacy request still applies and needs no inferred reason.,"Latest user correction supersedes the earlier restricted sensitivity adjudication: sensitivity=uncertain. Candidate says ""This part was supposed to stay private."" Honor that explicit privacy warning; uncertainty grants no permission. Action/type/scope remain uncertain. See reports/admission_batch_b_clarification_log.md.",draft
+batch-b-07-02,keep,requirement,project,restricted,fictional_assistant_authored,A rule that restricts access to a private family passage.,,draft
+batch-b-07-03,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A repeatable search bug that gives the wrong identifier.,,draft
+batch-b-07-04,keep,requirement,project,ordinary,fictional_assistant_authored,A traceability rule for summaries.,,draft
+batch-b-07-05,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,An unconfirmed belief about a second speaker that should be checked.,"Retained submitted interpretation after review. Supports tracking the identifiable claim as an open verification issue, preserving its uncertainty. Does not establish the claim as a fact or override storage permission. See proposed rule clarification.",draft
+batch-b-07-06,skip,acknowledgment,session,ordinary,fictional_assistant_authored,Confirms understanding only.,,draft
+batch-b-07-07,keep,fact,project,ordinary,fictional_assistant_authored,A stable rule about what the accession number identifies.,,draft
+batch-b-07-08,keep,fact,project,ordinary,fictional_assistant_authored,A stable storage detail.,,draft
+batch-b-07-09,skip,transient,session,ordinary,fictional_assistant_authored,A momentary layout jump.,,draft
+batch-b-07-10,keep,fact,project,personal,fictional_assistant_authored,A stated personal responsibility involving a named relative.,"Retained submitted interpretation after review. Submitted interpretation is supported by the context and guide; assistant drafts are comparison material, not gold labels.",draft
+batch-b-07-11,skip,transient,session,ordinary,fictional_assistant_authored,A demo label that appeared briefly.,Retained submitted interpretation after review. A generic sample label or mention without the sensitive contents need not inherit the sensitivity of the material it names; being fictional alone is not a reason to lower sensitivity.,draft
+batch-b-07-12,keep,correction,project,ordinary,fictional_assistant_authored,Replaces the earlier part-two marker.,,draft
+batch-b-07-13,skip,preference,session,ordinary,fictional_assistant_authored,An example donor's taste in a handbook.,,draft
+batch-b-07-14,skip,fact,session,ordinary,fictional_assistant_authored,A sample story in a demo archive.,,draft
+batch-b-07-15,keep,preference,project,ordinary,fictional_assistant_authored,A display order choice.,,draft
+batch-b-07-16,keep,requirement,project,restricted,fictional_assistant_authored,A permission rule for private contact details.,,draft
+batch-b-07-17,skip,fact,project,ordinary,fictional_assistant_authored,Already recorded in the catalog.,,draft
+batch-b-07-18,keep,milestone,project,ordinary,fictional_assistant_authored,A scheduled meeting date.,,draft
+batch-b-07-19,keep,decision,project,ordinary,fictional_assistant_authored,An explicit citation choice for the first release.,,draft
+batch-b-08-00,keep,requirement,person,restricted,fictional_assistant_authored,A stated personal need that applies on any group outing.,"Retained submitted interpretation after review. Submitted interpretation is supported by the context and guide; assistant drafts are comparison material, not gold labels.",draft
+batch-b-08-01,keep,preference,project,ordinary,fictional_assistant_authored,A style for route directions.,,draft
+batch-b-08-02,skip,decision,session,ordinary,fictional_assistant_authored,A choice made in a sample itinerary.,,draft
+batch-b-08-03,uncertain,uncertain,uncertain,uncertain,fictional_assistant_authored,Which route and why the person cannot do it are missing.,,draft
+batch-b-08-04,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,An unconfirmed report about the ridge gate that needs checking.,"Retained submitted interpretation after review. Supports tracking the identifiable claim as an open verification issue, preserving its uncertainty. Does not establish the claim as a fact or override storage permission. See proposed rule clarification.",draft
+batch-b-08-05,keep,correction,project,ordinary,fictional_assistant_authored,Replaces the draft's return distance.,,draft
+batch-b-08-06,skip,transient,session,ordinary,fictional_assistant_authored,A momentary compass rotation.,,draft
+batch-b-08-07,keep,correction,project,ordinary,fictional_assistant_authored,Changes the assembly point.,,draft
+batch-b-08-08,skip,fact,session,ordinary,fictional_assistant_authored,A stock photo detail.,,draft
+batch-b-08-09,keep,milestone,project,ordinary,fictional_assistant_authored,A scheduled reconnaissance date.,,draft
+batch-b-08-10,keep,fact,project,personal,fictional_assistant_authored,Names the regular walking partner.,"Retained submitted interpretation after review. Submitted interpretation is supported by the context and guide; assistant drafts are comparison material, not gold labels.",draft
+batch-b-08-11,keep,requirement,project,restricted,fictional_assistant_authored,A rule that protects members' access needs.,,draft
+batch-b-08-12,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A repeatable printing bug that drops the last turn.,,draft
+batch-b-08-13,keep,requirement,project,ordinary,fictional_assistant_authored,A planning rule for stopping points.,,draft
+batch-b-08-14,keep,decision,project,ordinary,fictional_assistant_authored,An explicit choice of route.,,draft
+batch-b-08-15,skip,fact,project,ordinary,fictional_assistant_authored,Already excluded in the saved plan.,,draft
+batch-b-08-16,keep,fact,project,ordinary,fictional_assistant_authored,A stable detail that keeps materials consistent.,,draft
+batch-b-08-17,skip,acknowledgment,session,ordinary,fictional_assistant_authored,Confirms understanding only.,,draft
+batch-b-08-18,keep,requirement,project,ordinary,fictional_assistant_authored,A labeling rule for unverified information.,,draft
+batch-b-08-19,skip,transient,session,ordinary,fictional_assistant_authored,A passing screen touch.,,draft
+batch-b-09-00,keep,requirement,project,ordinary,fictional_assistant_authored,A general large-print rule that names no individual.,,draft
+batch-b-09-01,keep,milestone,project,ordinary,fictional_assistant_authored,A scheduled rehearsal date.,,draft
+batch-b-09-02,keep,decision,project,ordinary,fictional_assistant_authored,An explicit format choice.,,draft
+batch-b-09-03,skip,fact,project,ordinary,fictional_assistant_authored,Already stated in the venue note.,,draft
+batch-b-09-04,skip,preference,session,ordinary,fictional_assistant_authored,A sample attendee's taste in a training packet.,,draft
+batch-b-09-05,keep,fact,project,personal,fictional_assistant_authored,Names the person's support contact for the event.,"Retained submitted interpretation after review. Submitted interpretation is supported by the context and guide; assistant drafts are comparison material, not gold labels.",draft
+batch-b-09-06,keep,fact,project,ordinary,fictional_assistant_authored,A useful stable detail about the caption service.,,draft
+batch-b-09-07,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A repeatable bug that loses remote questions.,,draft
+batch-b-09-08,keep,correction,project,ordinary,fictional_assistant_authored,Replaces the provisional room capacity.,,draft
+batch-b-09-09,uncertain,uncertain,uncertain,uncertain,fictional_assistant_authored,What arrangement does not work and why is missing.,Retained submitted interpretation after review. Conservative scope is supported while the referent or application is missing.,draft
+batch-b-09-10,skip,transient,session,ordinary,fictional_assistant_authored,A single toggle during a demo.,,draft
+batch-b-09-11,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,An unconfirmed offer that should be checked.,"Retained submitted interpretation after review. Supports tracking the identifiable claim as an open verification issue, preserving its uncertainty. Does not establish the claim as a fact or override storage permission. See proposed rule clarification.",draft
+batch-b-09-12,skip,transient,session,ordinary,fictional_assistant_authored,A brief preview glitch.,,draft
+batch-b-09-13,keep,requirement,project,restricted,fictional_assistant_authored,A stated personal access need for this event.,,draft
+batch-b-09-14,skip,fact,session,ordinary,fictional_assistant_authored,A label on an unrelated floor plan.,,draft
+batch-b-09-15,keep,preference,project,ordinary,fictional_assistant_authored,A style rule for introductions.,,draft
+batch-b-09-16,skip,acknowledgment,session,ordinary,fictional_assistant_authored,Confirms understanding only.,,draft
+batch-b-09-17,keep,fact,person,restricted,fictional_assistant_authored,A stated personal access need that applies across all work.,,draft
+batch-b-09-18,keep,correction,project,ordinary,fictional_assistant_authored,Changes the desk's location.,,draft
+batch-b-09-19,keep,requirement,project,restricted,fictional_assistant_authored,A rule that protects explanations of access needs.,,draft
+batch-b-10-00,skip,transient,session,ordinary,fictional_assistant_authored,A passing kitchen moment.,,draft
+batch-b-10-01,keep,fact,project,ordinary,fictional_assistant_authored,A stable filing detail for the binder.,,draft
+batch-b-10-02,keep,milestone,project,ordinary,fictional_assistant_authored,A scheduled family session.,,draft
+batch-b-10-03,keep,preference,project,ordinary,fictional_assistant_authored,A page layout choice.,,draft
+batch-b-10-04,keep,correction,project,ordinary,fictional_assistant_authored,Replaces the earlier cooking-time estimate.,,draft
+batch-b-10-05,keep,preference,person,ordinary,fictional_assistant_authored,A stated taste that applies across meal plans.,,draft
+batch-b-10-06,uncertain,uncertain,uncertain,uncertain,fictional_assistant_authored,Which ingredient and why it is a problem are missing.,Retained submitted interpretation after review. Conservative scope is supported while the referent or application is missing.,draft
+batch-b-10-07,keep,correction,project,ordinary,fictional_assistant_authored,Replaces the portion count the entry was written for.,"Retained submitted interpretation after review. Submitted interpretation is supported by the context and guide; assistant drafts are comparison material, not gold labels.",draft
+batch-b-10-08,keep,requirement,person,restricted,fictional_assistant_authored,A stated dietary need that applies to all meals prepared for the person.,,draft
+batch-b-10-09,skip,preference,session,ordinary,fictional_assistant_authored,A template cook's taste.,,draft
+batch-b-10-10,skip,acknowledgment,session,ordinary,fictional_assistant_authored,Shows understanding only.,,draft
+batch-b-10-11,skip,fact,session,ordinary,fictional_assistant_authored,A detail of a font preview.,,draft
+batch-b-10-12,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,An unconfirmed recollection about a past version.,"Retained submitted interpretation after review. Supports tracking the identifiable claim as an open verification issue, preserving its uncertainty. Does not establish the claim as a fact or override storage permission. See proposed rule clarification.",draft
+batch-b-10-13,keep,requirement,project,ordinary,fictional_assistant_authored,A rule for showing quantities.,,draft
+batch-b-10-14,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A repeatable scaling bug.,,draft
+batch-b-10-15,keep,decision,project,ordinary,fictional_assistant_authored,An explicit organization choice.,,draft
+batch-b-10-16,skip,fact,project,ordinary,fictional_assistant_authored,Already set in the binder settings.,,draft
+batch-b-10-17,keep,requirement,project,restricted,fictional_assistant_authored,A rule that keeps family dietary information out of shared copies.,,draft
+batch-b-10-18,skip,transient,session,ordinary,fictional_assistant_authored,A passing action.,,draft
+batch-b-10-19,keep,fact,person,personal,fictional_assistant_authored,"This separately stated recurring household cooking routine can help beyond producing the binder, matching the v1.1 household-routine rule.","User explicitly accepted scope: project -> person. This separately stated recurring household cooking routine can help beyond producing the binder, matching the v1.1 household-routine rule.",draft
+batch-b-11-00,keep,preference,project,ordinary,fictional_assistant_authored,A style for showing titles.,,draft
+batch-b-11-01,keep,milestone,project,ordinary,fictional_assistant_authored,A scheduled audit date.,,draft
+batch-b-11-02,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A repeatable bug that merges authors.,,draft
+batch-b-11-03,keep,correction,project,ordinary,fictional_assistant_authored,Replaces the sole-author attribution.,,draft
+batch-b-11-04,uncertain,uncertain,uncertain,ordinary,fictional_assistant_authored,It is not stated which paper or how the withdrawal claim was learned.,Retained submitted interpretation after review. Conservative scope is supported while the referent or application is missing.,draft
+batch-b-11-05,skip,fact,session,ordinary,fictional_assistant_authored,A detail of a software tutorial article.,,draft
+batch-b-11-06,uncertain,uncertain,uncertain,ordinary,fictional_assistant_authored,It is not stated which source or why it is stronger.,Retained submitted interpretation after review. Conservative scope is supported while the referent or application is missing.,draft
+batch-b-11-07,keep,decision,project,ordinary,fictional_assistant_authored,An agreed citation style.,,draft
+batch-b-11-08,keep,requirement,project,restricted,fictional_assistant_authored,A rule that protects participants' private comments.,,draft
+batch-b-11-09,keep,unresolved_issue,project,personal,fictional_assistant_authored,"A specific, ongoing difficulty that should shape later help.","Retained submitted interpretation after review. Submitted interpretation is supported by the context and guide; assistant drafts are comparison material, not gold labels.",draft
+batch-b-11-10,skip,transient,session,ordinary,fictional_assistant_authored,A brief display flash.,,draft
+batch-b-11-11,skip,transient,session,ordinary,fictional_assistant_authored,A passing hover.,,draft
+batch-b-11-12,keep,fact,project,ordinary,fictional_assistant_authored,A stable numbering convention.,,draft
+batch-b-11-13,keep,correction,project,ordinary,fictional_assistant_authored,Replaces the earlier deadline.,,draft
+batch-b-11-14,skip,preference,session,ordinary,fictional_assistant_authored,An example researcher's taste.,,draft
+batch-b-11-15,keep,fact,project,ordinary,fictional_assistant_authored,A stable detail of how the log works.,,draft
+batch-b-11-16,skip,acknowledgment,session,ordinary,fictional_assistant_authored,Confirms understanding only.,,draft
+batch-b-11-17,skip,requirement,project,ordinary,fictional_assistant_authored,Already required by the stored instructions.,"Retained submitted interpretation after review. Submitted interpretation is supported by the context and guide; assistant drafts are comparison material, not gold labels.",draft
+batch-b-11-18,keep,requirement,project,restricted,fictional_assistant_authored,A rule that keeps private feedback out of public material.,"Retained submitted interpretation after review. Submitted interpretation is supported by the context and guide; assistant drafts are comparison material, not gold labels.",draft
+batch-b-11-19,keep,requirement,project,ordinary,fictional_assistant_authored,A verification step before submission.,,draft
+batch-b-12-00,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A repeatable logging bug that overwrites results.,,draft
+batch-b-12-01,uncertain,uncertain,uncertain,ordinary,fictional_assistant_authored,It is not stated what the replacement is or what it might fit.,Retained submitted interpretation after review. Conservative scope is supported while the referent or application is missing.,draft
+batch-b-12-02,keep,preference,project,ordinary,fictional_assistant_authored,A chart style preference.,,draft
+batch-b-12-03,keep,fact,project,personal,fictional_assistant_authored,"A precise, recurring access window to a shared resource.","Retained submitted interpretation after review. Submitted interpretation is supported by the context and guide; assistant drafts are comparison material, not gold labels.",draft
+batch-b-12-04,skip,transient,session,ordinary,fictional_assistant_authored,A passing placement of equipment.,,draft
+batch-b-12-05,keep,correction,project,ordinary,fictional_assistant_authored,Replaces the earlier screw size.,,draft
+batch-b-12-06,skip,fact,project,ordinary,fictional_assistant_authored,Already stated in the build note.,,draft
+batch-b-12-07,skip,fact,session,ordinary,fictional_assistant_authored,A detail of a catalog item.,,draft
+batch-b-12-08,keep,milestone,project,ordinary,fictional_assistant_authored,A scheduled rehearsal date.,,draft
+batch-b-12-09,keep,fact,project,ordinary,fictional_assistant_authored,A useful stable hardware detail.,,draft
+batch-b-12-10,keep,correction,project,ordinary,fictional_assistant_authored,Renames a channel.,,draft
+batch-b-12-11,keep,requirement,project,restricted,fictional_assistant_authored,A rule that keeps private access instructions off the public log.,,draft
+batch-b-12-12,skip,transient,session,ordinary,fictional_assistant_authored,A passing indicator event.,,draft
+batch-b-12-13,skip,acknowledgment,session,ordinary,fictional_assistant_authored,Shows understanding only.,,draft
+batch-b-12-14,keep,requirement,project,ordinary,fictional_assistant_authored,A recording rule for test results.,,draft
+batch-b-12-15,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,An unverified forum claim that should not be treated as a confirmed fix.,"Retained submitted interpretation after review. Supports tracking the identifiable claim as an open verification issue, preserving its uncertainty. Does not establish the claim as a fact or override storage permission. See proposed rule clarification.",draft
+batch-b-12-16,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A repeatable fault that still needs attention.,,draft
+batch-b-12-17,skip,requirement,session,ordinary,fictional_assistant_authored,"A quoted worksheet exercise, not part of this indoor build.",,draft
+batch-b-12-18,keep,decision,project,ordinary,fictional_assistant_authored,An explicit equipment choice.,,draft
+batch-b-12-19,keep,requirement,project,ordinary,fictional_assistant_authored,A data-handling rule.,,draft
+batch-b-13-00,skip,preference,session,ordinary,fictional_assistant_authored,A tutorial translator's taste.,,draft
+batch-b-13-01,keep,requirement,project,ordinary,fictional_assistant_authored,A technical rule for translations.,,draft
+batch-b-13-02,uncertain,uncertain,uncertain,ordinary,fictional_assistant_authored,It is not stated which wording is shorter or better.,Retained submitted interpretation after review. Conservative scope is supported while the referent or application is missing.,draft
+batch-b-13-03,skip,transient,session,ordinary,fictional_assistant_authored,A brief preview delay.,,draft
+batch-b-13-04,keep,requirement,project,ordinary,fictional_assistant_authored,A rule against guessing missing context.,,draft
+batch-b-13-05,keep,requirement,project,restricted,fictional_assistant_authored,A rule that keeps confidential unreleased text out of public examples.,,draft
+batch-b-13-06,keep,correction,project,ordinary,fictional_assistant_authored,Replaces the old plural condition.,,draft
+batch-b-13-07,keep,preference,project,ordinary,fictional_assistant_authored,A style rule for strings.,,draft
+batch-b-13-08,keep,correction,project,ordinary,fictional_assistant_authored,Replaces the draft location name.,,draft
+batch-b-13-09,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A repeatable bug that truncates choices.,,draft
+batch-b-13-10,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,An unconfirmed possibility that could change later builds.,"Retained submitted interpretation after review. Supports tracking the identifiable claim as an open verification issue, preserving its uncertainty. Does not establish the claim as a fact or override storage permission. See proposed rule clarification.",draft
+batch-b-13-11,keep,unresolved_issue,project,personal,fictional_assistant_authored,"A specific, ongoing difficulty that should shape later help.","Retained submitted interpretation after review. Submitted interpretation is supported by the context and guide; assistant drafts are comparison material, not gold labels.",draft
+batch-b-13-12,skip,fact,session,ordinary,fictional_assistant_authored,A spoiler from an unrelated game.,Retained submitted interpretation after review. A generic sample label or mention without the sensitive contents need not inherit the sensitivity of the material it names; being fictional alone is not a reason to lower sensitivity.,draft
+batch-b-13-13,skip,acknowledgment,session,ordinary,fictional_assistant_authored,Shows understanding only.,,draft
+batch-b-13-14,keep,milestone,project,ordinary,fictional_assistant_authored,A scheduled build date.,,draft
+batch-b-13-15,keep,fact,project,ordinary,fictional_assistant_authored,A stable technical detail.,,draft
+batch-b-13-16,skip,fact,project,ordinary,fictional_assistant_authored,Already stored in the glossary.,,draft
+batch-b-13-17,keep,decision,project,ordinary,fictional_assistant_authored,An explicit team choice.,,draft
+batch-b-13-18,skip,transient,session,ordinary,fictional_assistant_authored,A passing click.,,draft
+batch-b-13-19,keep,fact,project,ordinary,fictional_assistant_authored,A stable technical detail.,,draft
+batch-b-14-00,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,An unconfirmed hearing about the delivery day that should be checked.,"Retained submitted interpretation after review. Supports tracking the identifiable claim as an open verification issue, preserving its uncertainty. Does not establish the claim as a fact or override storage permission. See proposed rule clarification.",draft
+batch-b-14-01,skip,fact,session,ordinary,fictional_assistant_authored,A mockup detail.,,draft
+batch-b-14-02,skip,fact,project,ordinary,fictional_assistant_authored,Already stated in the stored plan.,,draft
+batch-b-14-03,keep,requirement,project,restricted,fictional_assistant_authored,A rule that protects households' dietary information.,,draft
+batch-b-14-04,keep,correction,project,ordinary,fictional_assistant_authored,Replaces the old cupboard label.,,draft
+batch-b-14-05,keep,correction,project,ordinary,fictional_assistant_authored,Changes the closing time.,,draft
+batch-b-14-06,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A repeatable counting bug.,,draft
+batch-b-14-07,keep,requirement,person,restricted,fictional_assistant_authored,A stated dietary need that applies to any food suggested for the person.,,draft
+batch-b-14-08,keep,fact,project,personal,fictional_assistant_authored,A precise recurring availability for collections.,"Retained submitted interpretation after review. Submitted interpretation is supported by the context and guide; assistant drafts are comparison material, not gold labels.",draft
+batch-b-14-09,skip,fact,session,ordinary,fictional_assistant_authored,An onboarding example detail.,"Retained submitted interpretation after review. Submitted interpretation is supported by the context and guide; assistant drafts are comparison material, not gold labels.",draft
+batch-b-14-10,skip,transient,session,ordinary,fictional_assistant_authored,A passing action.,,draft
+batch-b-14-11,keep,decision,project,ordinary,fictional_assistant_authored,An explicit queue choice.,,draft
+batch-b-14-12,keep,milestone,project,ordinary,fictional_assistant_authored,A scheduled review date.,,draft
+batch-b-14-13,uncertain,uncertain,uncertain,uncertain,fictional_assistant_authored,Which item and why it is unsuitable are missing.,Retained submitted interpretation after review. Conservative scope is supported while the referent or application is missing.,draft
+batch-b-14-14,keep,fact,person,personal,fictional_assistant_authored,"Household size and makeup, a stable detail useful across activities.",,draft
+batch-b-14-15,skip,transient,session,ordinary,fictional_assistant_authored,A passing sound.,,draft
+batch-b-14-16,skip,acknowledgment,session,ordinary,fictional_assistant_authored,Confirms understanding only.,,draft
+batch-b-14-17,keep,preference,project,ordinary,fictional_assistant_authored,A list display style.,,draft
+batch-b-14-18,keep,requirement,project,ordinary,fictional_assistant_authored,A record-keeping rule.,,draft
+batch-b-14-19,keep,fact,project,ordinary,fictional_assistant_authored,A useful stable convention for collection codes.,,draft
+batch-b-15-00,keep,milestone,project,ordinary,fictional_assistant_authored,A scheduled photography session.,,draft
+batch-b-15-01,uncertain,uncertain,uncertain,ordinary,fictional_assistant_authored,It is not stated which object or what the handle replaces.,Retained submitted interpretation after review. Conservative scope is supported while the referent or application is missing.,draft
+batch-b-15-02,keep,requirement,project,restricted,fictional_assistant_authored,A rule that keeps donor contact details private.,,draft
+batch-b-15-03,keep,fact,project,personal,fictional_assistant_authored,Records which relative donated two bowls.,"Retained submitted interpretation after review. Submitted interpretation is supported by the context and guide; assistant drafts are comparison material, not gold labels.",draft
+batch-b-15-04,keep,decision,project,ordinary,fictional_assistant_authored,An explicit cataloging choice.,,draft
+batch-b-15-05,skip,transient,session,ordinary,fictional_assistant_authored,A passing action.,,draft
+batch-b-15-06,keep,correction,project,ordinary,fictional_assistant_authored,Replaces the earlier classification.,,draft
+batch-b-15-07,skip,fact,project,ordinary,fictional_assistant_authored,Already stated in the catalog.,,draft
+batch-b-15-08,keep,requirement,project,ordinary,fictional_assistant_authored,A recording rule for measurements.,,draft
+batch-b-15-09,skip,preference,session,ordinary,fictional_assistant_authored,An example curator's taste.,,draft
+batch-b-15-10,skip,transient,session,ordinary,fictional_assistant_authored,A passing reflection.,,draft
+batch-b-15-11,keep,preference,project,ordinary,fictional_assistant_authored,A display order choice.,,draft
+batch-b-15-12,keep,correction,project,ordinary,fictional_assistant_authored,Replaces the recorded height.,,draft
+batch-b-15-13,keep,fact,project,ordinary,fictional_assistant_authored,A stable detail of the report layout.,,draft
+batch-b-15-14,skip,fact,session,ordinary,fictional_assistant_authored,A detail of software sample data.,,draft
+batch-b-15-15,keep,fact,project,ordinary,fictional_assistant_authored,A stable rule about what the prefix means.,,draft
+batch-b-15-16,uncertain,uncertain,uncertain,ordinary,fictional_assistant_authored,It is not stated which record is older or what it replaces.,Retained submitted interpretation after review. Conservative scope is supported while the referent or application is missing.,draft
+batch-b-15-17,keep,requirement,project,ordinary,fictional_assistant_authored,A rule for uncertain information.,,draft
+batch-b-15-18,skip,acknowledgment,session,ordinary,fictional_assistant_authored,Shows understanding only.,,draft
+batch-b-15-19,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A repeatable photo bug.,,draft
+batch-b-16-00,skip,transient,session,ordinary,fictional_assistant_authored,A passing notification.,,draft
+batch-b-16-01,keep,unresolved_issue,project,personal,fictional_assistant_authored,An unconfirmed change for a learner that could affect scheduling.,"Retained submitted interpretation after review. Supports tracking the identifiable claim as an open verification issue, preserving its uncertainty. Does not establish the claim as a fact or override storage permission. See proposed rule clarification.",draft
+batch-b-16-02,keep,fact,project,ordinary,fictional_assistant_authored,A stable detail about how cancellations appear.,,draft
+batch-b-16-03,skip,preference,session,ordinary,fictional_assistant_authored,A demo mentor's taste.,,draft
+batch-b-16-04,keep,requirement,project,restricted,fictional_assistant_authored,A stated access need for one learner that later materials must meet.,,draft
+batch-b-16-05,skip,acknowledgment,session,ordinary,fictional_assistant_authored,Confirms visibility only.,,draft
+batch-b-16-06,keep,fact,person,personal,fictional_assistant_authored,A precise weekday commitment involving a relative.,,draft
+batch-b-16-07,keep,requirement,project,ordinary,fictional_assistant_authored,A scheduling rule.,,draft
+batch-b-16-08,keep,preference,person,ordinary,fictional_assistant_authored,A working preference stated for all meetings.,,draft
+batch-b-16-09,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A repeatable reminder bug.,,draft
+batch-b-16-10,keep,correction,project,ordinary,fictional_assistant_authored,Changes the call day.,,draft
+batch-b-16-11,keep,decision,project,ordinary,fictional_assistant_authored,An agreed buffer between calls.,,draft
+batch-b-16-12,keep,requirement,project,restricted,fictional_assistant_authored,A rule that keeps private learning-support notes out of shared schedules.,,draft
+batch-b-16-13,keep,requirement,project,ordinary,fictional_assistant_authored,A tracking rule for appointment status.,,draft
+batch-b-16-14,skip,transient,session,ordinary,fictional_assistant_authored,A passing calendar action.,,draft
+batch-b-16-15,keep,correction,project,personal,fictional_assistant_authored,Replaces the learner's guardian contact.,,draft
+batch-b-16-16,keep,milestone,project,ordinary,fictional_assistant_authored,A scheduled review date.,,draft
+batch-b-16-17,uncertain,uncertain,uncertain,ordinary,fictional_assistant_authored,It is not stated what is being moved or when it should be calm.,Retained submitted interpretation after review. Conservative scope is supported while the referent or application is missing.,draft
+batch-b-16-18,skip,fact,session,ordinary,fictional_assistant_authored,A demo detail.,,draft
+batch-b-16-19,skip,fact,project,ordinary,fictional_assistant_authored,Already stored in the calendar.,,draft
+batch-b-17-00,keep,unresolved_issue,project,restricted,fictional_assistant_authored,An unverified remark about someone's finances that should not be stored as fact.,"Retained submitted interpretation after review. Supports tracking the identifiable claim as an open verification issue, preserving its uncertainty. Does not establish the claim as a fact or override storage permission. See proposed rule clarification.",draft
+batch-b-17-01,keep,requirement,person,restricted,fictional_assistant_authored,A standing instruction that protects private financial details.,,draft
+batch-b-17-02,keep,fact,project,ordinary,fictional_assistant_authored,The sentence defines the existing meanings of blank and zero; it does not instruct someone to adopt a new rule.,User explicitly accepted type: requirement -> fact. The sentence defines the existing meanings of blank and zero; it does not instruct someone to adopt a new rule.,draft
+batch-b-17-03,skip,preference,session,ordinary,fictional_assistant_authored,A tutorial family's taste.,,draft
+batch-b-17-04,skip,transient,session,ordinary,fictional_assistant_authored,A passing placement of an object.,,draft
+batch-b-17-05,keep,fact,project,restricted,fictional_assistant_authored,"A useful recurring cost, but a private debt detail needing separate permission review.","Retained submitted interpretation after review. Submitted interpretation is supported by the context and guide; assistant drafts are comparison material, not gold labels.",draft
+batch-b-17-06,keep,requirement,project,ordinary,fictional_assistant_authored,A content rule for planned expenses.,,draft
+batch-b-17-07,keep,preference,project,ordinary,fictional_assistant_authored,A display order choice.,,draft
+batch-b-17-08,keep,decision,project,ordinary,fictional_assistant_authored,An agreed review routine.,,draft
+batch-b-17-09,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A repeatable total error.,,draft
+batch-b-17-10,skip,fact,project,ordinary,fictional_assistant_authored,Already stored in the categories.,,draft
+batch-b-17-11,uncertain,uncertain,uncertain,ordinary,fictional_assistant_authored,It is not stated which total or what is expected.,Retained submitted interpretation after review. Conservative scope is supported while the referent or application is missing.,draft
+batch-b-17-12,keep,requirement,project,ordinary,fictional_assistant_authored,A separation rule.,,draft
+batch-b-17-13,skip,acknowledgment,session,ordinary,fictional_assistant_authored,Shows understanding only.,,draft
+batch-b-17-14,keep,milestone,project,ordinary,fictional_assistant_authored,A scheduled review date.,,draft
+batch-b-17-15,keep,fact,project,personal,fictional_assistant_authored,Names who helps maintain the notebook.,"Retained submitted interpretation after review. Submitted interpretation is supported by the context and guide; assistant drafts are comparison material, not gold labels.",draft
+batch-b-17-16,keep,correction,project,personal,fictional_assistant_authored,Replaces a budget allowance.,"Retained submitted interpretation after review. Submitted interpretation is supported by the context and guide; assistant drafts are comparison material, not gold labels.",draft
+batch-b-17-17,keep,correction,project,ordinary,fictional_assistant_authored,Fixes an item's classification.,,draft
+batch-b-17-18,skip,fact,session,ordinary,fictional_assistant_authored,A sample spreadsheet detail about an invented person.,Retained submitted interpretation after review. A generic sample label or mention without the sensitive contents need not inherit the sensitivity of the material it names; being fictional alone is not a reason to lower sensitivity.,draft
+batch-b-17-19,skip,transient,session,ordinary,fictional_assistant_authored,A passing scroll.,,draft
+batch-b-18-00,keep,preference,project,ordinary,fictional_assistant_authored,A wording style for interface text.,,draft
+batch-b-18-01,keep,milestone,project,ordinary,fictional_assistant_authored,A scheduled review date.,,draft
+batch-b-18-02,skip,fact,session,ordinary,fictional_assistant_authored,A test label only; it contains no content.,Retained submitted interpretation after review. A generic sample label or mention without the sensitive contents need not inherit the sensitivity of the material it names; being fictional alone is not a reason to lower sensitivity.,draft
+batch-b-18-03,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A repeatable bug in data removal.,,draft
+batch-b-18-04,keep,requirement,person,restricted,fictional_assistant_authored,A standing exclusion that protects a private folder.,"Retained submitted interpretation after review. Submitted interpretation is supported by the context and guide; assistant drafts are comparison material, not gold labels.",draft
+batch-b-18-05,keep,correction,project,ordinary,fictional_assistant_authored,Replaces the allowlist version in the note.,,draft
+batch-b-18-06,keep,requirement,project,ordinary,fictional_assistant_authored,A design rule for the import.,,draft
+batch-b-18-07,keep,requirement,person,restricted,fictional_assistant_authored,A standing consent rule for private journal passages.,,draft
+batch-b-18-08,uncertain,uncertain,uncertain,uncertain,fictional_assistant_authored,What permission is meant and when is missing.,Retained submitted interpretation after review. Conservative scope is supported while the referent or application is missing.,draft
+batch-b-18-09,skip,transient,session,ordinary,fictional_assistant_authored,A momentary sidebar change.,,draft
+batch-b-18-10,skip,requirement,session,ordinary,fictional_assistant_authored,"A quoted tutorial instruction, unrelated to this design.",,draft
+batch-b-18-11,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,An unconfirmed possibility about revoked access that needs checking.,"Retained submitted interpretation after review. Supports tracking the identifiable claim as an open verification issue, preserving its uncertainty. Does not establish the claim as a fact or override storage permission. See proposed rule clarification.",draft
+batch-b-18-12,keep,requirement,project,ordinary,fictional_assistant_authored,A rule for handling unanswered questions.,,draft
+batch-b-18-13,skip,acknowledgment,session,ordinary,fictional_assistant_authored,Shows understanding only.,,draft
+batch-b-18-14,skip,transient,session,ordinary,fictional_assistant_authored,A passing file chooser.,,draft
+batch-b-18-15,keep,fact,project,ordinary,fictional_assistant_authored,"The sentence describes existing provenance behavior. A requirement would direct that behavior, for example that every excerpt must carry the identifier.","User explicitly accepted type: requirement -> fact. The sentence describes existing provenance behavior. A requirement would direct that behavior, for example that every excerpt must carry the identifier.",draft
+batch-b-18-16,skip,requirement,project,ordinary,fictional_assistant_authored,Already stated in the saved design.,"Retained submitted interpretation after review. Submitted interpretation is supported by the context and guide; assistant drafts are comparison material, not gold labels.",draft
+batch-b-18-17,keep,correction,project,ordinary,fictional_assistant_authored,Replaces the draft retention wording.,,draft
+batch-b-18-18,keep,decision,project,ordinary,fictional_assistant_authored,An explicit confirmation choice.,,draft
+batch-b-18-19,keep,fact,project,ordinary,fictional_assistant_authored,A stable behavior detail of the prototype.,,draft
+batch-b-19-00,keep,fact,project,personal,fictional_assistant_authored,Names the family loan contact.,"Retained submitted interpretation after review. Submitted interpretation is supported by the context and guide; assistant drafts are comparison material, not gold labels.",draft
+batch-b-19-01,skip,preference,session,ordinary,fictional_assistant_authored,A training example's taste.,,draft
+batch-b-19-02,keep,decision,project,ordinary,fictional_assistant_authored,An approved caption format choice.,,draft
+batch-b-19-03,keep,fact,project,ordinary,fictional_assistant_authored,A stable rule for what a caption ID means.,,draft
+batch-b-19-04,skip,fact,project,ordinary,fictional_assistant_authored,Already stated in the approved format.,,draft
+batch-b-19-05,keep,milestone,project,ordinary,fictional_assistant_authored,A scheduled approval deadline.,,draft
+batch-b-19-06,skip,transient,session,ordinary,fictional_assistant_authored,A passing action.,,draft
+batch-b-19-07,keep,correction,project,ordinary,fictional_assistant_authored,Replaces the earlier dating of the textile.,,draft
+batch-b-19-08,uncertain,uncertain,uncertain,ordinary,fictional_assistant_authored,It is not stated which credit line is meant.,Retained submitted interpretation after review. Conservative scope is supported while the referent or application is missing.,draft
+batch-b-19-09,keep,requirement,project,ordinary,fictional_assistant_authored,A caption rule for attribution.,,draft
+batch-b-19-10,skip,fact,session,ordinary,fictional_assistant_authored,A printer test sample.,,draft
+batch-b-19-11,keep,requirement,project,ordinary,fictional_assistant_authored,A preservation rule.,,draft
+batch-b-19-12,skip,acknowledgment,session,ordinary,fictional_assistant_authored,Shows understanding only.,,draft
+batch-b-19-13,keep,requirement,project,restricted,fictional_assistant_authored,A rule that keeps private family history out of public captions.,,draft
+batch-b-19-14,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,An unverified suggestion about the attribution that needs checking.,"Retained submitted interpretation after review. Supports tracking the identifiable claim as an open verification issue, preserving its uncertainty. Does not establish the claim as a fact or override storage permission. See proposed rule clarification.",draft
+batch-b-19-15,keep,fact,project,ordinary,fictional_assistant_authored,A stable detail about where credits are stored.,,draft
+batch-b-19-16,keep,preference,project,ordinary,fictional_assistant_authored,A wording style for captions.,,draft
+batch-b-19-17,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A repeatable exporter bug.,,draft
+batch-b-19-18,skip,transient,session,ordinary,fictional_assistant_authored,A momentary toolbar change.,,draft
+batch-b-19-19,keep,correction,project,ordinary,fictional_assistant_authored,Replaces the earlier loan number.,,draft
+batch-b-20-00,skip,preference,session,ordinary,fictional_assistant_authored,A sample sitter's taste in a template.,,draft
+batch-b-20-01,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A repeatable sync bug.,,draft
+batch-b-20-02,keep,preference,person,ordinary,fictional_assistant_authored,A stated taste for reminders generally.,,draft
+batch-b-20-03,keep,fact,project,personal,fictional_assistant_authored,Names who looks after the cat during travel.,"Retained submitted interpretation after review. Submitted interpretation is supported by the context and guide; assistant drafts are comparison material, not gold labels.",draft
+batch-b-20-04,keep,fact,person,personal,fictional_assistant_authored,A precise recurring absence that affects availability.,,draft
+batch-b-20-05,skip,fact,session,ordinary,fictional_assistant_authored,A detail of sample app data.,,draft
+batch-b-20-06,keep,correction,project,personal,fictional_assistant_authored,Replaces the trip contact.,,draft
+batch-b-20-07,keep,correction,project,ordinary,fictional_assistant_authored,Updates a storage location.,,draft
+batch-b-20-08,keep,milestone,project,ordinary,fictional_assistant_authored,A scheduled handover date.,,draft
+batch-b-20-09,keep,fact,project,ordinary,fictional_assistant_authored,A stable storage location.,,draft
+batch-b-20-10,keep,requirement,project,ordinary,fictional_assistant_authored,A tracking rule for care records.,,draft
+batch-b-20-11,skip,fact,project,ordinary,fictional_assistant_authored,Already stated in the saved note.,,draft
+batch-b-20-12,uncertain,uncertain,uncertain,ordinary,fictional_assistant_authored,It is not stated what amount or what it should be.,Retained submitted interpretation after review. Conservative scope is supported while the referent or application is missing.,draft
+batch-b-20-13,skip,acknowledgment,session,ordinary,fictional_assistant_authored,Shows understanding only.,,draft
+batch-b-20-14,skip,transient,session,ordinary,fictional_assistant_authored,A passing action.,,draft
+batch-b-20-15,keep,requirement,project,ordinary,fictional_assistant_authored,A record rule for completed tasks.,,draft
+batch-b-20-16,keep,requirement,project,restricted,fictional_assistant_authored,A rule that keeps private entry instructions off public adverts.,,draft
+batch-b-20-17,skip,transient,session,ordinary,fictional_assistant_authored,A passing moment.,,draft
+batch-b-20-18,keep,unresolved_issue,project,personal,fictional_assistant_authored,An unconfirmed change in a named person's availability.,"Retained submitted interpretation after review. Supports tracking the identifiable claim as an open verification issue, preserving its uncertainty. Does not establish the claim as a fact or override storage permission. See proposed rule clarification.",draft
+batch-b-20-19,keep,decision,project,ordinary,fictional_assistant_authored,An agreed shared checklist for the trip.,,draft
+batch-b-21-00,keep,fact,project,personal,fictional_assistant_authored,Names who checks recipe spellings.,"Retained submitted interpretation after review. Submitted interpretation is supported by the context and guide; assistant drafts are comparison material, not gold labels.",draft
+batch-b-21-01,keep,fact,project,ordinary,fictional_assistant_authored,A stable behavior detail of recipe IDs.,,draft
+batch-b-21-02,skip,preference,session,ordinary,fictional_assistant_authored,A stock example author's taste.,,draft
+batch-b-21-03,uncertain,uncertain,uncertain,ordinary,fictional_assistant_authored,It is not stated what should be bigger.,Retained submitted interpretation after review. Conservative scope is supported while the referent or application is missing.,draft
+batch-b-21-04,keep,milestone,project,ordinary,fictional_assistant_authored,A scheduled review date.,,draft
+batch-b-21-05,skip,transient,session,ordinary,fictional_assistant_authored,A brief preview glitch.,,draft
+batch-b-21-06,skip,fact,project,ordinary,fictional_assistant_authored,Already set in the production brief.,,draft
+batch-b-21-07,keep,fact,project,ordinary,fictional_assistant_authored,A stable page-count convention.,,draft
+batch-b-21-08,skip,fact,session,ordinary,fictional_assistant_authored,"A mention in a disposable sample, unrelated to the real contributors.",Retained submitted interpretation after review. A generic sample label or mention without the sensitive contents need not inherit the sensitivity of the material it names; being fictional alone is not a reason to lower sensitivity.,draft
+batch-b-21-09,keep,requirement,project,ordinary,fictional_assistant_authored,A general labeling rule that names no individual.,,draft
+batch-b-21-10,keep,decision,project,ordinary,fictional_assistant_authored,An explicit indexing choice.,,draft
+batch-b-21-11,skip,transient,session,ordinary,fictional_assistant_authored,A passing action.,,draft
+batch-b-21-12,keep,preference,project,ordinary,fictional_assistant_authored,An illustration style choice.,,draft
+batch-b-21-13,keep,requirement,project,restricted,fictional_assistant_authored,A rule that keeps a contributor's private dietary explanation out of print.,,draft
+batch-b-21-14,keep,correction,project,ordinary,fictional_assistant_authored,Replaces the earlier print quantity.,,draft
+batch-b-21-15,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A repeatable index bug.,,draft
+batch-b-21-16,keep,preference,project,ordinary,fictional_assistant_authored,A layout style choice.,"Retained submitted interpretation after review. Submitted interpretation is supported by the context and guide; assistant drafts are comparison material, not gold labels.",draft
+batch-b-21-17,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,An unconfirmed possible layout fix.,"Retained submitted interpretation after review. Supports tracking the identifiable claim as an open verification issue, preserving its uncertainty. Does not establish the claim as a fact or override storage permission. See proposed rule clarification.",draft
+batch-b-21-18,skip,acknowledgment,session,ordinary,fictional_assistant_authored,Shows understanding only.,,draft
+batch-b-21-19,keep,correction,project,ordinary,fictional_assistant_authored,Replaces the earlier recipe title.,,draft
+batch-b-22-00,skip,transient,session,ordinary,fictional_assistant_authored,A passing cursor change.,,draft
+batch-b-22-01,keep,preference,project,ordinary,fictional_assistant_authored,An output style choice.,,draft
+batch-b-22-02,keep,decision,project,ordinary,fictional_assistant_authored,An explicit design choice.,,draft
+batch-b-22-03,keep,milestone,project,ordinary,fictional_assistant_authored,A scheduled review date.,,draft
+batch-b-22-04,keep,fact,project,ordinary,fictional_assistant_authored,A stable behavior detail.,,draft
+batch-b-22-05,keep,fact,project,ordinary,fictional_assistant_authored,A stable behavior detail.,,draft
+batch-b-22-06,skip,fact,project,ordinary,fictional_assistant_authored,Already stated in the saved design.,,draft
+batch-b-22-07,keep,requirement,project,ordinary,fictional_assistant_authored,A correctness rule for imports.,,draft
+batch-b-22-08,keep,requirement,project,restricted,fictional_assistant_authored,A rule that keeps private notes out of public bundles.,,draft
+batch-b-22-09,skip,transient,session,ordinary,fictional_assistant_authored,A passing terminal action.,,draft
+batch-b-22-10,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A repeatable retry bug.,,draft
+batch-b-22-11,keep,correction,project,ordinary,fictional_assistant_authored,Replaces the filename-only cache key.,,draft
+batch-b-22-12,skip,requirement,session,ordinary,fictional_assistant_authored,"A quoted exercise instruction, unrelated to this project.",,draft
+batch-b-22-13,keep,fact,person,personal,fictional_assistant_authored,"A precise, recurring review window useful for scheduling.",,draft
+batch-b-22-14,uncertain,uncertain,uncertain,ordinary,fictional_assistant_authored,It is not stated what fails or which try is meant.,Retained submitted interpretation after review. Conservative scope is supported while the referent or application is missing.,draft
+batch-b-22-15,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,An unconfirmed hypothesis about a failing run.,"Retained submitted interpretation after review. Supports tracking the identifiable claim as an open verification issue, preserving its uncertainty. Does not establish the claim as a fact or override storage permission. See proposed rule clarification.",draft
+batch-b-22-16,skip,acknowledgment,session,ordinary,fictional_assistant_authored,Shows understanding only.,,draft
+batch-b-22-17,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A repeatable bug that leaves cache data behind.,,draft
+batch-b-22-18,skip,fact,session,ordinary,fictional_assistant_authored,A tutorial example detail.,,draft
+batch-b-22-19,keep,requirement,project,ordinary,fictional_assistant_authored,A safety rule for permission checks.,,draft
+batch-b-23-00,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,An unconfirmed possibility about driver availability.,"Retained submitted interpretation after review. Supports tracking the identifiable claim as an open verification issue, preserving its uncertainty. Does not establish the claim as a fact or override storage permission. See proposed rule clarification.",draft
+batch-b-23-01,keep,correction,project,personal,fictional_assistant_authored,Replaces the emergency contact for this concert.,,draft
+batch-b-23-02,skip,transient,session,ordinary,fictional_assistant_authored,A passing action.,,draft
+batch-b-23-03,skip,transient,session,ordinary,fictional_assistant_authored,A passing screen event.,,draft
+batch-b-23-04,keep,correction,project,ordinary,fictional_assistant_authored,Changes the pickup place.,,draft
+batch-b-23-05,keep,requirement,project,ordinary,fictional_assistant_authored,A booking rule.,,draft
+batch-b-23-06,skip,acknowledgment,session,ordinary,fictional_assistant_authored,Shows understanding only.,,draft
+batch-b-23-07,uncertain,uncertain,uncertain,uncertain,fictional_assistant_authored,What changed for the person and why is missing.,Retained submitted interpretation after review. Conservative scope is supported while the referent or application is missing.,draft
+batch-b-23-08,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A repeatable booking bug.,,draft
+batch-b-23-09,keep,preference,project,ordinary,fictional_assistant_authored,A directions style choice.,,draft
+batch-b-23-10,keep,decision,project,ordinary,fictional_assistant_authored,An explicit coordination choice.,,draft
+batch-b-23-11,keep,milestone,project,ordinary,fictional_assistant_authored,A scheduled rehearsal date.,,draft
+batch-b-23-12,keep,fact,project,ordinary,fictional_assistant_authored,A stable meaning of the booking reference.,,draft
+batch-b-23-13,skip,preference,session,ordinary,fictional_assistant_authored,A sample passenger's taste.,,draft
+batch-b-23-14,keep,fact,project,personal,fictional_assistant_authored,A precise recurring time that affects pickups.,"Retained submitted interpretation after review. Submitted interpretation is supported by the context and guide; assistant drafts are comparison material, not gold labels.",draft
+batch-b-23-15,skip,fact,session,ordinary,fictional_assistant_authored,A sample sheet detail.,,draft
+batch-b-23-16,keep,requirement,person,restricted,fictional_assistant_authored,A stated access need that applies to any vehicle booked for the person.,,draft
+batch-b-23-17,skip,fact,project,ordinary,fictional_assistant_authored,Already stated in the saved plan.,,draft
+batch-b-23-18,keep,requirement,project,restricted,fictional_assistant_authored,A rule that keeps passengers' access explanations private.,,draft
+batch-b-23-19,keep,fact,project,personal,fictional_assistant_authored,Names the person's regular lift contact.,"Retained submitted interpretation after review. Submitted interpretation is supported by the context and guide; assistant drafts are comparison material, not gold labels.",draft
+batch-b-24-00,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,A repeatable bug that overwrites metadata.,,draft
+batch-b-24-01,skip,preference,session,ordinary,fictional_assistant_authored,A demo photographer's taste.,,draft
+batch-b-24-02,keep,fact,project,ordinary,fictional_assistant_authored,A stable detail about selection IDs.,,draft
+batch-b-24-03,skip,acknowledgment,session,ordinary,fictional_assistant_authored,Shows understanding only.,,draft
+batch-b-24-04,skip,transient,session,ordinary,fictional_assistant_authored,A passing action.,,draft
+batch-b-24-05,skip,transient,session,ordinary,fictional_assistant_authored,A momentary thumbnail change.,,draft
+batch-b-24-06,keep,correction,project,ordinary,fictional_assistant_authored,Fixes a frame name.,,draft
+batch-b-24-07,keep,requirement,project,ordinary,fictional_assistant_authored,A provenance rule for dates.,,draft
+batch-b-24-08,keep,fact,project,ordinary,fictional_assistant_authored,A stable detail about how the archive stores time.,,draft
+batch-b-24-09,skip,fact,project,ordinary,fictional_assistant_authored,Already stated in the project note.,,draft
+batch-b-24-10,uncertain,uncertain,uncertain,ordinary,fictional_assistant_authored,It is not stated which image is misleading.,Retained submitted interpretation after review. Conservative scope is supported while the referent or application is missing.,draft
+batch-b-24-11,keep,correction,project,ordinary,fictional_assistant_authored,Replaces the earlier caption date.,,draft
+batch-b-24-12,keep,fact,project,personal,fictional_assistant_authored,Records who holds the unedited copies.,"Retained submitted interpretation after review. Submitted interpretation is supported by the context and guide; assistant drafts are comparison material, not gold labels.",draft
+batch-b-24-13,keep,unresolved_issue,project,ordinary,fictional_assistant_authored,An unconfirmed possibility that affects timestamps.,"Retained submitted interpretation after review. Supports tracking the identifiable claim as an open verification issue, preserving its uncertainty. Does not establish the claim as a fact or override storage permission. See proposed rule clarification.",draft
+batch-b-24-14,skip,fact,session,ordinary,fictional_assistant_authored,"A mention in a disposable template, not a real caption.",Retained submitted interpretation after review. A generic sample label or mention without the sensitive contents need not inherit the sensitivity of the material it names; being fictional alone is not a reason to lower sensitivity.,draft
+batch-b-24-15,keep,requirement,project,restricted,fictional_assistant_authored,A rule that keeps private family captions off the public sheet.,,draft
+batch-b-24-16,keep,milestone,project,ordinary,fictional_assistant_authored,A scheduled review date.,,draft
+batch-b-24-17,keep,preference,project,ordinary,fictional_assistant_authored,A sequencing style choice.,,draft
+batch-b-24-18,keep,decision,project,ordinary,fictional_assistant_authored,An explicit review format choice.,,draft
+batch-b-24-19,keep,requirement,project,ordinary,fictional_assistant_authored,A data-integrity rule.,,draft

@@ -1,0 +1,20 @@
+[
+  {
+    "case": 0,
+    "answer": "No, the provided evidence does not establish a favorite television series. The text discusses royal court ceremonial codes, political legitimacy, and historical examples like the Mughal, French, Qing, and Ottoman courts. [E1]",
+    "expected": "No. It shows a question about royal court ceremonies, but no favorite television series. [E1]",
+    "elapsed_seconds": 2.1043777500017313
+  },
+  {
+    "case": 1,
+    "answer": "The provided evidence does not contain information about the medication the user takes.",
+    "expected": "The supplied evidence does not identify any medication. [E1]",
+    "elapsed_seconds": 0.8091887909977231
+  },
+  {
+    "case": 2,
+    "answer": "No, the evidence does not confirm that the user works at a hospital. The assistant's draft mentions \"the past few weeks at the hospital,\" which could imply the user works there, but it could also mean they are a patient or visitor. The user's original statement only asks for help improving the flow and tone of a message without specifying their role.",
+    "expected": "No. The hospital description appears in an assistant draft, without a confirming user statement. [E1]",
+    "elapsed_seconds": 1.8660198340003262
+  }
+]

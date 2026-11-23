@@ -1,0 +1,56 @@
+[
+  {
+    "case": 0,
+    "answer": "No. The provided evidence does not establish a favorite television series. It discusses the functions of ceremonial codes in royal courts. [E1]",
+    "expected": "No. It shows a question about royal court ceremonies, but no favorite television series. [E1]",
+    "elapsed_seconds": 1.9399972499959404
+  },
+  {
+    "case": 1,
+    "answer": "The provided evidence does not contain information about the medication the user takes. The text describes the user\u2019s financial struggles and daily routine. [E1]",
+    "expected": "The supplied evidence does not identify any medication. [E1]",
+    "elapsed_seconds": 1.173975124998833
+  },
+  {
+    "case": 2,
+    "answer": "No. The user only describes the user\u2019s experience; it is not a direct user. The user describes the user\u2019s experience. The user describes it. The user describes it. The user describes it. The user describes it. The user describes it. The user describes it. The user describes it. The user describes it. The user describes it. The user describes it. The user describes it. The user describes it. The user describes it. The user describes it. The user describes it. The user describes it. The user describes it. The user describes it. The user describes it. The user describes it. The user describes it. The user describes it. The user describes it. The user describes it. The user describes it. The user describes it. The user describes it. The user describes it. The user describes it. The user describes it. The user describes it",
+    "expected": "No. The hospital description appears in an assistant draft, without a confirming user statement. [E1]",
+    "elapsed_seconds": 4.4832219169984455
+  },
+  {
+    "case": 3,
+    "answer": "No. The user only requested a polished opening paragraph; it is the assistant\u2019s drafted response. It is not a user\u2019s account. [E1]",
+    "expected": "No. The observatory sentence is an assistant draft, not a confirmed user statement. [E1]",
+    "elapsed_seconds": 0.9368555420005578
+  },
+  {
+    "case": 4,
+    "answer": "The user\u2019s cousin. [E1]",
+    "expected": "The user\u2019s cousin, according to the quoted message, not the user. [E1]",
+    "elapsed_seconds": 0.4213839590011048
+  },
+  {
+    "case": 5,
+    "answer": "The user maintains wind turbines. [E1]",
+    "expected": "The user directly says they maintain wind turbines. [E1]",
+    "elapsed_seconds": 0.4565426249973825
+  },
+  {
+    "case": 6,
+    "answer": "Yes. The user confirmed it. [E1]",
+    "expected": "Yes. The user explicitly confirmed the assistant\u2019s draft. [E1]",
+    "elapsed_seconds": 0.5220070840005064
+  },
+  {
+    "case": 7,
+    "answer": "The user is a map restorer. [E1]",
+    "expected": "The user restores old maps. Their partner is the pastry chef. [E1]",
+    "elapsed_seconds": 0.4930612500029383
+  },
+  {
+    "case": 8,
+    "answer": "The user\u2019s statement establishes that it is a character\u2019s claim. The user has not confirmed it. [E1]",
+    "expected": "No. The statement belongs to a fictional character, not the user. [E1]",
+    "elapsed_seconds": 0.7307267910000519
+  }
+]

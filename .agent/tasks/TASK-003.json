@@ -1,0 +1,13 @@
+{
+  "id": "003",
+  "title": "Close observation saving and provenance gaps",
+  "priority": 3,
+  "passes": false,
+  "spec": ".agent/tasks/TASK-003.json",
+  "steps": [
+    "Inspect extraction/save callers and tests",
+    "Implement minimal safe fixes supported by evidence",
+    "Verify rejection, update and deletion behavior",
+    "Review changes before next session"
+  ]
+}

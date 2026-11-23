@@ -1,0 +1,68 @@
+{
+  "status": "exploratory_grouped_split_not_independent_release",
+  "dataset": "data/admission_reviewed_exploratory_v0_1.jsonl",
+  "dataset_sha256": "d91b7314d7e751351f0e6f6e58cd64dfafa4913e7e1be3381ec87599b192dab1",
+  "source_sha256": {
+    "data/admission_batch_a_draft_01.jsonl": "0b0bdde91665df834e2dcf5235463aa925bd973a2f61c8c19ade6b802ec35075",
+    "data/admission_batch_a_draft_02.jsonl": "b494b53381e723cbac087b574135ad90889b422f62955c4564a41a2849ae4860",
+    "data/admission_batch_a_draft_03.jsonl": "87ed3f3ecf954083d738ec8d99893e51b2560f99d34e8f527683cd84ed4be67e",
+    "data/admission_batch_a_draft_04.jsonl": "249c2a407791c01649985a7bd30db403cff673487e2ff3035ef49d28f5b501a4",
+    "data/admission_batch_a_draft_05.jsonl": "dabebde2cad86d4206691d160ba05450541a95858a14214ec1d13e8a8d3c9cce",
+    "data/admission_batch_b_draft.jsonl": "072e20bb3a9e0261729e86690f8cd34cdcc788bb920b582a1e85c7b8739555f1",
+    "data/admission_batch_c_draft.jsonl": "0b9b074c2451496de5debb09157c88b2ac6395562246ddd541bca842f8587495",
+    "data/admission_batch_a_adjudicated_01.csv": "9a6e91b814dbe3f123e997626bf999a60f7ecb2dd922f7d8fa71d5c08c8005f3",
+    "data/admission_batch_a_adjudicated_02.csv": "b03af0913f19e78c13cecd926a4e2850cedf3b02b1f5c7680a591de4d1dbacb8",
+    "data/admission_batch_a_review_03_completed.csv": "633d9052bfaa3ee517714f59b52643a3221b4813ec80f391dd41c576d405d093",
+    "data/admission_batch_a_adjudicated_04.csv": "6a079afe79a50cf0d97a7549151a5f597abac4e3726186c04488d4016e0b3484",
+    "data/admission_batch_a_adjudicated_05.csv": "a8b655feaa0304dd7f902efcd264657bd04e3953e6c542f7b398cfdfdeee4401",
+    "data/admission_batch_b_adjudicated_v1_1.csv": "12667202594400835310c83d33f15780b269ff81c72d366ebc81190f5988ef06",
+    "data/admission_batch_c_review_completed.csv": "6780eb5e05c07cb40f9841399f351fed184bf7ed3bc1f2dab12832b13947d3cb",
+    "data/admission_eval_fresh_01_draft.jsonl": "e940a79c5dfa7897ec2ea062f851f3a60948bdc0e82f5e6cbaf6770aa89b8ab5",
+    "data/admission_eval_fresh_01_adjudicated.csv": "0ce27c663148a5bcf66c5188a77252d5274caf8de4906a97f145bcbf4c2ce3d4",
+    "data/admission_eval_fresh_02_draft.jsonl": "1a8855e469c94a23def8c2e531b2c5b689e1689ce839bec9080fa0bde65ab5b3",
+    "data/admission_eval_fresh_02_adjudicated.csv": "15cb7c991d97de01e36618549957452b97fa78ec1d51010e3c8b8faf8797ae02"
+  },
+  "row_count": 1584,
+  "null_action_labels": 96,
+  "components": {
+    "origin-component-000": 1500,
+    "origin-component-001": 24,
+    "origin-component-002": 60
+  },
+  "splits": {
+    "train": {
+      "rows": 1500,
+      "keep": 918,
+      "skip": 504,
+      "uncertain": 78,
+      "group_ids": [
+        "origin-component-000"
+      ]
+    },
+    "validation": {
+      "rows": 24,
+      "keep": 12,
+      "skip": 6,
+      "uncertain": 6,
+      "group_ids": [
+        "origin-component-001"
+      ]
+    },
+    "test": {
+      "rows": 60,
+      "keep": 30,
+      "skip": 18,
+      "uncertain": 12,
+      "group_ids": [
+        "origin-component-002"
+      ]
+    }
+  },
+  "split_rule": "largest shared A/B/C component=train; fresh01=validation; fresh02=test",
+  "evidence_limits": [
+    "A/B/C share one documented assistant template family and stay together.",
+    "Fresh01 and fresh02 are provisional authoring families, not proven independent origins.",
+    "Fresh02 repeats a fixed five-keep/three-skip/two-uncertain scenario pattern.",
+    "Metrics from this file cannot be described as broad held-out generalization."
+  ]
+}

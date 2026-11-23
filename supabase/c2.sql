@@ -5,6 +5,32 @@ alter table public.sources add column if not exists observation jsonb;
 -- Replace the previous signature so PostgREST does not see ambiguous overloads.
 drop function if exists public.c2_memory(text,text,text,text,text,text,jsonb,text,uuid);
 
+-- Everything one forget removes, mirroring MemoryStore.preview_forget: all versions of the file,
+-- every capture of the same screen window, then one hop to copies reached by another route
+-- whose content hash matches, or whose whole chunk set matches after whitespace normalising.
+-- Whole-chunk-set matches count only for substantial text (24+ chars): a lone "Approved." or
+-- "OK" must not take another note with it. Scope is the whole owner, like tombstones.
+create or replace function public.c2_forget_set(uid uuid, folder text, file_id text)
+returns table(id uuid, content_hash text) language sql stable security definer set search_path = '' as $f$
+    with s as (
+        select src.id, src.drive_file_id, src.content_hash, src.version, src.observation,
+               coalesce((select array_agg(n order by n) from (
+                   select distinct btrim(regexp_replace(c.text, '\s+', ' ', 'g')) as n
+                   from public.chunks c where c.source_id = src.id) x), '{}'::text[]) as cs
+        from public.sources src where src.owner_id = uid),
+    target as (select * from s where s.drive_file_id = file_id order by s.version desc limit 1),
+    base as (
+        select b.* from s b, target t
+        where b.drive_file_id = file_id
+           or (t.observation->>'route' = 'screen-ocr' and b.observation->>'route' = 'screen-ocr'
+               and b.observation->>'source' = t.observation->>'source'))
+    select distinct s.id, s.content_hash from s
+    where s.id in (select base.id from base)
+       or s.content_hash in (select base.content_hash from base)
+       or s.cs in (select base.cs from base where length(array_to_string(base.cs, '')) >= 24)
+$f$;
+revoke all on function public.c2_forget_set(uuid,text,text) from public, anon, authenticated;
+
 create or replace function public.c2_memory(
     op text, folder text, file_id text default null, filename text default null,
     revision text default null, body_hash text default null, pieces jsonb default null,
@@ -18,22 +44,40 @@ declare
     versions integer;
     passages integer;
     receipt uuid;
+    tsq tsquery;
+    ids uuid[];
+    token uuid;
 begin
     if uid is null or folder is null or folder !~ '^[a-zA-Z0-9_-]+$' then
         raise exception 'Invalid session or folder';
     end if;
     if op = 'search' then
-        select coalesce(jsonb_agg(to_jsonb(h)), '[]'::jsonb) into result from (
-            select s.path, s.version, s.id as source_id, c.line_start, c.line_end,
-                   c.text, concat(s.id, ':', c.ordinal) as citation,
-                   case when s.observation is null then null else
-                       jsonb_build_object('source',s.observation->>'source','route',s.observation->>'route')
-                   end as observation
-            from public.sources s join public.chunks c on s.id=c.source_id
-            where s.owner_id=uid and c.owner_id=uid and s.folder_id=folder and s.active
-              and c.search_vector @@ plainto_tsquery('simple', query_text)
-            order by ts_rank(c.search_vector, plainto_tsquery('simple', query_text)) desc,
-                     s.id, c.ordinal limit 5
+        -- OR the words like the local FTS: plainto_tsquery ANDs every word, so a natural
+        -- question ("When is the violet demonstration?") would match nothing.
+        -- Parse the question with the same parser as the index, so "3.14", "a@b.com" or "v2.0"
+        -- stay whole lexemes. Cap at 32 distinct lexemes.
+        select to_tsquery('simple', string_agg(quote_literal(l), ' | ')) into tsq from (
+            select lexeme as l from unnest(to_tsvector('simple', left(coalesce(query_text,''),2000)))
+            limit 32) w;
+        if tsq is null then return '[]'::jsonb; end if;
+        -- Whitespace-equal chunks reached through another route collapse into one hit with `linked`.
+        select coalesce(jsonb_agg(to_jsonb(h) - 'rk' - 'ord' - 'rn' order by h.rk desc, h.source_id, h.ord),
+                        '[]'::jsonb) into result from (
+            select * from (
+                select s.path, s.version, s.id as source_id, c.line_start, c.line_end,
+                       c.text, concat(s.id, ':', c.ordinal) as citation,
+                       case when s.observation is null then null else
+                           jsonb_build_object('source',s.observation->>'source','route',s.observation->>'route')
+                       end as observation,
+                       array_remove(array_agg(concat(s.id, ':', c.ordinal)) over w,
+                                    concat(s.id, ':', c.ordinal)) as linked,
+                       ts_rank(c.search_vector, tsq) as rk, c.ordinal as ord,
+                       row_number() over (w order by ts_rank(c.search_vector, tsq) desc, s.id, c.ordinal) as rn
+                from public.sources s join public.chunks c on s.id=c.source_id
+                where s.owner_id=uid and c.owner_id=uid and s.folder_id=folder and s.active
+                  and c.search_vector @@ tsq
+                window w as (partition by btrim(regexp_replace(c.text, '\s+', ' ', 'g')))
+            ) x where rn=1 order by rk desc, source_id, ord limit 5
         ) h;
         return result;
     end if;
@@ -71,7 +115,7 @@ begin
         if exists(select 1 from public.tombstones where owner_id=uid and content_hash=body_hash) then
             raise exception 'Content previously forgotten';
         end if;
-        if latest.content_hash=body_hash and
+        if latest.active and latest.content_hash=body_hash and
            (latest.observation - 'observed_at') is not distinct from (observation - 'observed_at') then
             return jsonb_build_object('source_id',latest.id,'version',latest.version,'duplicate',true);
         end if;
@@ -91,16 +135,21 @@ begin
             where owner_id=uid and drive_file_id=file_id;
         return result;
     end if;
-    select count(distinct s.id),count(c.id) into versions,passages
-        from public.sources s left join public.chunks c on c.source_id=s.id
-        where s.owner_id=uid and s.drive_file_id=file_id;
+    select coalesce(array_agg(f.id order by f.id), '{}') into ids
+        from public.c2_forget_set(uid, folder, file_id) f;
+    select count(*) into passages from public.chunks where owner_id=uid and source_id = any(ids);
+    versions := cardinality(ids);
+    -- The token covers the exact set, so a copy added after the preview makes it stale.
+    token := md5(array_to_string(ids, ',') || ':' || passages)::uuid;
     if op='preview' then
-        return jsonb_build_object('versions',versions,'chunks',passages,'confirmation',latest.id);
-    elsif op='forget' and latest.id=confirmation then
+        return jsonb_build_object('versions',versions,'chunks',passages,'confirmation',token);
+    elsif op='forget' and token=confirmation then
         insert into public.tombstones(owner_id,content_hash)
-            select uid,content_hash from public.sources where owner_id=uid and drive_file_id=file_id
+            select uid,s.content_hash from public.sources s where s.owner_id=uid and s.id = any(ids)
             on conflict do nothing;
-        delete from public.sources where owner_id=uid and drive_file_id=file_id;
+        delete from public.sources where owner_id=uid and id = any(ids);
+        -- Older versions are never reactivated: forgetting a current text must not bring an
+        -- outdated one back as the answer. They remain history only.
         insert into public.deletion_receipts(owner_id,source_count,chunk_count)
             values(uid,versions,passages) returning id into receipt;
         return jsonb_build_object('receipt',receipt,'versions',versions,'chunks',passages);

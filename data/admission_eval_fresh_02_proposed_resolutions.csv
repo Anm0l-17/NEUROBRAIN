@@ -1,0 +1,5 @@
+example_id,field,submitted,proposed,reason,status
+eval-fresh-02-00-07,scope,session,person,"The recurring snack-buying habit is personal in scope even though irrelevant to the printing task; retain action=skip and type=fact.",pending_user_resolution
+eval-fresh-02-02-07,scope,session,person,"A recurring reading preference is personal in scope; relevance to the loom task separately supports action=skip.",pending_user_resolution
+eval-fresh-02-04-07,scope,session,person,"A favourite bus seat is a personal preference rather than a passing session state; retain action=skip.",pending_user_resolution
+eval-fresh-02-04-09,sensitivity,uncertain,restricted,"The explicit privacy request applies even with missing referents; retain uncertain action/type/scope and infer no private reason.",pending_user_resolution

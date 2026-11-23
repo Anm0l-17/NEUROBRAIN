@@ -1,0 +1,27 @@
+## Latest page snapshot
+uid=1_0 RootWebArea "NeuroBrain · Local memory" url="http://127.0.0.1:50236/"
+  uid=4_0 main
+    uid=4_1 StaticText "PRIVATE BY SELECTION · PROTOTYPE 0.1"
+    uid=4_2 heading "NeuroBrain" level="1"
+    uid=4_3 StaticText "Your notes, with evidence you can inspect and memory you can remove."
+    uid=4_4 StaticText "Baseline: local text search and exact excerpts. Neural admission and generated answers are planned."
+    uid=4_5 heading "Remember a note" level="2"
+    uid=4_6 form
+      uid=4_7 StaticText "File within your allowed notes folder"
+      uid=4_8 textbox "File within your allowed notes folder" required
+      uid=4_9 button "Import note"
+    uid=4_10 StaticText "TXT or Markdown, up to 1 MiB. Only import notes you have checked for private content."
+    uid=4_11 heading "Find evidence" level="2"
+    uid=4_12 form
+      uid=4_13 StaticText "What would you like to recall?"
+      uid=4_14 textbox "What would you like to recall?" required value="Friday"
+      uid=4_15 button "Search memory"
+    uid=4_16 StaticText "Results quote stored notes. Matching words do not prove that a passage answers your question."
+    uid=4_17 status atomic live="polite" relevant="additions text"
+      uid=4_18 StaticText "Forgot 1 passages. Deletion verified. Original file kept."
+    uid=4_19 heading "Evidence" level="2"
+    uid=4_20 heading "Stored sources" level="2"
+    uid=4_21 StaticText "Reimporting an edited note creates a version. Search uses the latest version; inspection can show earlier evidence."
+    uid=4_22 StaticText "No notes imported yet."
+    uid=4_23 StaticText "Nothing is sent to a language model. Your notes are never used for training in this prototype. Storage is local and is not encrypted by NeuroBrain."
+

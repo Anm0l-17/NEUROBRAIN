@@ -1,0 +1,35 @@
+{
+  "date": "2026-11-13",
+  "model_repo": "mlx-community/Qwen3.5-4B-4bit",
+  "model_revision": "0e7ffd5c629ef7719d4cbc04069232580bfa9d9c",
+  "model_local_path": "/private/tmp/neurobrain-qwen35-4b-mlx",
+  "venv": "/private/tmp/neurobrain-qwen-pilot-venv",
+  "dataset": "data/generator_pilot_v1",
+  "adapter": "models/generator-pilot-v1",
+  "training": {
+    "iterations": 20,
+    "num_layers": 1,
+    "rank": 8,
+    "learning_rate": 0.0001,
+    "batch_size": 1,
+    "seed": 17,
+    "mask_prompt": true,
+    "max_seq_length": 1024,
+    "gradient_checkpointing": true
+  },
+  "generation": {
+    "temperature": 0,
+    "enable_thinking": false,
+    "max_tokens": 180
+  },
+  "promotion_gate": "No scaling authorized. Retest success requires all nine correct, supported, properly attributed and cited answers.",
+  "limitations": [
+    "17 tiny training examples, 9 development cases",
+    "12 newly authored fictional training examples, 6 new fictional development cases",
+    "known previous failure reused as regression",
+    "single seed and manual answer review; no independent final test",
+    "no retrieval or deployment changes"
+  ],
+  "comparison": "Fresh adapter from original pinned base; same 20 steps and hyperparameters as v0. Only teaching examples changed; expanded development suite used for both comparators.",
+  "result": "failed, 7/9 combined checks; no scaling"
+}

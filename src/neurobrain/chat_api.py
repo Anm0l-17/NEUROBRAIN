@@ -1,6 +1,7 @@
 """Single-user, loopback OpenAI-compatible bridge to retained NeuroBrain evidence."""
 
 import argparse
+import contextlib
 import html
 import json
 import os
@@ -12,10 +13,34 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
 from uuid import uuid4
 
+from .cloud import HostedMemory
 from .core import MemoryError, MemoryStore
 from .extract import answer
 
 MODEL = "neurobrain-memory"
+
+
+_PERSONAL = re.compile(r"\b(it|its|they|their|them)\b", re.I)
+_DEMONSTRATIVE = re.compile(r"\b(that|this|those)\b", re.I)
+_FILLER = frozenset(
+    "a an the is are was were be do does did what which who whom whose when where why "
+    "how about of to in on at for with and or me my i you tell say said".split()
+)
+
+
+def unresolved_reference(question: str) -> bool:
+    """True when the question leans on chat history instead of naming a subject.
+
+    Personal pronouns always count. that/this/those count only when fewer than two
+    content words remain, so "the room that Ravi booked" passes but "What about this?" does not.
+    shortcut: word list heuristic, not parsing; "How much does that cost?" passes.
+    """
+    if _PERSONAL.search(question):
+        return True
+    if not _DEMONSTRATIVE.search(question):
+        return False
+    words = re.findall(r"[^\W_]+", _DEMONSTRATIVE.sub(" ", question.lower()))
+    return sum(w not in _FILLER for w in words) < 2
 
 
 def literal(text):
@@ -23,10 +48,14 @@ def literal(text):
     return re.sub(r"([\\`*_{}\[\]()#+.!|>~\-])", r"\\\1", html.escape(text))
 
 
-def create_server(db, notes_root, token, port=8766, answerer=answer):
+def create_server(db, notes_root, token, port=8766, answerer=answer, hosted=False):
     if len(token) < 24:
         raise MemoryError("Set NEUROBRAIN_CHAT_KEY to at least 24 characters")
-    with MemoryStore(db, notes_root):
+
+    def open_store():
+        return HostedMemory() if hosted else MemoryStore(db, notes_root)
+
+    with open_store():
         pass
 
     class Handler(BaseHTTPRequestHandler):
@@ -62,9 +91,13 @@ def create_server(db, notes_root, token, port=8766, answerer=answer):
 
         def send_evidence(self, value, content_type, result, question):
             try:
-                with MemoryStore(db, notes_root) as store, store.db:
-                    # Serialize final validation and delivery with source deletion.
-                    store.db.execute("BEGIN IMMEDIATE")
+                with open_store() as store, contextlib.ExitStack() as stack:
+                    local = getattr(store, "db", None)
+                    # Local: serialize final validation and delivery with source deletion.
+                    # Hosted: the recheck is the only guard; the server cannot be locked.
+                    if local:
+                        stack.enter_context(local)
+                        local.execute("BEGIN IMMEDIATE")
                     current = {r["citation"]: r["text"] for r in store.search(question)}
                     if any(
                         current.get(r["citation"]) != r["text"]
@@ -75,10 +108,8 @@ def create_server(db, notes_root, token, port=8766, answerer=answer):
                         )
                         return
                     self.send(200, value, content_type)
-            except (MemoryError, sqlite3.Error, OSError):
-                self.send(
-                    503, {"error": {"message": "Local evidence service unavailable"}}
-                )
+            except (MemoryError, sqlite3.Error, OSError, ValueError):
+                self.send(503, {"error": {"message": "Evidence service unavailable"}})
 
         def do_GET(self):
             if not self.authorized():
@@ -129,9 +160,7 @@ def create_server(db, notes_root, token, port=8766, answerer=answer):
                     raise ValueError
                 if type(data.get("stream", False)) is not bool:
                     raise ValueError
-                if re.search(
-                    r"\b(it|its|they|their|that|those|them|this)\b", question, re.I
-                ):
+                if unresolved_reference(question):
                     self.send(
                         400,
                         {
@@ -152,7 +181,7 @@ def create_server(db, notes_root, token, port=8766, answerer=answer):
                 )
                 return
             try:
-                with MemoryStore(db, notes_root) as store:
+                with open_store() as store:
                     result = answerer(store, question)
                 text = (
                     "\n\n".join(
@@ -166,10 +195,8 @@ def create_server(db, notes_root, token, port=8766, answerer=answer):
                     )
                     or "I could not find stored evidence that answers this question."
                 )
-            except (MemoryError, sqlite3.Error, OSError):
-                self.send(
-                    503, {"error": {"message": "Local evidence service unavailable"}}
-                )
+            except (MemoryError, sqlite3.Error, OSError, ValueError):
+                self.send(503, {"error": {"message": "Evidence service unavailable"}})
                 return
             common = {
                 "id": "chatcmpl-" + uuid4().hex,
@@ -228,6 +255,11 @@ def main():
     )
     parser.add_argument("--notes-root", type=Path, default=Path("examples/notes"))
     parser.add_argument("--port", type=int, default=8766)
+    parser.add_argument(
+        "--hosted",
+        action="store_true",
+        help="Answer from the signed-in Supabase observations (needs NEUROBRAIN_USER_TOKEN)",
+    )
     args = parser.parse_args()
     try:
         server = create_server(
@@ -235,6 +267,7 @@ def main():
             args.notes_root,
             os.environ.get("NEUROBRAIN_CHAT_KEY", ""),
             args.port,
+            hosted=args.hosted,
         )
         print(
             f"NeuroBrain evidence endpoint http://127.0.0.1:{server.server_port}/v1",
