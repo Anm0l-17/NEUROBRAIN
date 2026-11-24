@@ -43,6 +43,8 @@ def request(url, token, *, payload=None, key=None, raw=False, headers=None):
             ):
                 if message.encode() in body:
                     detail = ": " + message
+        if exc.code == 401:
+            detail = ": sign-in expired or invalid, renew NEUROBRAIN_USER_TOKEN"
         raise MemoryError(f"Cloud request failed (HTTP {exc.code}){detail}") from exc
     except (URLError, OSError) as exc:
         raise MemoryError("Cloud service unreachable") from exc
@@ -156,7 +158,11 @@ def save_observation(text, extraction):
     if checked["route"] not in {"selected-file", "page-api", "screen-ocr"}:
         raise MemoryError("Unsupported hosted observation route")
     checked["status"] = "saved_by_explicit_hosted_request"
-    source_key = "obs_" + digest(json.dumps([checked["route"], checked["source"]]))
+    key = [checked["route"], checked["source"]]
+    if checked["route"] == "screen-ocr":
+        # Same keying as MemoryStore: each distinct capture is its own hosted source.
+        key.append(digest(text))
+    source_key = "obs_" + digest(json.dumps(key))
     params = dict(
         op="import",
         folder="observations",
@@ -177,6 +183,40 @@ def save_observation(text, extraction):
     ):
         raise MemoryError("Hosted write did not return an acknowledgment")
     return {**result, "storage": "supabase", "source_key": source_key}
+
+
+class HostedMemory:
+    """Read-only search over the signed-in user's hosted observations.
+
+    Same `search()` rows as MemoryStore, so `extract.answer` and the chat bridge work
+    unchanged. There is no local copy: a forgotten note cannot be served from a cache.
+    """
+
+    def __init__(self):
+        # The bridge serves many requests; never prompt for a password per request.
+        for name in (
+            "NEUROBRAIN_USER_TOKEN",
+            "SUPABASE_URL",
+            "SUPABASE_PUBLISHABLE_KEY",
+        ):
+            setting(name)
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *_):
+        pass
+
+    def search(self, query, limit=5):
+        rows = rpc(dict(op="search", folder="observations", query_text=query))
+        if not isinstance(rows, list):
+            raise MemoryError("Unexpected hosted search response")
+        for row in rows:
+            if not isinstance(row, dict) or not {"citation", "text", "path"} <= set(
+                row
+            ):
+                raise MemoryError("Unexpected hosted search response")
+        return rows[:limit]
 
 
 def main(argv=None):

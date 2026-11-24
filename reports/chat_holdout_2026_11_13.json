@@ -1,0 +1,99 @@
+{
+  "scope": "Four follow-up development checks. The access-code false-positive was used to refine the router and then rerun; other three request routes are unchanged. This is not held-out validation.",
+  "fixture_sha256": "371d26328759f44374ef088a038689812c24e11d0d611fc20f77a326f7338d90",
+  "router_sha256": "21db0bd5871cbaaad98db26a38da0a2f4393002b7f633904ab25a99728f18076",
+  "cases": [
+    {
+      "case": {
+        "id": "italy-capital",
+        "prompt": "What is the capital of Italy?",
+        "think": false,
+        "required": [
+          "\\brome\\b"
+        ]
+      },
+      "routed_thinking": false,
+      "result": {
+        "answer": "The capital of Italy is Rome.",
+        "thinking": false,
+        "thinking_tokens_present": false,
+        "eval_count": 7,
+        "total_duration": 486435416,
+        "passed": true,
+        "seconds": 0.499
+      }
+    },
+    {
+      "case": {
+        "id": "note-code",
+        "prompt": "Notes: The approved access code for the fictional demo is R-42. The old draft listed Z-19, which was cancelled. What is the approved code? Answer from these notes only.",
+        "think": false,
+        "required": [
+          "R-42"
+        ],
+        "forbidden": [
+          "approved code is Z-19"
+        ]
+      },
+      "routed_thinking": false,
+      "result": {
+        "answer": "The approved access code is **R-42**.",
+        "thinking": false,
+        "thinking_tokens_present": false,
+        "eval_count": 11,
+        "total_duration": 466483292,
+        "passed": true,
+        "seconds": 0.479
+      },
+      "initial_result": {
+        "error": "Model hit its generation limit; answer was not completed.",
+        "passed": false,
+        "seconds": 87.854
+      }
+    },
+    {
+      "case": {
+        "id": "compound-price",
+        "prompt": "Calculate the final price of a 900 rupee item after a 20 percent discount and then a 15 percent tax on the discounted price.",
+        "think": true,
+        "required": [
+          "\\b828\\b"
+        ]
+      },
+      "routed_thinking": true,
+      "result": {
+        "answer": "The final price comes out to 828 rupees after applying the 20% discount and then the 15% tax.",
+        "thinking": true,
+        "thinking_tokens_present": true,
+        "eval_count": 662,
+        "total_duration": 18699296958,
+        "passed": true,
+        "seconds": 18.716
+      }
+    },
+    {
+      "case": {
+        "id": "age-logic",
+        "prompt": "Analyze these facts: Mia is older than Noa. Leo is younger than Noa. Who is the oldest of these three?",
+        "think": true,
+        "required": [
+          "\\bmia\\b"
+        ]
+      },
+      "routed_thinking": true,
+      "result": {
+        "answer": "Mia is the oldest of the three.",
+        "thinking": true,
+        "thinking_tokens_present": true,
+        "eval_count": 456,
+        "total_duration": 13032512875,
+        "passed": true,
+        "seconds": 13.053
+      }
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "total": 4
+  }
+}

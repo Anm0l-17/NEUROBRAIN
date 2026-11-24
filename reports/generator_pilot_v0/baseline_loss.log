@@ -1,0 +1,6 @@
+Calling `python -m mlx_lm.lora...` directly is deprecated. Use `mlx_lm.lora...` or `python -m mlx_lm lora ...` instead.
+Loading pretrained model
+Loading datasets
+Testing
+Calculating loss...:   0%|          | 0/3 [00:00<?, ?it/s]Calculating loss...:  33%|███▎      | 1/3 [00:01<00:03,  1.88s/it]Calculating loss...:  67%|██████▋   | 2/3 [00:02<00:01,  1.19s/it]Calculating loss...: 100%|██████████| 3/3 [00:03<00:00,  1.16s/it]Calculating loss...: 100%|██████████| 3/3 [00:03<00:00,  1.24s/it]
+Test loss 2.215, Test ppl 9.166.

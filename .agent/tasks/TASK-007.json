@@ -1,0 +1,12 @@
+{
+  "id": "007",
+  "scope": "User explicitly authorizes attribution repair and retest only; no scaling or deployment",
+  "changes": "Add 12 fictional training examples, preserve old 3 regression cases, add 6 new development cases",
+  "gate": "All 9 supported answers with correct speaker attribution and citation, including positive confirmations",
+  "exit_checks": [
+    "Train from pinned base with same 20-step settings",
+    "Reload adapter",
+    "Compare all 9 cases across baseline, previous adapter, new adapter",
+    "Report yes/no honestly and preserve outputs"
+  ]
+}

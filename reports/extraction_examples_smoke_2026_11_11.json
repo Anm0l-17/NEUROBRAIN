@@ -1,0 +1,142 @@
+{
+  "model": "qwen3.5:4b",
+  "scope": "Developer-authored prompt development checks; not independent generalization evidence",
+  "cases": [
+    {
+      "id": "original-ambiguity",
+      "input": "Move that to there after the thing is finished.",
+      "expected_nonempty": false,
+      "passed": false,
+      "notes": [
+        {
+          "kind": "preference",
+          "text": "Move that to there after the thing is finished.",
+          "char_start": 0,
+          "char_end": 47,
+          "line_start": 1,
+          "line_end": 1
+        }
+      ],
+      "seconds": 1.15
+    },
+    {
+      "id": "missing-object",
+      "input": "Please send it to her tomorrow.",
+      "expected_nonempty": false,
+      "passed": false,
+      "notes": [
+        {
+          "kind": "preference",
+          "text": "Please send it to her tomorrow.",
+          "char_start": 0,
+          "char_end": 31,
+          "line_start": 1,
+          "line_end": 1
+        }
+      ],
+      "seconds": 0.89
+    },
+    {
+      "id": "missing-subject",
+      "input": "It is broken again.",
+      "expected_nonempty": false,
+      "passed": false,
+      "notes": [
+        {
+          "kind": "unresolved_issue",
+          "text": "It is broken again.",
+          "char_start": 0,
+          "char_end": 19,
+          "line_start": 1,
+          "line_end": 1
+        }
+      ],
+      "seconds": 0.71
+    },
+    {
+      "id": "clear-decision",
+      "input": "We decided to store the violet prototype notes locally in SQLite.",
+      "expected_nonempty": true,
+      "passed": true,
+      "notes": [
+        {
+          "kind": "decision",
+          "text": "We decided to store the violet prototype notes locally in SQLite.",
+          "char_start": 0,
+          "char_end": 65,
+          "line_start": 1,
+          "line_end": 1
+        }
+      ],
+      "seconds": 0.88
+    },
+    {
+      "id": "contextual-pronoun",
+      "input": "The violet prototype uses SQLite. It stores notes locally.",
+      "expected_nonempty": true,
+      "passed": true,
+      "notes": [
+        {
+          "kind": "requirement",
+          "text": "The violet prototype uses SQLite.",
+          "char_start": 0,
+          "char_end": 33,
+          "line_start": 1,
+          "line_end": 1
+        },
+        {
+          "kind": "fact",
+          "text": "It stores notes locally.",
+          "char_start": 34,
+          "char_end": 58,
+          "line_start": 1,
+          "line_end": 1
+        }
+      ],
+      "seconds": 1.35
+    },
+    {
+      "id": "clear-issue",
+      "input": "The violet prototype cannot read the selected Notion page because its token expired.",
+      "expected_nonempty": true,
+      "passed": true,
+      "notes": [
+        {
+          "kind": "unresolved_issue",
+          "text": "The violet prototype cannot read the selected Notion page because its token expired.",
+          "char_start": 0,
+          "char_end": 84,
+          "line_start": 1,
+          "line_end": 1
+        }
+      ],
+      "seconds": 1.2
+    },
+    {
+      "id": "chatter",
+      "input": "Thanks! Okay, great.",
+      "expected_nonempty": false,
+      "passed": true,
+      "notes": [],
+      "seconds": 0.28
+    },
+    {
+      "id": "clear-milestone",
+      "input": "The violet prototype demonstration is on 23 November 2026.",
+      "expected_nonempty": true,
+      "passed": true,
+      "notes": [
+        {
+          "kind": "milestone",
+          "text": "The violet prototype demonstration is on 23 November 2026.",
+          "char_start": 0,
+          "char_end": 58,
+          "line_start": 1,
+          "line_end": 1
+        }
+      ],
+      "seconds": 1.16
+    }
+  ],
+  "prompt_revision": "context requirements plus two contrasting demonstrations"
+}

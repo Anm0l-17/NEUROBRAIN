@@ -1,0 +1,13 @@
+{
+  "id": "004",
+  "title": "Prepare repeatable presentation and morning handoff",
+  "priority": 4,
+  "passes": false,
+  "spec": ".agent/tasks/TASK-004.json",
+  "steps": [
+    "Create fictional demo fixtures and exact run sheet",
+    "Run regression and lint checks",
+    "Document hosted and live-access blockers",
+    "Summarize sessions and remaining readiness gaps"
+  ]
+}

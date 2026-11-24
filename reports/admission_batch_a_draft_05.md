@@ -1,0 +1,7 @@
+# Stage B Session 09 — fifth Batch A review set
+
+**Date:** 7 November 2026. `data/admission_batch_a_draft_05.jsonl` contains 100 fictional assistant drafts in five 20-record scenarios: aquarium, puppet theatre, grain mill, accessibility audit, and weather station. There are 60 draft keep and 40 draft skip labels, with both classes in every scenario. All rows have `split=unassigned` and `annotation_status=assistant_draft_pending_human_review`. `data/admission_batch_a_review_05.csv` hides the draft labels and rationales for the user's review.
+
+Checks: required fields and rationales present; 100 unique IDs and candidate texts; five groups of 20; no exact candidate overlap with the pilot or earlier Batch A sets. Nine similar phrases were revised. The final normalized character-similarity screen found no pairs at ≥0.78 within this set or against the pilot and earlier Batch A sets. This screen cannot rule out semantic paraphrases or drafting shortcuts. The manifest records the final hash, IDs, and shared template origin.
+
+Batch A has 500 assistant drafts across 25 scenarios. The fourth and fifth review sheets still need the user's labels. Reviews 01–03 are single-person reviews compared with assistant drafts, not independent inter-rater agreement. All Batch A drafts share `assistant-structured-scenarios-a1`; they must stay in one partition during the later split audit. This corpus is not training ready.

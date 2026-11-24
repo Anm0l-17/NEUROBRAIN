@@ -128,6 +128,11 @@ CREATE TABLE IF NOT EXISTS observation_metadata(
 """
 
 
+def norm(text):
+    """Whitespace-insensitive form, so OCR text and the saved file compare equal."""
+    return " ".join(text.split())
+
+
 def passages(text):
     offset = 0
     while offset < len(text):
@@ -199,11 +204,11 @@ class MemoryStore:
         if checked["notes"] != extraction["notes"]:
             raise MemoryError("Observation evidence offsets differ")
         checked["status"] = "saved_by_explicit_extraction_request"
-        path = self.policy.root / (
-            "observation-"
-            + digest(json.dumps([extraction["route"], extraction["source"]]))
-            + ".md"
-        )
+        key = [extraction["route"], extraction["source"]]
+        if extraction["route"] == "screen-ocr":
+            # Each distinct capture is its own source, so scrolling never hides earlier notes.
+            key.append(digest(text))
+        path = self.policy.root / ("observation-" + digest(json.dumps(key)) + ".md")
         rows = [
             (n["text"], n["char_start"], n["char_end"], n["line_start"], n["line_end"])
             for n in checked["notes"]
@@ -237,6 +242,7 @@ class MemoryStore:
                 } == {k: v for k, v in old.items() if k != "observed_at"}
             if (
                 previous
+                and previous["active"]
                 and previous["content_hash"] == content_hash
                 and same_observation
             ):
@@ -291,8 +297,13 @@ class MemoryStore:
             GROUP BY s.id ORDER BY s.imported_at DESC"""
         ).fetchall()
         sources = []
+        logical = {}
         for row in rows:
             if not self._allowed(row["path"]):
+                continue
+            key = self._logical_key(row["id"]) if row["active"] else None
+            if key and key in logical:
+                logical[key]["linked"].append(row["id"])
                 continue
             source = dict(row)
             metadata = source.pop("metadata")
@@ -301,8 +312,20 @@ class MemoryStore:
                 source["observation"] = {
                     key: observation[key] for key in ("source", "route")
                 }
+            source["linked"] = []
+            if key:
+                logical[key] = source
             sources.append(source)
         return sources
+
+    def _logical_key(self, source_id):
+        texts = frozenset(
+            norm(r[0])
+            for r in self.db.execute(
+                "SELECT text FROM chunks WHERE source_id=?", (source_id,)
+            )
+        )
+        return texts or None
 
     def inspect(self, source_id: str) -> dict:
         row = self.db.execute(
@@ -353,11 +376,19 @@ class MemoryStore:
             (expression,),
         )
         results = []
+        seen = {}
         for row in rows:
             if self._allowed(row["path"]):
+                first = seen.get(norm(row["text"]))
+                if first is not None:
+                    # Same note reached through another route: link, don't repeat.
+                    first["linked"].append(f"{row['source_id']}:{row['id']}")
+                    continue
                 item = dict(row)
                 item["citation"] = f"{item['source_id']}:{item['id']}"
                 item["observation"] = self.observation_reference(item["source_id"])
+                item["linked"] = []
+                seen[norm(item["text"])] = item
                 results.append(item)
                 if len(results) == limit:
                     break
@@ -377,12 +408,54 @@ class MemoryStore:
         }
 
     def preview_forget(self, source_id: str) -> dict:
-        source = self.inspect(source_id)["source"]
-        rows = self.db.execute(
-            """SELECT s.id,s.content_hash,count(c.id) AS chunks FROM sources s
-            LEFT JOIN chunks c ON c.source_id=s.id WHERE s.path=? GROUP BY s.id ORDER BY s.version""",
-            (source["path"],),
-        ).fetchall()
+        inspected = self.inspect(source_id)
+        source = inspected["source"]
+        observation = inspected["observation"] or {}
+        window = (
+            [observation["source"]] if observation.get("route") == "screen-ocr" else []
+        )
+        # Base: every version of this path, plus every capture of the same screen window.
+        # Then one more hop: in-scope copies reached by another route, whose bytes match
+        # exactly (content hash) or after whitespace normalisation (trailing newline, OCR spacing).
+        # shortcut: scans every chunk, fine at demo size; add a normalized-hash column to scale.
+        everything = [
+            row
+            for row in self.db.execute(
+                """SELECT s.id,s.path,s.content_hash,count(c.id) AS chunks,
+                    json_extract(m.metadata,'$.route') AS route,
+                    json_extract(m.metadata,'$.source') AS origin
+                FROM sources s LEFT JOIN chunks c ON c.source_id=s.id
+                LEFT JOIN observation_metadata m ON m.source_id=s.id
+                GROUP BY s.id ORDER BY s.path,s.version"""
+            )
+            if self._allowed(row["path"])
+        ]
+        base = [
+            r
+            for r in everything
+            if r["path"] == source["path"]
+            or (window and r["route"] == "screen-ocr" and r["origin"] == window[0])
+        ]
+        hashes = {r["content_hash"] for r in base}
+
+        def texts(r):
+            return {
+                norm(c[0])
+                for c in self.db.execute(
+                    "SELECT text FROM chunks WHERE source_id=?", (r["id"],)
+                )
+            }
+
+        # Whole chunk sets must match: one shared short quote ("Approved.") is not the same note.
+        # shortcut: 24 characters is a guess for "substantial"; short notes link by exact hash only.
+        wanted = [frozenset(texts(r)) for r in base if sum(map(len, texts(r))) >= 24]
+        rows = [
+            r
+            for r in everything
+            if r in base
+            or r["content_hash"] in hashes
+            or (texts(r) and frozenset(texts(r)) in wanted)
+        ]
         content_hashes = sorted({row["content_hash"] for row in rows})
         source_ids = [row["id"] for row in rows]
         chunks = sum(row["chunks"] for row in rows)
@@ -392,7 +465,7 @@ class MemoryStore:
             "versions": len(rows),
             "chunks": chunks,
             "preview_token": token,
-            "scope": "All imported versions of this source and their FTS entries",
+            "scope": "All imported versions of this source, copies with identical content, other captures of the same screen window, and their FTS entries",
             "boundary": "Original files, backups, and previously displayed answers remain outside this deletion.",
         }
 
@@ -413,6 +486,8 @@ class MemoryStore:
                     "INSERT OR IGNORE INTO tombstones VALUES(?,?)", (row[0], completed)
                 )
                 self.db.execute("DELETE FROM sources WHERE id=?", (sid,))
+            # Older versions are never reactivated: forgetting a current text must not
+            # bring an outdated one back as the answer. They remain history only.
             receipt_id = uuid4().hex
             self.db.execute(
                 "INSERT INTO deletion_receipts VALUES(?,?,?,?)",
@@ -426,6 +501,9 @@ class MemoryStore:
                 raise MemoryError(
                     "Deletion integrity check failed; transaction rolled back."
                 )
+        # FTS5 keeps deleted terms in old index segments until they are merged away.
+        with self.db:
+            self.db.execute("INSERT INTO chunks_fts(chunks_fts) VALUES('optimize')")
         try:
             from .semantic import invalidate_cache
 

@@ -1,0 +1,243 @@
+{
+  "overall_pass": false,
+  "method": "Assistant manual content/attribution review; citation presence checked mechanically. Strict ownership criterion treats baseline my cousin as an attribution failure. No independent reviewer.",
+  "results": {
+    "baseline_answers": {
+      "content_passes": 7,
+      "citation_presence": 6,
+      "combined_passes": 4,
+      "cases": [
+        {
+          "case": 0,
+          "name": "old_tv_abstention",
+          "manual_content_pass": true,
+          "citation_marker_present": true,
+          "pass": true,
+          "reason": "Content supported on manual review."
+        },
+        {
+          "case": 1,
+          "name": "old_medication_abstention",
+          "manual_content_pass": true,
+          "citation_marker_present": false,
+          "pass": false,
+          "reason": "Content supported on manual review. Missing requested citation."
+        },
+        {
+          "case": 2,
+          "name": "old_hospital_attribution",
+          "manual_content_pass": true,
+          "citation_marker_present": false,
+          "pass": false,
+          "reason": "Content supported on manual review. Missing requested citation."
+        },
+        {
+          "case": 3,
+          "name": "assistant_draft",
+          "manual_content_pass": true,
+          "citation_marker_present": false,
+          "pass": false,
+          "reason": "Content supported on manual review. Missing requested citation."
+        },
+        {
+          "case": 4,
+          "name": "third_party",
+          "manual_content_pass": false,
+          "citation_marker_present": true,
+          "pass": false,
+          "reason": "Says my cousin rather than the user\u2019s cousin: ambiguous first-person ownership."
+        },
+        {
+          "case": 5,
+          "name": "direct_statement",
+          "manual_content_pass": true,
+          "citation_marker_present": true,
+          "pass": true,
+          "reason": "Content supported on manual review."
+        },
+        {
+          "case": 6,
+          "name": "confirmed_draft",
+          "manual_content_pass": true,
+          "citation_marker_present": true,
+          "pass": true,
+          "reason": "Content supported on manual review."
+        },
+        {
+          "case": 7,
+          "name": "correction",
+          "manual_content_pass": true,
+          "citation_marker_present": true,
+          "pass": true,
+          "reason": "Content supported on manual review."
+        },
+        {
+          "case": 8,
+          "name": "fiction",
+          "manual_content_pass": false,
+          "citation_marker_present": true,
+          "pass": false,
+          "reason": "Incorrectly treats a fictional character\u2019s property as the user\u2019s property."
+        }
+      ]
+    },
+    "previous_adapter_answers": {
+      "content_passes": 7,
+      "citation_presence": 9,
+      "combined_passes": 7,
+      "cases": [
+        {
+          "case": 0,
+          "name": "old_tv_abstention",
+          "manual_content_pass": true,
+          "citation_marker_present": true,
+          "pass": true,
+          "reason": "Content supported on manual review."
+        },
+        {
+          "case": 1,
+          "name": "old_medication_abstention",
+          "manual_content_pass": true,
+          "citation_marker_present": true,
+          "pass": true,
+          "reason": "Content supported on manual review."
+        },
+        {
+          "case": 2,
+          "name": "old_hospital_attribution",
+          "manual_content_pass": false,
+          "citation_marker_present": true,
+          "pass": false,
+          "reason": "Attributes assistant hospital draft to the user."
+        },
+        {
+          "case": 3,
+          "name": "assistant_draft",
+          "manual_content_pass": true,
+          "citation_marker_present": true,
+          "pass": true,
+          "reason": "Content supported on manual review."
+        },
+        {
+          "case": 4,
+          "name": "third_party",
+          "manual_content_pass": true,
+          "citation_marker_present": true,
+          "pass": true,
+          "reason": "Content supported on manual review."
+        },
+        {
+          "case": 5,
+          "name": "direct_statement",
+          "manual_content_pass": true,
+          "citation_marker_present": true,
+          "pass": true,
+          "reason": "Content supported on manual review."
+        },
+        {
+          "case": 6,
+          "name": "confirmed_draft",
+          "manual_content_pass": false,
+          "citation_marker_present": true,
+          "pass": false,
+          "reason": "Begins No despite explicit user confirmation; internally contradictory."
+        },
+        {
+          "case": 7,
+          "name": "correction",
+          "manual_content_pass": true,
+          "citation_marker_present": true,
+          "pass": true,
+          "reason": "Content supported on manual review."
+        },
+        {
+          "case": 8,
+          "name": "fiction",
+          "manual_content_pass": true,
+          "citation_marker_present": true,
+          "pass": true,
+          "reason": "Content supported on manual review."
+        }
+      ]
+    },
+    "retrained_answers": {
+      "content_passes": 7,
+      "citation_presence": 8,
+      "combined_passes": 7,
+      "cases": [
+        {
+          "case": 0,
+          "name": "old_tv_abstention",
+          "manual_content_pass": true,
+          "citation_marker_present": true,
+          "pass": true,
+          "reason": "Content supported on manual review."
+        },
+        {
+          "case": 1,
+          "name": "old_medication_abstention",
+          "manual_content_pass": false,
+          "citation_marker_present": true,
+          "pass": false,
+          "reason": "Calls an assistant-authored financial reflection the user\u2019s financial struggles and routine."
+        },
+        {
+          "case": 2,
+          "name": "old_hospital_attribution",
+          "manual_content_pass": false,
+          "citation_marker_present": false,
+          "pass": false,
+          "reason": "Repetitive invalid output, incorrect speaker attribution and missing citation. Missing requested citation."
+        },
+        {
+          "case": 3,
+          "name": "assistant_draft",
+          "manual_content_pass": true,
+          "citation_marker_present": true,
+          "pass": true,
+          "reason": "Content supported on manual review."
+        },
+        {
+          "case": 4,
+          "name": "third_party",
+          "manual_content_pass": true,
+          "citation_marker_present": true,
+          "pass": true,
+          "reason": "Content supported on manual review."
+        },
+        {
+          "case": 5,
+          "name": "direct_statement",
+          "manual_content_pass": true,
+          "citation_marker_present": true,
+          "pass": true,
+          "reason": "Content supported on manual review."
+        },
+        {
+          "case": 6,
+          "name": "confirmed_draft",
+          "manual_content_pass": true,
+          "citation_marker_present": true,
+          "pass": true,
+          "reason": "Content supported on manual review."
+        },
+        {
+          "case": 7,
+          "name": "correction",
+          "manual_content_pass": true,
+          "citation_marker_present": true,
+          "pass": true,
+          "reason": "Content supported on manual review."
+        },
+        {
+          "case": 8,
+          "name": "fiction",
+          "manual_content_pass": true,
+          "citation_marker_present": true,
+          "pass": true,
+          "reason": "Content supported on manual review."
+        }
+      ]
+    }
+  }
+}

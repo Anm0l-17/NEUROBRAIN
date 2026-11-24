@@ -1,0 +1,56 @@
+{
+  "path": "data/admission_reviewed_v0_1.jsonl",
+  "sha256": "eaccce95dfd221d1cba1de4b1c739ab0bdefbbf7205f3f2c75d2cadb0dc490bc",
+  "source_sha256": {
+    "data/admission_batch_a_draft_01.jsonl": "0b0bdde91665df834e2dcf5235463aa925bd973a2f61c8c19ade6b802ec35075",
+    "data/admission_batch_a_draft_02.jsonl": "b494b53381e723cbac087b574135ad90889b422f62955c4564a41a2849ae4860",
+    "data/admission_batch_a_draft_03.jsonl": "87ed3f3ecf954083d738ec8d99893e51b2560f99d34e8f527683cd84ed4be67e",
+    "data/admission_batch_a_draft_04.jsonl": "249c2a407791c01649985a7bd30db403cff673487e2ff3035ef49d28f5b501a4",
+    "data/admission_batch_a_draft_05.jsonl": "dabebde2cad86d4206691d160ba05450541a95858a14214ec1d13e8a8d3c9cce",
+    "data/admission_batch_b_draft.jsonl": "072e20bb3a9e0261729e86690f8cd34cdcc788bb920b582a1e85c7b8739555f1",
+    "data/admission_batch_c_draft.jsonl": "0b9b074c2451496de5debb09157c88b2ac6395562246ddd541bca842f8587495",
+    "data/admission_batch_a_adjudicated_01.csv": "9a6e91b814dbe3f123e997626bf999a60f7ecb2dd922f7d8fa71d5c08c8005f3",
+    "data/admission_batch_a_adjudicated_02.csv": "b03af0913f19e78c13cecd926a4e2850cedf3b02b1f5c7680a591de4d1dbacb8",
+    "data/admission_batch_a_review_03_completed.csv": "633d9052bfaa3ee517714f59b52643a3221b4813ec80f391dd41c576d405d093",
+    "data/admission_batch_a_adjudicated_04.csv": "6a079afe79a50cf0d97a7549151a5f597abac4e3726186c04488d4016e0b3484",
+    "data/admission_batch_a_adjudicated_05.csv": "a8b655feaa0304dd7f902efcd264657bd04e3953e6c542f7b398cfdfdeee4401",
+    "data/admission_batch_b_adjudicated_v1_1.csv": "12667202594400835310c83d33f15780b269ff81c72d366ebc81190f5988ef06",
+    "data/admission_batch_c_review_completed.csv": "6780eb5e05c07cb40f9841399f351fed184bf7ed3bc1f2dab12832b13947d3cb",
+    "data/admission_eval_fresh_01_draft.jsonl": "e940a79c5dfa7897ec2ea062f851f3a60948bdc0e82f5e6cbaf6770aa89b8ab5",
+    "data/admission_eval_fresh_01_adjudicated.csv": "0ce27c663148a5bcf66c5188a77252d5274caf8de4906a97f145bcbf4c2ce3d4"
+  },
+  "row_count": 1524,
+  "label_distribution": {
+    "keep": 930,
+    "skip": 510,
+    "uncertain": 84
+  },
+  "origin_components": {
+    "origin-component-000": 1500,
+    "origin-component-001": 24
+  },
+  "head_counts": {
+    "action": {
+      "known": 1440,
+      "unresolved": 84
+    },
+    "type": {
+      "known": 1441,
+      "unresolved": 83
+    },
+    "scope": {
+      "known": 1441,
+      "unresolved": 83
+    },
+    "sensitivity": {
+      "known": 1511,
+      "unresolved": 13
+    }
+  },
+  "status": "reviewed_snapshot_not_training_release",
+  "open_gates": [
+    "independently assessed validation/test template origins",
+    "frozen grouped split manifest",
+    "completed Stage B release checklist"
+  ]
+}

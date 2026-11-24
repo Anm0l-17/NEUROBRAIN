@@ -91,6 +91,259 @@ class ExtractionTests(unittest.TestCase):
                     {"status": "no_evidence", "answers": []},
                 )
 
+    def test_forget_removes_plain_and_extracted_copies_of_same_note(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            note = root / "plan.md"
+            text = "The fictional launch moved to Thursday."
+            note.write_text(text)
+            with MemoryStore(root / "memory.sqlite3", root) as store:
+                plain = store.import_note(note)
+                extraction = extract_notes(
+                    text,
+                    str(note),
+                    "selected-file",
+                    lambda _: {"notes": [{"kind": "decision", "quote": text}]},
+                )
+                store.import_observation(text, extraction)
+                found = store.search("Thursday")
+                self.assertEqual(len(found), 1)
+                self.assertEqual(len(found[0]["linked"]), 1)
+                preview = store.preview_forget(plain["source_id"])
+                receipt = store.forget(plain["source_id"], preview["preview_token"])
+                self.assertEqual(receipt["removed_versions"], 2)
+                self.assertFalse(store.search("Thursday"))
+                with self.assertRaises(MemoryError):
+                    store.import_note(note)
+                with self.assertRaises(MemoryError):
+                    store.import_observation(text, extraction)
+
+    def test_forget_keeps_linked_copy_versions_with_different_content(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            note = root / "plan.md"
+            text = "The fictional launch moved to Thursday."
+            note.write_text(text)
+            with MemoryStore(root / "memory.sqlite3", root) as store:
+                plain = store.import_note(note)
+
+                def extraction(body):
+                    return extract_notes(
+                        body,
+                        "screen-window",
+                        "screen-ocr",
+                        lambda _: {"notes": [{"kind": "fact", "quote": body}]},
+                    )
+
+                store.import_observation(text, extraction(text))
+                later = "The fictional budget review is on Monday."
+                store.import_observation(later, extraction(later))
+                preview = store.preview_forget(plain["source_id"])
+                receipt = store.forget(plain["source_id"], preview["preview_token"])
+                self.assertEqual(receipt["removed_versions"], 2)
+                self.assertFalse(store.search("Thursday"))
+                self.assertTrue(store.search("Monday"))
+
+    def test_forgetting_a_capture_also_takes_a_plain_copy_of_a_sibling_capture(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            note = root / "plan.md"
+            b_text = "The amber rehearsal room is Cedar 417."
+            note.write_text(b_text)
+
+            def capture(body):
+                return extract_notes(
+                    body,
+                    "window",
+                    "screen-ocr",
+                    lambda _: {"notes": [{"kind": "fact", "quote": body}]},
+                )
+
+            with MemoryStore(root / "memory.sqlite3", root) as store:
+                a_text = "The violet demonstration is on 23 November."
+                a = store.import_observation(a_text, capture(a_text))
+                store.import_observation(b_text, capture(b_text))
+                store.import_note(note)
+                preview = store.preview_forget(a["source_id"])
+                self.assertEqual(preview["versions"], 3)
+                store.forget(a["source_id"], preview["preview_token"])
+                self.assertFalse(store.search("Cedar"))
+
+    def test_forget_keeps_note_sharing_only_one_short_quote(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+
+            def save(store, name, quotes):
+                body = "\n".join(quotes) + "\n"
+                extraction = extract_notes(
+                    body,
+                    name,
+                    "selected-file",
+                    lambda _: {"notes": [{"kind": "fact", "quote": q} for q in quotes]},
+                )
+                return store.import_observation(body, extraction)
+
+            with MemoryStore(root / "memory.sqlite3", root) as store:
+                trip = save(store, "trip", ["Trip to Pune.", "Approved."])
+                save(store, "budget", ["Budget for Q4 is 2 lakh.", "Approved."])
+                preview = store.preview_forget(trip["source_id"])
+                self.assertEqual(preview["versions"], 1)
+                store.forget(trip["source_id"], preview["preview_token"])
+                self.assertTrue(store.search("lakh"))
+
+    def test_unresolved_reference_quotes_are_dropped_not_stored(self):
+        text = "Move that to there after the thing is finished.\nMira booked it for Friday."
+        out = extract_notes(
+            text,
+            "f07",
+            "selected-file",
+            lambda _: {
+                "notes": [
+                    {
+                        "kind": "decision",
+                        "quote": "Move that to there after the thing is finished.",
+                    },
+                    {"kind": "fact", "quote": "Mira booked it for Friday."},
+                ]
+            },
+        )
+        self.assertEqual(
+            [n["text"] for n in out["notes"]], ["Mira booked it for Friday."]
+        )
+
+    def test_lone_short_notes_do_not_link_distinct_sources(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+
+            def save(store, name, body):
+                extraction = extract_notes(
+                    body,
+                    name,
+                    "selected-file",
+                    lambda _: {"notes": [{"kind": "fact", "quote": body}]},
+                )
+                return store.import_observation(body, extraction)
+
+            with MemoryStore(root / "memory.sqlite3", root) as store:
+                one = save(store, "trip", "Approved.")
+                save(store, "budget", "Approved.!")
+                self.assertEqual(store.preview_forget(one["source_id"])["versions"], 1)
+
+    def test_forgotten_term_is_absent_from_database_file(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            db = root / "memory.sqlite3"
+            for name, text in (
+                ("keep.md", "Mira likes tea."),
+                ("gone.md", "Zqxmarkerwvu is fictional."),
+            ):
+                (root / name).write_text(text)
+            with MemoryStore(db, root) as store:
+                store.import_note(root / "keep.md")
+                gone = store.import_note(root / "gone.md")["source_id"]
+                preview = store.preview_forget(gone)
+                store.forget(gone, preview["preview_token"])
+            raw = db.read_bytes().lower()
+            self.assertNotIn(b"zqxmarkerwvu", raw)
+            self.assertIn(b"mira", raw)
+
+    def test_forgetting_current_text_does_not_bring_back_an_outdated_version(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            v1 = "The violet demonstration is on 23 November 2026."
+            v2 = "The violet demonstration is on 24 November 2026."
+
+            def page(text):
+                return extract_notes(
+                    text,
+                    "demo-page",
+                    "page-api",
+                    lambda _: {"notes": [{"kind": "milestone", "quote": text}]},
+                )
+
+            copy = root / "copy.md"
+            copy.write_text(v2)
+            with MemoryStore(root / "memory.sqlite3", root) as store:
+                store.import_observation(v1, page(v1))
+                store.import_observation(v2, page(v2))
+                plain = store.import_note(copy)
+                self.assertIn(
+                    "24 November", store.search("violet demonstration")[0]["text"]
+                )
+                preview = store.preview_forget(plain["source_id"])
+                store.forget(plain["source_id"], preview["preview_token"])
+                self.assertEqual(store.search("violet demonstration"), [])
+                # The old text is not tombstoned: importing it again makes a new current version.
+                again = store.import_observation(v1, page(v1))
+                self.assertFalse(again["duplicate"])
+                self.assertIn(
+                    "23 November", store.search("violet demonstration")[0]["text"]
+                )
+
+    def test_screen_captures_are_separate_sources_and_forget_together(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+
+            def capture(body):
+                return extract_notes(
+                    body,
+                    "window",
+                    "screen-ocr",
+                    lambda _: {"notes": [{"kind": "fact", "quote": body}]},
+                )
+
+            first = "The amber rehearsal room is Cedar 417."
+            second = "The violet demonstration is on 23 November."
+            with MemoryStore(root / "memory.sqlite3", root) as store:
+                a = store.import_observation(first, capture(first))
+                b = store.import_observation(second, capture(second))
+                self.assertNotEqual(a["source_id"], b["source_id"])
+                self.assertTrue(
+                    store.import_observation(first, capture(first))["duplicate"]
+                )
+                self.assertTrue(store.search("Cedar"))
+                self.assertTrue(store.search("violet"))
+                preview = store.preview_forget(a["source_id"])
+                self.assertEqual(preview["versions"], 2)
+                store.forget(a["source_id"], preview["preview_token"])
+                self.assertFalse(store.search("Cedar"))
+                self.assertFalse(store.search("violet"))
+
+    def test_unsaved_screen_fact_then_saved_file_is_one_logical_note(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            ocr = "The amber rehearsal room is Cedar 417."
+            saved = root / "rehearsal.md"
+            saved.write_text(ocr + "\n")  # file bytes differ from OCR text
+            with MemoryStore(root / "memory.sqlite3", root) as store:
+                screen = extract_notes(
+                    ocr,
+                    "window",
+                    "screen-ocr",
+                    lambda _: {"notes": [{"kind": "fact", "quote": ocr}]},
+                )
+                a = store.import_observation(ocr, screen)
+                body = saved.read_text()
+                file = extract_notes(
+                    body,
+                    str(saved),
+                    "selected-file",
+                    lambda _: {"notes": [{"kind": "fact", "quote": ocr}]},
+                )
+                b = store.import_observation(body, file)
+                self.assertNotEqual(a["source_id"], b["source_id"])
+                found = store.search("Cedar")
+                self.assertEqual(len(found), 1)
+                self.assertEqual(len(found[0]["linked"]), 1)
+                active = [s for s in store.sources() if s["active"]]
+                self.assertEqual(len(active), 1)
+                self.assertEqual(len(active[0]["linked"]), 1)
+                preview = store.preview_forget(b["source_id"])
+                self.assertEqual(preview["versions"], 2)
+                store.forget(b["source_id"], preview["preview_token"])
+                self.assertFalse(store.search("Cedar"))
+                self.assertFalse(store.sources())
+
     def test_storage_updates_restart_forgetting_and_citations(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

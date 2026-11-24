@@ -1,0 +1,56 @@
+[
+  {
+    "case": 0,
+    "answer": "No, the provided evidence does not establish a favorite television series. The text discusses royal court ceremonial codes, political legitimacy, and historical examples like the Mughal, French, Qing, and Ottoman courts. [E1]",
+    "expected": "No. It shows a question about royal court ceremonies, but no favorite television series. [E1]",
+    "elapsed_seconds": 2.39030625000305
+  },
+  {
+    "case": 1,
+    "answer": "The provided evidence does not contain information about the medication the user takes.",
+    "expected": "The supplied evidence does not identify any medication. [E1]",
+    "elapsed_seconds": 0.9407576250014245
+  },
+  {
+    "case": 2,
+    "answer": "No, the evidence does not confirm that the user works at a hospital. The assistant's draft mentions \"the past few weeks at the hospital,\" which could imply the user works there, but it could also mean they are a patient or visitor. The user's original statement only asks for help improving the flow and tone of a message without specifying their role.",
+    "expected": "No. The hospital description appears in an assistant draft, without a confirming user statement. [E1]",
+    "elapsed_seconds": 1.9090756669975235
+  },
+  {
+    "case": 3,
+    "answer": "No, the user did not state that they worked in an observatory. The statement \"My years in the observatory taught me patience\" is part of the assistant's draft response, not the user's input.",
+    "expected": "No. The observatory sentence is an assistant draft, not a confirmed user statement. [E1]",
+    "elapsed_seconds": 1.2994399160015746
+  },
+  {
+    "case": 4,
+    "answer": "My cousin moved to Kyoto. [E1]",
+    "expected": "The user\u2019s cousin, according to the quoted message, not the user. [E1]",
+    "elapsed_seconds": 0.49287795800046297
+  },
+  {
+    "case": 5,
+    "answer": "The user maintains wind turbines in Cork. [E1]",
+    "expected": "The user directly says they maintain wind turbines. [E1]",
+    "elapsed_seconds": 0.49044054099795176
+  },
+  {
+    "case": 6,
+    "answer": "Yes, tutoring mathematics is confirmed as the user's job. [E1]",
+    "expected": "Yes. The user explicitly confirmed the assistant\u2019s draft. [E1]",
+    "elapsed_seconds": 0.65099845900113
+  },
+  {
+    "case": 7,
+    "answer": "The user's work is restoring old maps. [E1]",
+    "expected": "The user restores old maps. Their partner is the pastry chef. [E1]",
+    "elapsed_seconds": 0.5188775419956073
+  },
+  {
+    "case": 8,
+    "answer": "Yes, the statement establishes that the user owns a vineyard. [E1]",
+    "expected": "No. The statement belongs to a fictional character, not the user. [E1]",
+    "elapsed_seconds": 0.600451250000333
+  }
+]

@@ -1,0 +1,4 @@
+id_a,id_b,candidate_cosine,context_cosine,candidate_flag,context_flag,cross_batch,action_a,action_b,text_a,text_b
+batch-a-01-06,batch-a-12-13,0.940917,0.33857,True,False,False,skip,skip,I watched the export progress bar advance for a moment.,The export progress bar advanced while I watched.
+batch-b-10-08,batch-c-24-14,0.912177,0.23723,True,False,True,keep,keep,All meals prepared for me must avoid sesame.,Any festival meal selected for me must avoid sesame.
+batch-a-06-11,batch-a-13-10,0.857688,0.276239,True,False,False,skip,skip,"Okay, let us move to the next station.","Thank you, we can move to the next station."

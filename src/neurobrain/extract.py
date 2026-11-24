@@ -2,6 +2,7 @@
 
 import argparse
 import json
+import re
 from pathlib import Path
 from urllib.error import URLError
 from urllib.request import ProxyHandler, Request, build_opener
@@ -88,6 +89,26 @@ def structured_request(payload):
         ) from exc
 
 
+_VAGUE = re.compile(r"\b(that|this|those|them|it|there|thing|things|stuff)\b", re.I)
+_ACK = frozenset(
+    "ok okay thanks thank you sounds good sure noted got it yes yeah will do".split()
+)
+
+
+def unresolved_quote(quote):
+    """Acknowledgments, or a short quote leaning on two or more pronouns/placeholders
+    with no name or number ("Move that to there after the thing is finished.").
+
+    shortcut: lexical heuristic for the F07 abstain case; one pronoun alone is kept
+    ("Keep this file under version control."). Replace with a model abstain head.
+    """
+    if set(re.findall(r"[a-z]+", quote.lower())) <= _ACK:
+        return True
+    words = quote.split()
+    named = any(w[0].isupper() or any(c.isdigit() for c in w) for w in words[1:])
+    return len(_VAGUE.findall(quote)) >= 2 and not named and len(words) <= 14
+
+
 def extract_notes(text, source, route, generator=generate):
     text = NotePolicy.decode(text.encode())
     if len(text) > 6000:
@@ -110,7 +131,7 @@ def extract_notes(text, source, route, generator=generate):
         ):
             raise MemoryError("Extraction contains unsupported evidence")
         quote = note["quote"]
-        if quote in seen:
+        if quote in seen or unresolved_quote(quote):
             continue
         seen.add(quote)
         start = text.index(quote)
