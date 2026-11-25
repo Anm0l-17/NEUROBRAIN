@@ -41,7 +41,36 @@ SCHEMA = {
 }
 
 
+WINDOW = 600  # characters per extraction call; one call on a long paragraph stops partway.
+
+
+def windows(text):
+    """Consecutive slices of text, cut after sentence or line ends, each near WINDOW."""
+    cuts = [m.end() for m in re.finditer(r"(?<=[.!?])\s+|\n+", text)] + [len(text)]
+    parts, start, end = [], 0, 0
+    for cut in cuts:
+        if cut - start > WINDOW and end > start:
+            parts.append(text[start:end])
+            start = end
+        end = cut
+    parts.append(text[start:end])
+    return [p for p in parts if p.strip()]
+
+
 def generate(text):
+    """Extract from each window so later sentences (often the updates) are not skipped."""
+    notes = []
+    for part in windows(text):
+        result = generate_window(part)
+        if not isinstance(result, dict) or set(result) != {"notes"}:
+            raise MemoryError("Invalid extraction structure")
+        if not isinstance(result["notes"], list):
+            raise MemoryError("Invalid note list")
+        notes += result["notes"]
+    return {"notes": notes}
+
+
+def generate_window(text):
     payload = dict(
         model="qwen3.5:4b",
         stream=False,
@@ -118,9 +147,10 @@ def extract_notes(text, source, route, generator=generate):
     if not isinstance(result, dict) or set(result) != {"notes"}:
         raise MemoryError("Invalid extraction structure")
     notes = result["notes"]
-    if not isinstance(notes, list) or len(notes) > 12:
+    # At most 12 notes per extraction call, one call per window.
+    if not isinstance(notes, list) or len(notes) > 12 * max(1, len(windows(text))):
         raise MemoryError("Invalid note list")
-    validated, seen = [], set()
+    validated, seen, matched = [], set(), 0
     for note in notes:
         if (
             not isinstance(note, dict)
@@ -128,14 +158,18 @@ def extract_notes(text, source, route, generator=generate):
             or note["kind"] not in KINDS
             or not isinstance(note["quote"], str)
             or not note["quote"].strip()
-            or note["quote"] not in text
         ):
             raise MemoryError("Extraction contains unsupported evidence")
-        quote = note["quote"]
+        # Store the source's own span; a quote the model reworded is dropped, not the whole page.
+        pattern = re.escape(note["quote"])
+        match = re.search(pattern, text) or re.search(pattern, text, re.I)
+        if not match:
+            continue
+        matched += 1
+        quote, start = match.group(), match.start()
         if quote in seen or unresolved_quote(quote):
             continue
         seen.add(quote)
-        start = text.index(quote)
         validated.append(
             dict(
                 kind=note["kind"],
@@ -146,6 +180,8 @@ def extract_notes(text, source, route, generator=generate):
                 line_end=text.count("\n", 0, start + len(quote) - 1) + 1,
             )
         )
+    if notes and not matched:
+        raise MemoryError("Extraction contains unsupported evidence")
     return dict(
         source=source,
         route=route,

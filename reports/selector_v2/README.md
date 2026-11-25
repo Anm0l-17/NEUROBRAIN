@@ -77,3 +77,28 @@ improvement that passes the agreed bar, not as a large safety margin.
 **Using it in the app (opt-in):** `answer()` reads `NEUROBRAIN_SELECTOR_MODEL` (default `qwen3.5:4b`), so on a Mac
 with this model in Ollama run `export NEUROBRAIN_SELECTOR_MODEL=neurobrain-selector-v2` before starting the app.
 Note extraction (`generate()`) still uses `qwen3.5:4b`; the adapter was trained only for citation selection.
+
+## Live app check (25 Nov 2026, evening)
+
+Screenshots of the chat app showed wrong answers. Replaying them on a copy of the app's database:
+
+1. **Wrong citations** ("When is the violet demonstration" → the Saffron Bridge beta-release line; same for
+   "launch party"): the running app was the main checkout on `demo-week-2026-11`, so it used `qwen3.5:4b`, not v2.
+   With `NEUROBRAIN_SELECTOR_MODEL=neurobrain-selector-v2` every replayed question gave the right citation or none.
+2. **Book club page never stored**: the edited Notion page (the same page as the Saffron Bridge notes) was rejected
+   whole because 2 of 8 model quotes were not exact (a capital letter, a dropped word). Fixed: `extract_notes`
+   keeps the source's own span for a case-only difference and drops quotes it cannot find; it still fails if none
+   verify, and `import_observation` still rejects any altered note.
+3. **Later sentences skipped**: one extraction call on the 1,300-character paragraph stopped after the first half,
+   missing every update (Daniel picks the books, Aisha, $8 dues, *Salt and Signal*). Fixed: extraction runs per
+   ~600-character window (`windows()`); on the retyped page 13 notes are stored instead of 7.
+
+Still wrong after the fixes, on the retyped page with v2 (not on the real Notion text, which needs the user's token):
+
+| Question | Answer | Why |
+|---|---|---|
+| Who picks the books? | none | Search is keyword-only; "picks the books" shares no word with "handed book selection to Daniel" |
+| How much are the dues? / Who collects the dues? | the old $5 / Daniel line | All three lines reach the selector; it cites the outdated one. v2 never trained on updated facts (knowledge-update questions were excluded) |
+| What is the current book? | none | "switched to Salt and Signal" was not in the top five search results |
+
+Meeting time and place, parking, and the near misses (violet demonstration, holiday party) were right.

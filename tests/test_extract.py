@@ -430,3 +430,59 @@ class ExtractionTests(unittest.TestCase):
         ):
             with self.subTest(result=result), self.assertRaises(MemoryError):
                 extract_notes("actual", "fixture", "screen", lambda _, r=result: r)
+
+    def test_one_unverifiable_quote_does_not_discard_the_page(self):
+        text = "Dues are $5. Later the group announced a move to Thursday. Members asked to read chapter 10."
+        notes = [
+            {"kind": "fact", "quote": "Dues are $5."},
+            # Case-only change: stored as the source's own span.
+            {"kind": "fact", "quote": "The group announced a move to Thursday."},
+            # Reworded: not in the source, dropped.
+            {"kind": "fact", "quote": "Members are asked to read chapter 10."},
+        ]
+        result = extract_notes(text, "page", "page-api", lambda _: {"notes": notes})
+        self.assertEqual(
+            [n["text"] for n in result["notes"]],
+            ["Dues are $5.", "the group announced a move to Thursday."],
+        )
+        span = result["notes"][1]
+        self.assertEqual(text[span["char_start"] : span["char_end"]], span["text"])
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            with MemoryStore(root / "m.sqlite3", root) as store:
+                store.import_observation(text, result)
+                self.assertEqual(len(store.search("Thursday")), 1)
+                forged = dict(result, notes=result["notes"] + [dict(span, text="Invented.")])
+                with self.assertRaises(MemoryError):
+                    store.import_observation(text, forged)
+
+    def test_long_observation_is_extracted_window_by_window(self):
+        from neurobrain import extract
+
+        text = " ".join(f"Fact {i} is that item {i} costs {i} dollars." for i in range(60))
+        seen = []
+
+        def fake(part):
+            seen.append(part)
+            return {"notes": [{"kind": "fact", "quote": part.split(". ")[-1]}]}
+
+        with patch.object(extract, "generate_window", fake):
+            notes = extract.generate(text)["notes"]
+        self.assertGreater(len(seen), 1)
+        self.assertTrue(all(len(p) <= extract.WINDOW + 60 for p in seen))
+        self.assertEqual("".join(seen).replace(" ", ""), text.replace(" ", ""))
+        self.assertIn("Fact 59 is that item 59 costs 59 dollars.", [n["quote"] for n in notes])
+        with patch.object(extract, "generate_window", fake):
+            self.assertEqual(len(extract.windows("Short note.")), 1)
+
+    def test_note_cap_follows_window_count(self):
+        from neurobrain import extract
+
+        text = ("x" * 590 + ". Tiny sentence. ") * 9
+        quote = {"kind": "fact", "quote": "Tiny sentence."}
+        count = 12 * len(extract.windows(text))
+        self.assertGreater(count, 120)
+        result = extract_notes(text, "page", "page-api", lambda _: {"notes": [quote] * count})
+        self.assertEqual(len(result["notes"]), 1)
+        with self.assertRaises(MemoryError):
+            extract_notes(text, "page", "page-api", lambda _: {"notes": [quote] * (count + 1)})
