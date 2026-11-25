@@ -18,11 +18,18 @@ test "$(git -C $NB/llama.cpp-premerge rev-parse HEAD)" = 1a0b56cec73dac938e0602c
 "$PY" - "$ADAPTER" "$WORK" <<'EOF'
 import sys
 import torch
-from peft import PeftModel
+from peft import PeftModel, get_peft_model_state_dict
+from safetensors import safe_open
 from transformers import AutoModelForCausalLM, AutoTokenizer
 adapter, out = sys.argv[1], sys.argv[2]
 base = AutoModelForCausalLM.from_pretrained(".neurobrain/qwen35_4b", dtype=torch.float16)
-merged = PeftModel.from_pretrained(base, adapter).merge_and_unload()
+model = PeftModel.from_pretrained(base, adapter)
+# peft only warns on unmatched keys; a name mismatch would silently merge nothing.
+with safe_open(f"{adapter}/adapter_model.safetensors", "pt") as f:
+    saved = set(f.keys())
+live = set(get_peft_model_state_dict(model).keys())
+assert saved == live, f"adapter keys do not match the model: {sorted(saved ^ live)[:5]}"
+merged = model.merge_and_unload()
 merged.save_pretrained(out, safe_serialization=True)
 AutoTokenizer.from_pretrained(".neurobrain/qwen35_4b").save_pretrained(out)
 EOF

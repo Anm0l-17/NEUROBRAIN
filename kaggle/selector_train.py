@@ -6,13 +6,13 @@ Before running, set COMMIT to the pushed commit that contains data/selector_v1.
 Outputs in /kaggle/working/selector_v1: adapter/, checkpoints, run.json, dev_*.json, adapter.zip.
 """
 
-# %% [1] Packages (Qwen3.5 needs a recent transformers)
+# %% [1] Packages: pinned to the versions scripts/deploy_selector.sh was verified with
 import subprocess
 import sys
 
 subprocess.run(
     [sys.executable, "-m", "pip", "install", "-q", "-U",
-     "transformers>=5.0", "peft>=0.17", "bitsandbytes>=0.46", "accelerate>=1.10"],
+     "transformers==5.21.0", "peft==0.22.0", "accelerate==1.16.0", "bitsandbytes>=0.46"],
     check=True,
 )
 
@@ -45,7 +45,12 @@ def fetch(name):
 train = fetch("train.jsonl")
 dev = fetch("dev.jsonl")
 # The sealed evaluation file is deliberately not downloaded here.
-print(len(train), "train rows,", len(dev), "dev rows")
+# Smoke mode: a few rows end to end. Run once with True, check SELECTOR_DONE prints, then set
+# False and Save & Run All again for the real run.
+SMOKE = True
+if SMOKE:
+    train, dev = train[:16], dev[:8]
+print("SMOKE" if SMOKE else "FULL", len(train), "train rows,", len(dev), "dev rows")
 
 # %% [3] Model: Qwen3.5-4B, 4-bit NF4, pinned revision
 import torch
@@ -54,6 +59,8 @@ from peft import LoraConfig, PeftModel, get_peft_model, prepare_model_for_kbit_t
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, set_seed
 
 SEED, LR, ACCUM, EPOCHS, MAX_LEN, SAVE_EVERY = 17, 2e-4, 8, 1, 1536, 50
+if SMOKE:
+    ACCUM, SAVE_EVERY = 4, 1
 set_seed(SEED)
 REPO_ID = "Qwen/Qwen3.5-4B"
 REV = model_info(REPO_ID).sha
@@ -98,9 +105,10 @@ def dev_score(model, name):
     answerable = [(p, g) for p, g in zip(preds, gold) if g and p is not None]
     result = {
         "exact_match": round(sum(p == g for p, g in zip(preds, gold)) / n, 3),
-        "abstain_recall": round(tp / empty_gold, 3),
+        "abstain_recall": round(tp / empty_gold, 3) if empty_gold else None,
         "abstain_precision": round(tp / empty_pred, 3) if empty_pred else None,
-        "over_select_rate": round(sum(bool(p - g) for p, g in answerable) / len(answerable), 3),
+        "over_select_rate": round(sum(bool(p - g) for p, g in answerable) / len(answerable), 3)
+        if answerable else None,
         "parse_errors": n - len(ok),
     }
     (OUT / f"dev_{name}.json").write_text(json.dumps(
@@ -158,7 +166,7 @@ adapter_dev = dev_score(model, "adapter")
 
 # %% [7] Record the run and zip the adapter for download
 (OUT / "run.json").write_text(json.dumps({
-    "base": REPO_ID, "revision": REV, "commit": COMMIT, "seed": SEED, "lr": LR,
+    "base": REPO_ID, "revision": REV, "smoke": SMOKE, "commit": COMMIT, "seed": SEED, "lr": LR,
     "accumulation": ACCUM, "epochs": EPOCHS, "optimizer_steps": step, "lora_r": 16,
     "targets": TARGETS, "train_rows": len(train), "losses": losses,
     "seconds": round(time.monotonic() - started), "gpu": torch.cuda.get_device_name(),
