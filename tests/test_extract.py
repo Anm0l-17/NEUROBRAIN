@@ -1,7 +1,8 @@
+import os
 import tempfile
 import unittest
 from pathlib import Path
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
 from neurobrain.core import MemoryError, MemoryStore
 from neurobrain.extract import answer, extract_notes
@@ -90,6 +91,25 @@ class ExtractionTests(unittest.TestCase):
                     answer(store, "Saturday", requester),
                     {"status": "no_evidence", "answers": []},
                 )
+
+    def test_answer_selector_model_comes_from_environment(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve()
+            note = root / "note.md"
+            note.write_text("The fictional meeting is on Saturday.")
+            with MemoryStore(root / "memory.sqlite3", root) as store:
+                store.import_note(note)
+                seen = []
+
+                def requester(payload):
+                    seen.append(payload["model"])
+                    return {"citations": []}
+
+                with patch.dict(os.environ, {"NEUROBRAIN_SELECTOR_MODEL": "neurobrain-selector-v2"}):
+                    answer(store, "Saturday", requester)
+                with patch.dict(os.environ, {"NEUROBRAIN_SELECTOR_MODEL": ""}):
+                    answer(store, "Saturday", requester)
+                self.assertEqual(seen, ["neurobrain-selector-v2", "qwen3.5:4b"])
 
     def test_forget_removes_plain_and_extracted_copies_of_same_note(self):
         with tempfile.TemporaryDirectory() as directory:

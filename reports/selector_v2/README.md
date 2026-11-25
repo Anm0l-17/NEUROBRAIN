@@ -73,3 +73,7 @@ keeping all six demo near misses abstaining. On LongMemEval, 4 of 28 answerable 
 slice is small (30 rows) and its abstain precision is 0.2 (1 of 5), so conversation-style refusals remain the
 weakest area. HotpotQA abstain precision is 0.688. The precision margin is three rows, so treat v2 as a clear
 improvement that passes the agreed bar, not as a large safety margin.
+
+**Using it in the app (opt-in):** `answer()` reads `NEUROBRAIN_SELECTOR_MODEL` (default `qwen3.5:4b`), so on a Mac
+with this model in Ollama run `export NEUROBRAIN_SELECTOR_MODEL=neurobrain-selector-v2` before starting the app.
+Note extraction (`generate()`) still uses `qwen3.5:4b`; the adapter was trained only for citation selection.

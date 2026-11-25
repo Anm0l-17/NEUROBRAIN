@@ -2,6 +2,7 @@
 
 import argparse
 import json
+import os
 import re
 from pathlib import Path
 from urllib.error import URLError
@@ -204,7 +205,9 @@ def answer(store, question, requester=structured_request):
     evidence = store.search(question, limit=5)
     if not evidence:
         return {"status": "no_evidence", "answers": []}
-    result = requester(selection_payload(question, evidence))
+    # Opt-in fine-tuned selector (reports/selector_v2); extraction keeps the stock model.
+    model = os.environ.get("NEUROBRAIN_SELECTOR_MODEL") or "qwen3.5:4b"
+    result = requester(selection_payload(question, evidence, model=model))
     selected = result.get("citations") if isinstance(result, dict) else None
     by_id = {r["citation"]: r for r in evidence}
     if (
