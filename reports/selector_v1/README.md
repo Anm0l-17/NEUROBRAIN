@@ -64,6 +64,34 @@ if on the sealed set:
 
 If it misses any item, the adapter stays an experiment and the app keeps the official model.
 
+## Adapter v1 result: not promoted
+
+Kaggle T4 run (data commit `b5d9674`, seed 17, 375 optimizer steps over 3,000 rows, 7,208 s, peak 7.8 GiB);
+training loss fell from 0.082 (first tenth) to 0.013 (last tenth). On `dev.jsonl` the adapter scored exact 0.780,
+abstain recall 0.991, abstain precision 0.772 (3 parse errors). Deployed with `scripts/deploy_selector.sh` as
+`neurobrain-selector-v1` (adapter keys matched before merge). Sealed set, raw `adapter_eval.json`, 640 s:
+
+| Model | Exact match | Answerable exact | Abstain recall | Abstain precision | Over-select | Errors |
+|---|---|---|---|---|---|---|
+| Converted base | 0.443 | 0.536 | 0.262 | 0.889 | 0.101 | 0 |
+| Adapter v1 | 0.674 | 0.515 (122/237) | **0.984** | **0.571** | 0.059 | 0 |
+
+| Gate item | Needed | Adapter v1 | Result |
+|---|---|---|---|
+| 1. Abstain recall | ≥ 0.50 | 0.984 | pass |
+| 2. Abstain precision | ≥ 0.85 | 0.571 | **fail** |
+| 3. Answerable exact | ≥ 0.516 | 0.515 (122/237) | **fail** (by one row) |
+| 4. Fixtures | 9/9 answerable, ≥ 5/6 near-miss abstain | 9/9, 6/6 | pass |
+| 5. Errors | 0 | 0 | pass |
+
+The adapter fixes the demo problem (all six near misses, including "Saffron Bridge launch party" and "amber
+lighthouse party", now return no citation) but overcorrects: it returns nothing on 90 of 237 answerable rows
+(38%; base 1.7%), most on LongMemEval (40, abstain precision 0.149) and SQuAD 2.0 (38). The higher overall exact
+match comes from the many no-answer rows. Per the gate it stays an experiment; the app keeps `qwen3.5:4b`.
+Dev abstain precision (0.772) already pointed this way, and the sealed set is harsher. Likely next steps: fewer
+empty targets than the current 36%, or more LongMemEval-style answerable rows; a v2 needs a new sealed set or an
+untouched slice, since this one has now been used for a gate decision.
+
 ## Admission MLP v2 (same day)
 
 `scripts/train_admission_v2.py`, report `reports/admission_v2/report.json`. Adding 4,004 LoCoMo turns
