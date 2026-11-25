@@ -1,0 +1,50 @@
+{
+  "seed": 17,
+  "raw_sha256": {
+    "squad_train.parquet": "f6da32ffb482ff463ad056477740d1bb284b96a45db3a08bee6a225ca6abf291",
+    "squad_val.parquet": "0560174ab095c5ac0a8c8dc8da05f1625453c45a77e4ce9cabc6947ddfdd24cb",
+    "hotpot_train0.parquet": "76d3bb3048a7cc73c1958107c0c5872a00d7e7d00c105b81e92f6769e7822e68",
+    "hotpot_val.parquet": "c20b638ca82b21d04fe12e14ff417ad05153d4d215a65de54497fca4e972f7c6",
+    "lme_oracle.json": "821a2034d219ab45846873dd14c14f12cfe7776e73527a483f9dac095d38620c"
+  },
+  "files": {
+    "train.jsonl": "e30127b01ebdca0628ce85058ca10ab171f3652601193ef30df458e7a728a0ae",
+    "dev.jsonl": "f025132435e1d441e521e8170a04207ca8c19a0c69b3d0a6c1bb058a40943cbe",
+    "eval_sealed.jsonl": "d93ad39e36f7282191ef7f358a058bf84669a793fc91164426e92ff3e5c0c140"
+  },
+  "counts": {
+    "train": {
+      "rows": 3000,
+      "empty_targets": 1058,
+      "by_source": {
+        "hotpotqa": 1450,
+        "squad2": 1550
+      }
+    },
+    "dev": {
+      "rows": 300,
+      "empty_targets": 110,
+      "by_source": {
+        "hotpotqa": 150,
+        "squad2": 150
+      }
+    },
+    "eval_sealed": {
+      "rows": 365,
+      "empty_targets": 118,
+      "by_source": {
+        "fixture": 15,
+        "hotpotqa": 100,
+        "longmemeval": 100,
+        "squad2": 150
+      }
+    }
+  },
+  "splits": "SQuAD train articles split 90/10 into train/dev by title; SQuAD validation, HotpotQA validation, LongMemEval and fixtures are sealed evaluation only.",
+  "licenses": {
+    "squad2": "CC BY-SA 4.0, rajpurkar/squad_v2",
+    "hotpotqa": "CC BY-SA 4.0, hotpotqa/hotpot_qa distractor",
+    "longmemeval": "MIT, xiaowu0162/longmemeval-cleaned (oracle), evaluation only",
+    "fixture": "Project-authored fictional notes, evaluation only"
+  }
+}

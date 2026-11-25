@@ -1,0 +1,223 @@
+{
+  "seed": 17,
+  "locomo_sha256": "79fa87e90f04081343b8c8debecb80a9a6842b76a7aa537dc9fdf651ea698ff4",
+  "truncated_inputs": 0,
+  "counts": {
+    "train/locomo": {
+      "rows": 4004,
+      "keep": 1634
+    },
+    "train/ours": {
+      "rows": 1422,
+      "keep": 918
+    },
+    "validation/locomo": {
+      "rows": 680,
+      "keep": 259
+    },
+    "validation/ours": {
+      "rows": 18,
+      "keep": 12
+    },
+    "test/locomo": {
+      "rows": 1198,
+      "keep": 482
+    },
+    "test/ours": {
+      "rows": 48,
+      "keep": 30
+    }
+  },
+  "note": "LoCoMo labels come from model-generated observations; LoCoMo has only 10 conversations.",
+  "configs": {
+    "locomo": {
+      "train_rows": 4004,
+      "mlp": {
+        "test_locomo": {
+          "precision": 0.44878048780487806,
+          "recall": 0.9543568464730291,
+          "f1": 0.6104844061048441,
+          "average_precision": 0.6046800358844481,
+          "confusion_matrix_tn_fp_fn_tp": [
+            151,
+            565,
+            22,
+            460
+          ],
+          "threshold": 0.2122897207736969,
+          "count": 1198
+        },
+        "test_ours": {
+          "precision": 0.6341463414634146,
+          "recall": 0.8666666666666667,
+          "f1": 0.7323943661971831,
+          "average_precision": 0.7828910927280173,
+          "confusion_matrix_tn_fp_fn_tp": [
+            3,
+            15,
+            4,
+            26
+          ],
+          "threshold": 0.2122897207736969,
+          "count": 48
+        }
+      },
+      "embedding_logistic": {
+        "test_locomo": {
+          "precision": 0.449119373776908,
+          "recall": 0.9522821576763485,
+          "f1": 0.6103723404255319,
+          "average_precision": 0.6736566693935281,
+          "confusion_matrix_tn_fp_fn_tp": [
+            153,
+            563,
+            23,
+            459
+          ],
+          "threshold": 0.15279440581798553,
+          "count": 1198
+        },
+        "test_ours": {
+          "precision": 0.9230769230769231,
+          "recall": 0.4,
+          "f1": 0.5581395348837209,
+          "average_precision": 0.8841111428732185,
+          "confusion_matrix_tn_fp_fn_tp": [
+            17,
+            1,
+            18,
+            12
+          ],
+          "threshold": 0.15279440581798553,
+          "count": 48
+        }
+      }
+    },
+    "combined": {
+      "train_rows": 5426,
+      "mlp": {
+        "test_locomo": {
+          "precision": 0.4446546830652791,
+          "recall": 0.975103734439834,
+          "f1": 0.6107862248213125,
+          "average_precision": 0.5838264590937596,
+          "confusion_matrix_tn_fp_fn_tp": [
+            129,
+            587,
+            12,
+            470
+          ],
+          "threshold": 0.18710362911224365,
+          "count": 1198
+        },
+        "test_ours": {
+          "precision": 0.625,
+          "recall": 1.0,
+          "f1": 0.7692307692307693,
+          "average_precision": 0.7971009063942286,
+          "confusion_matrix_tn_fp_fn_tp": [
+            0,
+            18,
+            0,
+            30
+          ],
+          "threshold": 0.18710362911224365,
+          "count": 48
+        }
+      },
+      "embedding_logistic": {
+        "test_locomo": {
+          "precision": 0.45337301587301587,
+          "recall": 0.9481327800829875,
+          "f1": 0.6134228187919463,
+          "average_precision": 0.6377664677033277,
+          "confusion_matrix_tn_fp_fn_tp": [
+            165,
+            551,
+            25,
+            457
+          ],
+          "threshold": 0.16076460480690002,
+          "count": 1198
+        },
+        "test_ours": {
+          "precision": 0.625,
+          "recall": 1.0,
+          "f1": 0.7692307692307693,
+          "average_precision": 0.8514768680968003,
+          "confusion_matrix_tn_fp_fn_tp": [
+            0,
+            18,
+            0,
+            30
+          ],
+          "threshold": 0.16076460480690002,
+          "count": 48
+        }
+      }
+    },
+    "ours_only": {
+      "train_rows": 1422,
+      "mlp": {
+        "test_locomo": {
+          "precision": 0.4873096446700508,
+          "recall": 0.1991701244813278,
+          "f1": 0.28276877761413843,
+          "average_precision": 0.4533377787552174,
+          "confusion_matrix_tn_fp_fn_tp": [
+            615,
+            101,
+            386,
+            96
+          ],
+          "threshold": 0.6057707667350769,
+          "count": 1198
+        },
+        "test_ours": {
+          "precision": 0.6923076923076923,
+          "recall": 0.9,
+          "f1": 0.782608695652174,
+          "average_precision": 0.7297078036960243,
+          "confusion_matrix_tn_fp_fn_tp": [
+            6,
+            12,
+            3,
+            27
+          ],
+          "threshold": 0.6057707667350769,
+          "count": 48
+        }
+      },
+      "embedding_logistic": {
+        "test_locomo": {
+          "precision": 0.5335968379446641,
+          "recall": 0.5601659751037344,
+          "f1": 0.5465587044534413,
+          "average_precision": 0.5313425494630687,
+          "confusion_matrix_tn_fp_fn_tp": [
+            480,
+            236,
+            212,
+            270
+          ],
+          "threshold": 0.6367853879928589,
+          "count": 1198
+        },
+        "test_ours": {
+          "precision": 0.7352941176470589,
+          "recall": 0.8333333333333334,
+          "f1": 0.78125,
+          "average_precision": 0.8055794850381338,
+          "confusion_matrix_tn_fp_fn_tp": [
+            9,
+            9,
+            5,
+            25
+          ],
+          "threshold": 0.6367853879928589,
+          "count": 48
+        }
+      }
+    }
+  }
+}
