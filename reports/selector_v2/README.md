@@ -28,6 +28,11 @@ trained on, now sit in train and dev. Few unseen LongMemEval questions remained,
 Fixtures: 9/9 answerable pass; near misses 4/6 (fails "Saffron Bridge launch party" with five lines and
 "amber lighthouse party", as on v1).
 
+Reference only (not a comparator): adapter v1 (`neurobrain-selector-v1`) on the same set, raw `adapter_v1_eval.json`,
+511 s: exact 0.739, answerable exact 0.591 (107/181), abstain recall 0.982, abstain precision **0.671**, over-select
+0.033, 0 errors; fixtures 9/9 and 6/6; no citation on 53 of 181 answerable rows (29%), 11 of 28 on LongMemEval. It
+would fail this gate on abstain precision alone. These are the numbers v2 has to beat on over-abstention.
+
 ## Promotion gate v2 (fixed before any v2 adapter result exists)
 
 Same rules as v1; only the answerable-exact bar moves with the new comparator. The adapter, served through
