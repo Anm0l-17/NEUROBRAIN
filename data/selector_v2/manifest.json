@@ -1,0 +1,82 @@
+{
+  "seed": 17,
+  "raw_sha256": {
+    "squad_train.parquet": "f6da32ffb482ff463ad056477740d1bb284b96a45db3a08bee6a225ca6abf291",
+    "squad_val.parquet": "0560174ab095c5ac0a8c8dc8da05f1625453c45a77e4ce9cabc6947ddfdd24cb",
+    "hotpot_train0.parquet": "76d3bb3048a7cc73c1958107c0c5872a00d7e7d00c105b81e92f6769e7822e68",
+    "hotpot_val.parquet": "c20b638ca82b21d04fe12e14ff417ad05153d4d215a65de54497fca4e972f7c6",
+    "lme_oracle.json": "821a2034d219ab45846873dd14c14f12cfe7776e73527a483f9dac095d38620c"
+  },
+  "files": {
+    "train.jsonl": "bb0282d15485af76ac3bb9185e719519ce529376d27fe0082589ad685ba588d9",
+    "dev.jsonl": "55ff0c7ea9c1c972b17ec0a74512b90c98c37cf81e394d7e94e84a4a75e7408f",
+    "eval_sealed.jsonl": "bd901790be6f34d638b7551ae0875ac3a9c0b7849dfc4d28ed7d06799f37f16f"
+  },
+  "counts": {
+    "train": {
+      "rows": 2808,
+      "empty_targets": 563,
+      "by_source": {
+        "hotpotqa": {
+          "rows": 1400,
+          "empty": 253
+        },
+        "longmemeval": {
+          "rows": 258,
+          "empty": 60
+        },
+        "squad2": {
+          "rows": 1150,
+          "empty": 250
+        }
+      }
+    },
+    "dev": {
+      "rows": 323,
+      "empty_targets": 132,
+      "by_source": {
+        "hotpotqa": {
+          "rows": 144,
+          "empty": 36
+        },
+        "longmemeval": {
+          "rows": 29,
+          "empty": 6
+        },
+        "squad2": {
+          "rows": 150,
+          "empty": 90
+        }
+      }
+    },
+    "eval_sealed": {
+      "rows": 291,
+      "empty_targets": 110,
+      "by_source": {
+        "fixture": {
+          "rows": 15,
+          "empty": 6
+        },
+        "hotpotqa": {
+          "rows": 96,
+          "empty": 12
+        },
+        "longmemeval": {
+          "rows": 30,
+          "empty": 2
+        },
+        "squad2": {
+          "rows": 150,
+          "empty": 90
+        }
+      }
+    }
+  },
+  "splits": "SQuAD train articles split 90/10 into train/dev by title; SQuAD validation and HotpotQA validation are sealed only; LongMemEval split by question (v1 sealed questions to train, unseen ones to sealed then dev); fixtures sealed only. No sealed row shares a question or evidence line with data/selector_v1/eval_sealed.jsonl.",
+  "licenses": {
+    "squad2": "CC BY-SA 4.0, rajpurkar/squad_v2",
+    "hotpotqa": "CC BY-SA 4.0, hotpotqa/hotpot_qa distractor",
+    "longmemeval": "MIT, xiaowu0162/longmemeval-cleaned (oracle)",
+    "fixture": "Project-authored fictional notes, evaluation only"
+  }
+}

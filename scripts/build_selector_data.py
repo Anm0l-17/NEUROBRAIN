@@ -1,4 +1,4 @@
-"""Build citation-selector training, development and sealed evaluation rows.
+"""Build citation-selector v2 training, development and sealed evaluation rows.
 
 Each row mirrors the app's real Ollama request (`extract.selection_payload`): a
 question plus one to five evidence lines with 32-hex citation IDs, and the target
@@ -6,8 +6,13 @@ question plus one to five evidence lines with 32-hex citation IDs, and the targe
 
 Sources (downloaded by hand into .neurobrain/raw, hashes pinned below):
   SQuAD 2.0 (CC BY-SA 4.0), HotpotQA distractor (CC BY-SA 4.0): train + dev + eval
-  LongMemEval oracle (MIT): sealed evaluation only
+  LongMemEval oracle (MIT): train + dev + eval, split by question
   Our fictional demo fixtures: sealed evaluation only
+
+v2 vs v1 (data/selector_v1, built at b5d9674): adapter v1 over-abstained because SQuAD train
+rows were 52% empty and no conversation-style rows were trained on. v2 lowers SQuAD empties,
+adds LongMemEval to train and dev, and draws a fresh sealed set with v1's quotas that shares
+no question or evidence line with the retired v1 sealed set.
 
 Run: python scripts/build_selector_data.py  (needs pyarrow)
 """
@@ -26,7 +31,8 @@ sys.path.insert(0, str(ROOT / "src"))
 from neurobrain.extract import SELECT_SYSTEM  # noqa: E402
 
 RAW = ROOT / ".neurobrain/raw"
-OUT = ROOT / "data/selector_v1"
+OUT = ROOT / "data/selector_v2"
+V1_SEALED = ROOT / "data/selector_v1/eval_sealed.jsonl"
 HASHES = {
     "squad_train.parquet": "f6da32ffb482ff463ad056477740d1bb284b96a45db3a08bee6a225ca6abf291",
     "squad_val.parquet": "0560174ab095c5ac0a8c8dc8da05f1625453c45a77e4ce9cabc6947ddfdd24cb",
@@ -156,13 +162,19 @@ def hotpot(rng, path, limit):
             return
 
 
-def longmemeval(rng, path, limit):
+def longmemeval(rng, path):
+    """Yield (kind, (question, lines, gold)) for every usable question; render with lme_row.
+
+    kind: answer | abstain | removed. Returned unrendered so train can render a question
+    several times (different evidence count, order and IDs).
+    """
     data = json.load(open(path))
     rng.shuffle(data)
-    made = 0
     for x in data:
         abstain = x["question_id"].endswith("_abs")
-        if not abstain and x["question_type"] not in ("single-session-user", "multi-session"):
+        # knowledge-update marks both old and new values as answers; assistant/preference
+        # answers are not in user turns; temporal-reasoning answers need session dates.
+        if x["question_type"] not in ("single-session-user", "multi-session"):
             continue
         turns = [t for s in x["haystack_sessions"] for t in s if t["role"] == "user"]
         gold = list(dict.fromkeys(t["content"].strip() for t in turns if t.get("has_answer")))
@@ -171,16 +183,20 @@ def longmemeval(rng, path, limit):
         pool = [t["content"].strip() for t in turns if len(t["content"]) <= 600]
         others = closest(x["question"], pool, 8, exclude=gold)
         ans = str(x["answer"]).lower()
-        if len(ans) <= 40:  # short answers can be matched; long ones are explanations
+        short = len(ans) <= 40  # short answers can be matched; long ones are explanations
+        if short:
             others = [o for o in others if ans not in o.lower()]
+        # Removed: drop the answering turns for a same-topic near miss (only when the answer
+        # filter ran, so no distractor can still answer).
+        if not abstain and short and rng.random() < 0.2 and len(others) >= 5:
+            yield "removed", (x["question"], others[:5], set())
+            continue
         if len(others) < 5 - len(gold):
             continue
         lines = gold + others[: 5 - len(gold)]
         # Abstention questions point at a related fact that does not answer them.
-        yield row(rng, "longmemeval", x["question"], lines, set() if abstain else set(range(len(gold))))
-        made += 1
-        if made >= limit:
-            return
+        gold_idx = set() if abstain else set(range(len(gold)))
+        yield ("abstain" if abstain else "answer"), (x["question"], lines, gold_idx)
 
 
 SAFFRON = [
@@ -229,6 +245,9 @@ def main():
         got = hashlib.sha256((RAW / name).read_bytes()).hexdigest()
         assert got == digest, f"{name} hash mismatch"
     rng = random.Random(17)
+    v1 = [json.loads(line) for line in open(V1_SEALED)]
+    v1_questions = {r["question"] for r in v1 if r["source"] != "fixture"}
+    v1_lines = {e["text"] for r in v1 if r["source"] != "fixture" for e in r["evidence"]}
 
     titles = sorted({r["title"] for r in pq.read_table(RAW / "squad_train.parquet", columns=["title"]).to_pylist()})
     rng.shuffle(titles)
@@ -238,34 +257,76 @@ def main():
     def take(stream, quota):
         got = {k: [] for k in quota}
         for _, kind, r in stream:
-            if len(got[kind]) < quota[kind]:
+            if kind in quota and len(got[kind]) < quota[kind]:
                 got[kind].append(r)
             if all(len(got[k]) >= quota[k] for k in quota):
                 break
         return [r for k in quota for r in got[k]]
 
-    squad_q = {"answer": 750, "unanswerable": 500, "removed": 300}
-    train = take(squad(rng, RAW / "squad_train.parquet", train_titles), squad_q)
-    hp = list(hotpot(rng, RAW / "hotpot_train0.parquet", 1600))
-    dev_hp = hp[1450:]
-    train += [r for _, r in hp[:1450]]
+    def fresh(stream):
+        """Sealed v2 candidates: nothing the v1 sealed set (already used for a decision) showed."""
+        for item in stream:
+            r = item[-1]
+            if r["question"] not in v1_questions and not any(e["text"] in v1_lines for e in r["evidence"]):
+                yield item
+
+    # SQuAD train was 52% empty in v1 (750/500/300); v2 is 22%.
+    train = take(squad(rng, RAW / "squad_train.parquet", train_titles), {"answer": 900, "unanswerable": 150, "removed": 100})
+    hp = list(hotpot(rng, RAW / "hotpot_train0.parquet", 1550))
+    train += [r for _, r in hp[:1400]]
     dev = take(squad(rng, RAW / "squad_train.parquet", dev_titles), {"answer": 60, "unanswerable": 50, "removed": 40})
-    dev += [r for _, r in dev_hp]
+    dev += [r for _, r in hp[1400:]]
+
+    # LongMemEval: v1 sealed questions were never trained on, so they go to train; never-shown
+    # questions fill the v2 sealed quota first, then dev, then train.
+    def lme_row(args):
+        return row(rng, "longmemeval", *args)
+
+    lme_seen, lme_new = [], []
+    for kind, args in longmemeval(rng, RAW / "lme_oracle.json"):
+        if args[0] in v1_questions:
+            lme_seen.append(args)
+        elif not any(line in v1_lines for line in args[1]):
+            lme_new.append((kind, args))
+    # Only ~60 single-session-user/multi-session questions were never shown by v1's sealed set,
+    # so v2's sealed LongMemEval slice is about two thirds of them (v1 had 100 rows). v1-shown
+    # questions (never trained on) fill dev and train.
+    # Pick sealed questions first, skipping any that share a turn with a v1-shown question,
+    # then keep questions sharing a turn with a sealed one out of train and dev.
+    seen_lines = {line for a in lme_seen for line in a[1]}
+    clean = [(k, a) for k, a in lme_new if not seen_lines & set(a[1])]
+    n_ans = sum(k == "answer" for k, _ in clean) * 2 // 3
+    picked, sealed_lines = [], set()
+    for want, kinds in ((n_ans, ("answer",)), (max(1, n_ans // 13), ("abstain", "removed"))):
+        got = [a for kind in kinds for k, a in clean if k == kind][:want]
+        picked += got
+        sealed_lines |= {line for a in got for line in a[1]}
+    sealed_lme = [lme_row(a) for a in picked]
+    rest = [a for k, a in lme_new if a not in picked and not sealed_lines & set(a[1])]
+    rng.shuffle(lme_seen)
+    dev += [lme_row(a) for a in lme_seen[:30]]
+    # Conversation-style rows are scarce; render each training question three times.
+    train += [lme_row(a) for a in lme_seen[30:] + rest for _ in range(3)]
 
     sealed = take(
-        ((None, k, r) for _, k, r in squad(rng, RAW / "squad_val.parquet")),
+        fresh((None, k, r) for _, k, r in squad(rng, RAW / "squad_val.parquet")),
         {"answer": 60, "unanswerable": 50, "removed": 40},
     )
-    sealed += [r for _, r in hotpot(rng, RAW / "hotpot_val.parquet", 100)]
-    sealed += list(longmemeval(rng, RAW / "lme_oracle.json", 100))
-    for q, lines, gold in FIXTURES:
-        sealed.append(row(rng, "fixture", q, lines, gold))
+    sealed += [r for _, r in fresh(hotpot(rng, RAW / "hotpot_val.parquet", 300))][:100]
+    sealed += sealed_lme
+    # The same 15 fixture rows as v1 (same evidence and IDs), so fixture results compare.
+    fixtures = [r for r in v1 if r["source"] == "fixture"]
+    assert [r["question"] for r in fixtures] == [q for q, _, _ in FIXTURES]
+    sealed += fixtures
 
     # Drop dev and sealed rows that reuse any evidence line seen in an earlier split.
     seen = {e["text"] for r in train for e in r["evidence"]}
     dev = [r for r in dev if not any(e["text"] in seen for e in r["evidence"])]
     seen |= {e["text"] for r in dev for e in r["evidence"]}
     sealed = [r for r in sealed if r["source"] == "fixture" or not any(e["text"] in seen for e in r["evidence"])]
+    for r in sealed:  # the retired v1 sealed set must not leak into v2's
+        if r["source"] != "fixture":
+            assert r["question"] not in v1_questions and not any(e["text"] in v1_lines for e in r["evidence"])
     rng.shuffle(train)
     rng.shuffle(dev)
     manifest = {
@@ -280,16 +341,21 @@ def main():
             n: {
                 "rows": len(rs),
                 "empty_targets": sum(not r["target"] for r in rs),
-                "by_source": {s: sum(r["source"] == s for r in rs) for s in sorted({r["source"] for r in rs})},
+                "by_source": {
+                    s: {"rows": sum(r["source"] == s for r in rs), "empty": sum(r["source"] == s and not r["target"] for r in rs)}
+                    for s in sorted({r["source"] for r in rs})
+                },
             }
             for n, rs in (("train", train), ("dev", dev), ("eval_sealed", sealed))
         },
-        "splits": "SQuAD train articles split 90/10 into train/dev by title; SQuAD validation, "
-        "HotpotQA validation, LongMemEval and fixtures are sealed evaluation only.",
+        "splits": "SQuAD train articles split 90/10 into train/dev by title; SQuAD validation and HotpotQA "
+        "validation are sealed only; LongMemEval split by question (v1 sealed questions to train, unseen "
+        "ones to sealed then dev); fixtures sealed only. No sealed row shares a question or evidence line "
+        "with data/selector_v1/eval_sealed.jsonl.",
         "licenses": {
             "squad2": "CC BY-SA 4.0, rajpurkar/squad_v2",
             "hotpotqa": "CC BY-SA 4.0, hotpotqa/hotpot_qa distractor",
-            "longmemeval": "MIT, xiaowu0162/longmemeval-cleaned (oracle), evaluation only",
+            "longmemeval": "MIT, xiaowu0162/longmemeval-cleaned (oracle)",
             "fixture": "Project-authored fictional notes, evaluation only",
         },
     }
