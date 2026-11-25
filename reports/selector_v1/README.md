@@ -1,21 +1,22 @@
 # Citation selector v1 — baseline before training (25 Nov 2026)
 
 Base `qwen3.5:4b` (Ollama, temperature 0, the app's exact request from `extract.selection_payload`) on the
-sealed evaluation set `data/selector_v1/eval_sealed.jsonl` (365 rows, 1 to 5 evidence lines each like the app's
-search; 119 rows have no answering line). Raw predictions: `base_eval.json`. Runtime 785 s on the presentation Mac.
+sealed evaluation set `data/selector_v1/eval_sealed.jsonl` (359 rows, 1 to 5 evidence lines each like the app's
+search; 122 rows have no answering line). Scoring follows the app's acceptance rule: a reply with an unknown ID,
+more than five IDs or a malformed list counts as an error and a miss. Raw: `base_eval.json`, 776 s.
 
 | Source | Rows | Exact match | Abstain recall | Abstain precision | Over-select | Under-select |
 |---|---|---|---|---|---|---|
-| All | 365 | 0.414 | **0.118** | 1.000 | 0.118 | 0.394 |
-| SQuAD 2.0 | 150 | 0.407 | 0.100 | 1.000 | 0.133 | 0.100 |
-| HotpotQA | 100 | 0.190 | 0.056 | 1.000 | 0.146 | 0.720 |
-| LongMemEval | 100 | 0.580 | 0.000 | — | 0.095 | 0.337 |
+| All | 359 | 0.435 | **0.172** | 0.955 | 0.122 | 0.397 |
+| SQuAD 2.0 | 150 | 0.447 | 0.156 | 0.933 | 0.100 | 0.083 |
+| HotpotQA | 94 | 0.245 | 0.105 | 1.000 | 0.173 | 0.680 |
+| LongMemEval | 100 | 0.530 | 0.143 | 1.000 | 0.108 | 0.409 |
 | Demo fixtures | 15 | 0.867 | 0.667 | 1.000 | 0.000 | 0.000 |
 
-The main weakness is abstention: when no line answers the question, the base model still cites one 88% of the
+The main weakness is abstention: when no line answers the question, the base model still cites one 83% of the
 time. On the demo fixtures it passes all 9 answerable questions and fails 2 of the 6 near misses ("Saffron Bridge
-launch party" with four lines shown, and "amber lighthouse party"). An earlier build of the same set with exactly
-five lines per row gave abstain recall 0.076; fewer lines make abstaining easier.
+launch party" with four lines shown, and "amber lighthouse party"). Earlier builds of this set (fixed five lines,
+then looser answer filters) gave abstain recall 0.076 and 0.118; the numbers here supersede them.
 
 Definitions: exact match = predicted citation set equals the gold set. Abstain recall = share of no-answer rows
 where the model returned no citation; abstain precision = share of empty predictions that were correct.
@@ -25,7 +26,7 @@ gold citation (HotpotQA needs two or three).
 ## Training plan
 
 `kaggle/selector_train.ipynb` trains a QLoRA adapter (rank 16, all language-model attention, linear-attention
-and MLP projections) on `train.jsonl` (3,000 rows, 35% empty targets) and scores base vs adapter on `dev.jsonl`.
+and MLP projections) on `train.jsonl` (3,000 rows, 36% empty targets) and scores base vs adapter on `dev.jsonl` (295 rows).
 The sealed set is never downloaded on Kaggle.
 
 ## Converted base (the comparator) and deployment check
@@ -33,12 +34,12 @@ The sealed set is never downloaded on Kaggle.
 `neurobrain-selector-base`: HF Qwen3.5-4B @ 851bf6e → `convert_hf_to_gguf.py` from llama.cpp `1a0b56c`
 (the last commit before qwen tensors were fused; the newest converter writes `ssm_beta_alpha` and
 `attn_qkv_gate`, which Ollama 0.40.16's runtime rejects) → `llama-quantize Q4_K_M` → `ollama create` with the
-official `qwen3.5` renderer and parser (`scripts/selector.Modelfile`). Raw: `converted_base_eval.json`, 822 s.
+official `qwen3.5` renderer and parser (`scripts/selector.Modelfile`). Raw: `converted_base_eval.json`, 826 s.
 
 | Model | Exact match | Answerable exact | Abstain recall | Abstain precision | Over-select |
 |---|---|---|---|---|---|
-| Official `qwen3.5:4b` (nvfp4) | 0.414 | 0.557 | 0.118 | 1.000 | 0.118 |
-| Converted base (Q4_K_M) | 0.416 | **0.496** | **0.252** | 0.909 | 0.142 |
+| Official `qwen3.5:4b` (nvfp4) | 0.435 | 0.570 | 0.172 | 0.955 | 0.122 |
+| Converted base (Q4_K_M) | 0.443 | **0.536** | **0.262** | 0.889 | 0.101 |
 
 Conversion alone changes behaviour (more abstaining, fewer exact answers), which is why the gate compares the
 adapter with the converted base. Both fail the same two near-miss fixtures.
@@ -55,9 +56,9 @@ quantize → `ollama create` route the adapter will use, scored with `scripts/ev
 nvfp4 `qwen3.5:4b` numbers above only describe today's app. The adapter, served the same way, is promoted only
 if on the sealed set:
 
-1. Abstain recall is at least **0.50** (converted base 0.252; official 0.118).
+1. Abstain recall is at least **0.50** (converted base 0.262; official 0.172).
 2. Abstain precision is at least **0.85** (it must not refuse real questions to get there).
-3. Exact match on answerable rows is at least **0.476** (converted base 0.496 minus 0.02).
+3. Exact match on answerable rows is at least **0.516** (converted base 0.536 minus 0.02).
 4. All 9 answerable demo fixtures still pass, and at least 5 of the 6 near-miss fixtures return no citation.
 5. No parse or request errors.
 
