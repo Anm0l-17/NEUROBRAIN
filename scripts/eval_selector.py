@@ -14,23 +14,35 @@ from neurobrain.core import MemoryError
 from neurobrain.extract import selection_payload, structured_request
 
 
+def valid_citations(result, evidence):
+    """The app's acceptance rule (extract.answer): a list of at most 5 known IDs, else None."""
+    allowed = {e["citation"] for e in evidence}
+    got = result.get("citations") if isinstance(result, dict) else None
+    if not isinstance(got, list) or len(got) > 5 or any(not isinstance(c, str) or c not in allowed for c in got):
+        return None
+    return set(got)
+
+
 def score(rows, preds):
-    """Exact set match; abstention precision/recall; over- and under-selection."""
+    """Exact set match; abstention precision/recall; over- and under-selection.
+
+    A None prediction is an error the app would raise on; it counts as a miss everywhere.
+    """
     m = defaultdict(lambda: defaultdict(int))
     for r, p in zip(rows, preds):
         gold, pred = set(r["target"]), p
         for key in ("all", r["source"]):
             s = m[key]
             s["n"] += 1
+            s["gold_empty"] += not gold
+            s["answerable"] += bool(gold)
             if pred is None:
                 s["errors"] += 1
                 continue
             s["exact"] += pred == gold
-            s["gold_empty"] += not gold
             s["pred_empty"] += not pred
             s["abstain_tp"] += not gold and not pred
             if gold:
-                s["answerable"] += 1
                 s["over"] += bool(pred - gold)
                 s["under"] += bool(gold - pred)
     out = {}
@@ -59,7 +71,7 @@ def main():
     for r in rows:
         try:
             got = structured_request(selection_payload(r["question"], r["evidence"], args.model))
-            preds.append(set(got.get("citations", [])))
+            preds.append(valid_citations(got, r["evidence"]))
         except MemoryError:
             preds.append(None)
     metrics = score(rows, preds)

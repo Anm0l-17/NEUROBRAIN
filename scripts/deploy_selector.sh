@@ -13,7 +13,8 @@ NAME=$2
 PY=${PY:-python}
 NB=.neurobrain
 WORK=$NB/merged_$NAME
-test "$(git -C $NB/llama.cpp-premerge rev-parse HEAD)" = 1a0b56cec73dac938e0602c974b21dc8e2862830
+test "$(git -C $NB/llama.cpp-premerge rev-parse HEAD)" = 1a0b56cec73dac938e0602c974b21dc8e2862830 \
+  || { echo "Need llama.cpp at 1a0b56c in $NB/llama.cpp-premerge" >&2; exit 1; }
 
 "$PY" - "$ADAPTER" "$WORK" <<'EOF'
 import sys

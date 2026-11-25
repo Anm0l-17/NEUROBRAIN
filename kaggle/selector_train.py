@@ -54,7 +54,6 @@ print("SMOKE" if SMOKE else "FULL", len(train), "train rows,", len(dev), "dev ro
 
 # %% [3] Model: Qwen3.5-4B, 4-bit NF4, pinned revision
 import torch
-from huggingface_hub import model_info
 from peft import LoraConfig, PeftModel, get_peft_model, prepare_model_for_kbit_training
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, set_seed
 
@@ -63,7 +62,7 @@ if SMOKE:
     ACCUM, SAVE_EVERY = 4, 1
 set_seed(SEED)
 REPO_ID = "Qwen/Qwen3.5-4B"
-REV = model_info(REPO_ID).sha
+REV = "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a"  # the revision scripts/deploy_selector.sh merges into
 tok = AutoTokenizer.from_pretrained(REPO_ID, revision=REV)
 quant = BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_quant_type="nf4",
                            bnb_4bit_compute_dtype=torch.float16, bnb_4bit_use_double_quant=True)
@@ -85,12 +84,15 @@ def predict(model, row):
         y = model.generate(x, attention_mask=torch.ones_like(x), max_new_tokens=120,
                            do_sample=False, pad_token_id=tok.eos_token_id)
     text = tok.decode(y[0, x.shape[1]:], skip_special_tokens=True)
+    # Same acceptance rule as the app: a list of at most 5 known IDs, otherwise an error (None).
     try:
         got = json.loads(text[text.index("{"): text.rindex("}") + 1])["citations"]
-        allowed = {e["citation"] for e in row["evidence"]}
-        return {c for c in got if c in allowed}
     except (ValueError, KeyError, TypeError):
         return None
+    allowed = {e["citation"] for e in row["evidence"]}
+    if not isinstance(got, list) or len(got) > 5 or any(not isinstance(c, str) or c not in allowed for c in got):
+        return None
+    return set(got)
 
 
 def dev_score(model, name):
@@ -102,12 +104,12 @@ def dev_score(model, name):
     empty_gold = sum(not g for g in gold)
     empty_pred = sum(p is not None and not p for p in preds)
     tp = sum(p is not None and not p and not g for p, g in zip(preds, gold))
-    answerable = [(p, g) for p, g in zip(preds, gold) if g and p is not None]
+    answerable = [(p, g) for p, g in zip(preds, gold) if g]
     result = {
         "exact_match": round(sum(p == g for p, g in zip(preds, gold)) / n, 3),
         "abstain_recall": round(tp / empty_gold, 3) if empty_gold else None,
         "abstain_precision": round(tp / empty_pred, 3) if empty_pred else None,
-        "over_select_rate": round(sum(bool(p - g) for p, g in answerable) / len(answerable), 3)
+        "over_select_rate": round(sum(p is not None and bool(p - g) for p, g in answerable) / len(answerable), 3)
         if answerable else None,
         "parse_errors": n - len(ok),
     }

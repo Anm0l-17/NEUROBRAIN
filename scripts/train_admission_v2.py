@@ -4,7 +4,7 @@ LoCoMo (CC BY-NC 4.0, snap-research/locomo @ 3eb6f2c) labels: a dialogue turn is
 "keep" when a session observation cites its dia_id, otherwise "skip". Those
 observations are model-generated, not human labels. Splits are by conversation
 (LoCoMo: 7 train / 1 validation / 2 test) and by template family for our reviewed
-fictional rows (70/15/15), so no group crosses splits.
+fictional rows (three families: 1,422 / 18 / 48 rows), so no group crosses splits.
 
 Two configurations: `locomo` (LoCoMo train only) and `combined` (LoCoMo + ours).
 Each reports, per test source, the MLP and the embedding-logistic baseline at the

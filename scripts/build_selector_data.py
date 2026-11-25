@@ -117,7 +117,8 @@ def squad(rng, path, titles=None):
         hit = [s for s, b, e in sents if b <= a_start and a_start + len(a_text) <= e]
         if len(hit) != 1 or len(hit[0]) > MAX_LINE:
             continue
-        others = [s for s in closest(q, texts, 6, exclude=hit) if a_text not in s]
+        variants = {v.lower() for v in answers["text"]}
+        others = [s for s in closest(q, texts, 6, exclude=hit) if not any(v in s.lower() for v in variants)]
         if len(others) >= 4 and rng.random() < 0.75:
             yield r["title"], "answer", row(rng, "squad2", q, hit + others[:4], {0})
         elif len(others) >= 5:
@@ -142,7 +143,7 @@ def hotpot(rng, path, limit):
         if not 2 <= len(gold) <= 3 or any(len(g) > MAX_LINE for g in gold):
             continue
         q, ans = r["question"], r["answer"]
-        others = [s for s in closest(q, pool, 8, exclude=gold) if ans not in s]
+        others = [s for s in closest(q, pool, 8, exclude=gold) if ans.lower() not in s.lower()]
         if rng.random() < 0.2 and len(others) >= 5 and ans not in ("yes", "no"):
             yield "removed", row(rng, "hotpotqa", q, others[:5], set())
         elif len(others) >= 5 - len(gold):
@@ -168,7 +169,10 @@ def longmemeval(rng, path, limit):
         if not 1 <= len(gold) <= 3 or any(len(g) > 600 for g in gold):
             continue
         pool = [t["content"].strip() for t in turns if len(t["content"]) <= 600]
-        others = closest(x["question"], pool, 5, exclude=gold)
+        others = closest(x["question"], pool, 8, exclude=gold)
+        ans = str(x["answer"]).lower()
+        if len(ans) <= 40:  # short answers can be matched; long ones are explanations
+            others = [o for o in others if ans not in o.lower()]
         if len(others) < 5 - len(gold):
             continue
         lines = gold + others[: 5 - len(gold)]
@@ -257,6 +261,11 @@ def main():
     for q, lines, gold in FIXTURES:
         sealed.append(row(rng, "fixture", q, lines, gold))
 
+    # Drop dev and sealed rows that reuse any evidence line seen in an earlier split.
+    seen = {e["text"] for r in train for e in r["evidence"]}
+    dev = [r for r in dev if not any(e["text"] in seen for e in r["evidence"])]
+    seen |= {e["text"] for r in dev for e in r["evidence"]}
+    sealed = [r for r in sealed if r["source"] == "fixture" or not any(e["text"] in seen for e in r["evidence"])]
     rng.shuffle(train)
     rng.shuffle(dev)
     manifest = {
