@@ -28,6 +28,26 @@ gold citation (HotpotQA needs two or three).
 and MLP projections) on `train.jsonl` (3,000 rows, 35% empty targets) and scores base vs adapter on `dev.jsonl`.
 The sealed set is never downloaded on Kaggle.
 
+## Converted base (the comparator) and deployment check
+
+`neurobrain-selector-base`: HF Qwen3.5-4B @ 851bf6e → `convert_hf_to_gguf.py` from llama.cpp `1a0b56c`
+(the last commit before qwen tensors were fused; the newest converter writes `ssm_beta_alpha` and
+`attn_qkv_gate`, which Ollama 0.40.16's runtime rejects) → `llama-quantize Q4_K_M` → `ollama create` with the
+official `qwen3.5` renderer and parser (`scripts/selector.Modelfile`). Raw: `converted_base_eval.json`, 822 s.
+
+| Model | Exact match | Answerable exact | Abstain recall | Abstain precision | Over-select |
+|---|---|---|---|---|---|
+| Official `qwen3.5:4b` (nvfp4) | 0.414 | 0.557 | 0.118 | 1.000 | 0.118 |
+| Converted base (Q4_K_M) | 0.416 | **0.496** | **0.252** | 0.909 | 0.142 |
+
+Conversion alone changes behaviour (more abstaining, fewer exact answers), which is why the gate compares the
+adapter with the converted base. Both fail the same two near-miss fixtures.
+
+Deployment rehearsal: `scripts/deploy_selector.sh` merged a zero-initialised LoRA with the training targets
+(30.5 M parameters: 24 linear-attention, 8 full-attention and 32 MLP blocks, vision excluded), converted,
+quantized and created it in Ollama. The quantized file was byte-identical to the converted base and gave
+identical answers on 30 of 30 sealed rows, so a trained adapter can reach the app by this route.
+
 ## Promotion gate (fixed before any adapter result exists)
 
 The comparator is the **converted base**: unmodified HF Qwen3.5-4B taken through the same merge → GGUF →
@@ -35,9 +55,9 @@ quantize → `ollama create` route the adapter will use, scored with `scripts/ev
 nvfp4 `qwen3.5:4b` numbers above only describe today's app. The adapter, served the same way, is promoted only
 if on the sealed set:
 
-1. Abstain recall is at least **0.50** (base: 0.118).
+1. Abstain recall is at least **0.50** (converted base 0.252; official 0.118).
 2. Abstain precision is at least **0.85** (it must not refuse real questions to get there).
-3. Exact match on answerable rows is no worse than the converted base minus 0.02.
+3. Exact match on answerable rows is at least **0.476** (converted base 0.496 minus 0.02).
 4. All 9 answerable demo fixtures still pass, and at least 5 of the 6 near-miss fixtures return no citation.
 5. No parse or request errors.
 
