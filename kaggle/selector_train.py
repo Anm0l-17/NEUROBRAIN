@@ -1,6 +1,7 @@
 """NeuroBrain citation-selector QLoRA on one Kaggle T4. Self-contained: runs from a fresh kernel.
 
-Kaggle settings: Accelerator = GPU T4 x1, Internet = On. Run all cells.
+Kaggle settings: Accelerator = GPU T4 x1, Internet = On. Start it with Save Version -> Save & Run All
+(a background run); an idle interactive session is killed and loses /kaggle/working.
 Before running, set COMMIT to the pushed commit that contains data/selector_v1.
 Outputs in /kaggle/working/selector_v1: adapter/, checkpoints, run.json, dev_*.json, adapter.zip.
 """
@@ -125,11 +126,14 @@ order = [i for _ in range(EPOCHS) for i in random.Random(SEED).sample(range(len(
 for k, idx in enumerate(order):
     msgs = train[idx]["messages"]
     prefix = prompt_ids(msgs)
-    target = tok.encode(msgs[-1]["content"], add_special_tokens=False) + [tok.eos_token_id]
-    if len(prefix) + len(target) > MAX_LEN:
+    # Render the whole conversation so the answer ends with Qwen's real turn end (<|im_end|>).
+    full = tok.encode(tok.apply_chat_template(msgs, tokenize=False, enable_thinking=False),
+                      add_special_tokens=False)
+    assert full[: len(prefix)] == prefix, "chat template prefix mismatch"
+    if len(full) > MAX_LEN:
         continue
-    x = torch.tensor([prefix + target], device="cuda")
-    labels = torch.tensor([[-100] * len(prefix) + target], device="cuda")
+    x = torch.tensor([full], device="cuda")
+    labels = torch.tensor([[-100] * len(prefix) + full[len(prefix):]], device="cuda")
     loss = model(x, labels=labels, use_cache=False).loss / ACCUM
     assert math.isfinite(loss.item())
     loss.backward()

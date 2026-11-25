@@ -1,7 +1,7 @@
 """Build citation-selector training, development and sealed evaluation rows.
 
 Each row mirrors the app's real Ollama request (`extract.selection_payload`): a
-question plus exactly five evidence lines with 32-hex citation IDs, and the target
+question plus one to five evidence lines with 32-hex citation IDs, and the target
 `{"citations": [...]}`, which is empty when no line answers the question.
 
 Sources (downloaded by hand into .neurobrain/raw, hashes pinned below):
@@ -65,9 +65,15 @@ def cite(rng):
 
 
 def row(rng, source, question, lines, gold):
-    """lines: 5 texts; gold: indexes that answer. Shuffles and assigns citations."""
+    """lines: 5 texts, closest distractors first; gold: indexes that answer.
+
+    The app's search returns 1 to 5 lines, so keep every gold line plus the closest
+    distractors up to a random count in that range, then shuffle and assign citations.
+    """
     assert len(lines) == 5 and len(set(lines)) == 5
-    order = list(range(5))
+    keep = rng.randint(max(1, len(gold)), 5)
+    extra = [i for i in range(5) if i not in gold][: keep - len(gold)]
+    order = sorted(gold) + extra
     rng.shuffle(order)
     evidence = [{"citation": cite(rng), "text": lines[i]} for i in order]
     target = [e["citation"] for e, i in zip(evidence, order) if i in gold]
