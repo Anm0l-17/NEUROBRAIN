@@ -109,3 +109,5 @@ baseline still wins every comparison, so the MLP stays advisory and the logistic
 scorer. Limits: our 1,584 rows come from only three template families, so "ours" train, validation (18 rows)
 and test (48 rows) are each one family; the 48-row test, reserved since v1, has now been used and is no longer
 untouched. LoCoMo has 10 conversations, so its test is two conversations. Treat these numbers as small-sample.
+
+The v1 sealed set is now retired; v2 data and gate: `reports/selector_v2/README.md`.
