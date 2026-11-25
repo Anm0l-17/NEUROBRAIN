@@ -63,7 +63,7 @@ from 0.081 (first tenth) to 0.014 (last tenth). Dev: exact 0.759, abstain recall
 | Gate item | Needed | Adapter v2 | Result |
 |---|---|---|---|
 | 1. Abstain recall | ≥ 0.50 | 0.791 | pass |
-| 2. Abstain precision | ≥ 0.85 | 0.870 (87/100) | pass (two more wrong refusals would fail it) |
+| 2. Abstain precision | ≥ 0.85 | 0.870 (87/100) | pass (three more wrong refusals, 87/103, would fail it) |
 | 3. Answerable exact | ≥ 93 of 181 | 140 of 181 | pass |
 | 4. Fixtures | 9/9 answerable, ≥ 5/6 near-miss abstain | 9/9, 6/6 | pass |
 | 5. Errors | 0 | 0 | pass |
@@ -71,5 +71,5 @@ from 0.081 (first tenth) to 0.014 (last tenth). Dev: exact 0.759, abstain recall
 Rebalancing the data fixed most of v1's over-abstention (no citation on 13 of 181 answerable rows, v1 53) while
 keeping all six demo near misses abstaining. On LongMemEval, 4 of 28 answerable rows get no citation (v1: 11); that
 slice is small (30 rows) and its abstain precision is 0.2 (1 of 5), so conversation-style refusals remain the
-weakest area. HotpotQA abstain precision is 0.688. The precision margin is two rows, so treat v2 as a clear
+weakest area. HotpotQA abstain precision is 0.688. The precision margin is three rows, so treat v2 as a clear
 improvement that passes the agreed bar, not as a large safety margin.
