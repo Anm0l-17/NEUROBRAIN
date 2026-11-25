@@ -7,7 +7,7 @@ Adapter v1 failed its gate by over-abstaining (`reports/selector_v1/README.md`):
 
 | Split | Rows | Empty | SQuAD 2.0 | HotpotQA | LongMemEval | Fixtures |
 |---|---|---|---|---|---|---|
-| Train | 2,808 | 19.9% | 1,150 (22% empty) | 1,400 | 258 (86 questions × 3 renders) | — |
+| Train | 2,808 | 20.0% | 1,150 (22% empty) | 1,400 | 258 (86 questions × 3 renders) | — |
 | Dev | 323 | 40.9% | 150 | 144 | 29 | — |
 | Sealed | 291 | 37.8% | 150 (60 answerable) | 96 | 30 (28 answerable) | 15 (same rows as v1) |
 
