@@ -7,7 +7,7 @@ because the note that answers them never reached those five.
 
 1. **Stemming.** The search index now uses SQLite's `porter unicode61` tokenizer, so "books" matches "book" and
    "picks" matches "pick". Existing databases are rebuilt automatically the first time the new code opens them.
-   This takes under a second for a personal store. `user_version` stays at 1, so older app builds (for example the
+   Rebuilding 5,000 notes took 0.006 s on this Mac. `user_version` stays at 1, so older app builds (for example the
    `demo-week-2026-11` checkout) can still open the file.
 2. **Stopwords.** Question words ("who", "what", "is", "the", and so on) are dropped from the query. Before, they
    let unrelated lines such as the parking note fill the top five. If a query has nothing but stopwords, the
@@ -45,7 +45,11 @@ NEUROBRAIN_SELECTOR_MODEL=neurobrain-selector-v2 PYTHONPATH=src .venv/bin/python
 | ...of which do not answer the question | 85 | 54 |
 
 Fixed: "Who picks the books?" now cites "…handed book selection to Daniel". "What is the current book?" now cites
-"…switched to Salt and Signal". No other answer changed. The selector runs at temperature 0, so each replay
+"…switched to Salt and Signal". No other answer changed.
+
+Also replayed on a copy of the database the old code wrote during the 25 Nov check (windowed extraction, real
+Qwen notes). It migrated on open, both former misses got the right citation, and the violet and holiday party
+near misses stayed empty. The selector runs at temperature 0, so each replay
 gives the same answers.
 
 ### Which change fixes what (recall@5, no selector)
