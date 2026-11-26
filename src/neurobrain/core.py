@@ -415,7 +415,7 @@ class MemoryStore:
                 results.append(item)
                 if len(results) == limit:
                     break
-        if results and results[0]["observation"]:
+        if limit > 1 and results and results[0]["observation"]:
             self._add_next_note(results, seen, limit)
         return results
 

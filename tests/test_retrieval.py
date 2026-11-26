@@ -56,7 +56,8 @@ class RetrievalTests(unittest.TestCase):
         found = self.texts("What is the current book?")
         self.assertEqual(found[0], NOTES[2])
         self.assertIn(NOTES[3], found)
-        self.assertEqual(len(self.store.search("What is the current book?", limit=1)), 1)
+        one = self.store.search("What is the current book?", limit=1)
+        self.assertEqual([r["text"] for r in one], [NOTES[2]])
 
     def test_next_note_takes_the_last_slot_when_results_are_full(self):
         save_page(self.store)

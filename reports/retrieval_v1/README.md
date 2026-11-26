@@ -15,7 +15,8 @@ because the note that answers them never reached those five.
 3. **Next note.** For saved pages (observations), the top note's next note on the same page gets the last slot.
    Notes are pieces of one page, so the next one often finishes the thought without repeating its words: "The
    current book is no longer The Glass Orchard" is followed by "The group dropped it halfway through and switched
-   to Salt and Signal". Plain file passages are not affected.
+   to Salt and Signal". Plain file passages and `limit=1` searches are not affected. When there are fewer hits
+   than the limit, the next note is added even if it shares no query word.
 
 The `search()` contract is unchanged: same keys, citations as `source_id:chunk_id`, only active and allowed
 sources, the same duplicate linking. `rank` is `NULL` for the next-note row, and nothing in `src` reads `rank`.
