@@ -50,10 +50,11 @@ has a change word:
 - **LongMemEval knowledge-update** (MIT): kept only where the newest answering turn contains the answer and the
   older turns do not (42 of 72 questions, plus 6 abstention questions). Split by question: 40% sealed, 10% dev,
   50% train. The text cue is often weak ("I've tried four so far"), so this slice is small and noisy, and it is
-  reported but not gated.
+  reported but not gated. `stale` lists only the older answering turns; a distractor can hold another
+  outdated value (e.g. the Crash Course row's "my 12th video").
 - **Book-club fixtures** (sealed only): the notes stored from the user's page in the 25 Nov live check, with all five lines
-  shown. They cover dues amount, dues collector, venue, start time, which Thursday, who picks the books, the current book, and
-  one near miss ("How much is the library room fee?", where no line states it).
+  shown. They cover dues amount, dues collector, venue, start time, which Thursday, who picks the books, the current book (gold:
+  "no longer The Glass Orchard" plus "switched to Salt and Signal", since the second only says "it"), and one near miss ("How much is the library room fee?", where no line states it).
 - LoCoMo is not used. Licences are in `data/selector_v3/NOTICE.md`.
 - Deterministic: two builds under different `PYTHONHASHSEED` values give identical files (hashes in `manifest.json`).
 
@@ -75,11 +76,12 @@ Fixtures: base 9/9 answerable, 4/6 near miss; v2 9/9, 6/6.
 
 | Model | Current-value exact | Stale line cited | Sibling + lone exact | Original exact | Absent exact | LongMemEval update exact | Book club | Abstain precision (file) |
 |---|---|---|---|---|---|---|---|---|
-| Converted base | 0.283 (26/92) | 82/116 | 83/83 | 9/16 | 35/49 | 8/19 | 1/8 (dues 0/2) | 1.000 |
-| Adapter v2 | 0.500 (46/92) | 61/116 | 83/83 | 6/16 | 49/49 | 8/19 | 2/8 (dues 0/2) | 0.926 |
+| Converted base | 0.283 (26/92) | 82/115 | 83/83 | 9/16 | 35/49 | 8/19 | 1/8 (dues 0/2) | 1.000 |
+| Adapter v2 | 0.500 (46/92) | 61/115 | 83/83 | 6/16 | 49/49 | 8/19 | 2/8 (dues 0/2) | 0.926 |
 
 v2 reproduces the live failure. It fails both dues questions and cites a stale line on more than half the rows that
-have one, mostly by citing old and new together.
+have one. In 55 of those 61 it cites only the old line, picking the outdated value over the new one
+(the converted base mostly cites both: 54 of 82).
 
 ## Promotion gate v3 (fixed before any v3 adapter result exists)
 
@@ -99,7 +101,7 @@ On `eval_update_sealed.jsonl` (new):
 
 6. **Update accuracy.** Current-value exact (`update_current`) is at least **0.75**, i.e. at least **69 of 92**
    (v2: 46).
-7. A stale line is cited on at most **29 of 116** rows that have one, i.e. at most 25% (v2: 61).
+7. A stale line is cited on at most **28 of 115** rows that have one, i.e. at most 25% (v2: 61).
 8. **Book club.** Both dues fixtures pass, and at least **6 of 8** book-club fixtures pass (v2: 2/8).
 9. **No shortcut.** Sibling, lone_old and lone_update exact together are at least **79 of 83** (v2: 83). File-wide
    abstain precision is at least **0.85** (v2: 0.926).

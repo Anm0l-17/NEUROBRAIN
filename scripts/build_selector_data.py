@@ -429,7 +429,7 @@ NAMES = {  # split -> (group words, group kinds, people)
         ["Yusuf", "Elena", "Marcus", "Anika", "Pablo", "Ingrid", "Kofi", "Selin"],
     ),
 }
-FEE_NOUNS = ["membership fee", "monthly subscription", "entry fee"]
+FEE_NOUNS = ["membership fee", "monthly subscription", "joining fee"]
 KINDS = {"current": 35, "sibling": 15, "original": 8, "lone_old": 10, "lone_update": 10, "absent": 22}
 
 
@@ -537,7 +537,7 @@ BOOK_FIXTURES = [  # (question, evidence indexes into BOOK, gold, stale); every 
     ("What time does the book club start?", [0, 7, 4, 3, 6], {7}, {0}),
     ("Which Thursday does the book club meet?", [0, 4, 5, 7, 3], {4}, {0}),
     ("Who picks the books?", [8, 1, 11, 12, 3], {8}, set()),
-    ("What is the current book?", [11, 12, 1, 8, 3], {12}, {1}),
+    ("What is the current book?", [11, 12, 1, 8, 3], {11, 12}, set()),  # 12 says "it"; 11 names what it replaced
     ("How much is the library room fee?", [10, 7, 9, 2, 3], set(), set()),
 ]
 
