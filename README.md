@@ -22,7 +22,7 @@ Useful information gets scattered across project notes, decisions, and personal 
 
 NeuroBrain explores that workflow through a small, inspectable system. Import selected Markdown or text files, retrieve exact passages with source references, and preview and verify the removal of a saved source.
 
-> **Current checkpoint (16 Nov 2026):** a working local prototype with a browser interface, command-line tools, SQLite search, optional offline hybrid retrieval, and a mentor-demo path: selected Notion page, saved file and approved VS Code window → local Qwen3.5 extraction of exact quotes → versioned memory → cited answers in Open WebUI. A Supabase PostgreSQL storage path is written and tested against a local PostgreSQL and mocks, but **has not been run on a hosted Supabase project**, and live Notion and screen capture are not yet verified on the presentation Mac. The admission MLP is a preview score only and never decides what is saved.
+> **Current checkpoint (26 Nov 2026):** a working local prototype. A selected Notion page, saved file or approved VS Code window → local Qwen3.5 extraction of exact quotes → versioned SQLite memory → a fine-tuned **citation selector** picks which stored note answers → Open WebUI shows that note word for word with its citation, or says it has no evidence. Live gates for hosted Supabase saving, screen OCR, Notion and Open WebUI [passed on 24 Nov](reports/demo_week/2026-11-24-hosted.md) on fictional data. Selector v2 [passed its sealed gate](reports/selector_v2/README.md); it can still cite an outdated line when a page records a change.
 
 ## What works today
 
@@ -30,12 +30,12 @@ NeuroBrain explores that workflow through a small, inspectable system. Import se
 | --- | --- |
 | **Selected note import** | Import permitted `.md` and `.txt` files from an explicitly allowed folder. |
 | **Versioned memory** | Keep source history while searching current note versions; repeated imports are idempotent. |
-| **Traceable retrieval** | Find exact excerpts with citations and source locations. |
-| **Evidence-based responses** | Use extractive answers and receive a no-evidence response for unsupported queries. |
-| **Optional hybrid search** | Combine lexical and offline MiniLM retrieval, with explicit lexical fallback when the model is unavailable. |
+| **Traceable retrieval** | Find exact excerpts with citations and source locations. Word search with stemming, question words dropped, and the top note's next note from the same page. |
+| **Evidence-based responses** | Chat answers are stored quotes chosen by a model; it cannot write new text. Unsupported questions can get a no-evidence reply (not guaranteed). |
+| **Optional hybrid search** | Add offline MiniLM retrieval (`NEUROBRAIN_HYBRID=1` for chat answers). Off by default: it [did not do better](reports/hybrid_v1/README.md). |
 | **Controlled forgetting** | Preview source deletion, confirm it with a token, and receive a verification receipt. |
 | **Two interfaces** | Explore the same memory services through the local browser UI or CLI. |
-| **Observed input and extraction** | Read a selected file, a flat Notion page or an approved VS Code window (local OCR); local Qwen3.5 returns exact quotes with source, route, time and evidence spans, validated before saving. |
+| **Observed input and extraction** | Read a selected file, a flat Notion page or an approved VS Code window (local OCR); local Qwen3.5 returns exact quotes with source, route, time and evidence spans, validated before saving. Long pages are read in windows, with a second pass over skipped sentences. |
 | **Open WebUI bridge** | `neurobrain-memory` answers with cited excerpts from the same database; `--hosted` reads the signed-in Supabase rows instead. |
 | **Cross-route linking** | A single-sentence fact seen on screen and then saved to its file shows as one logical note, and forgetting takes both. Multi-line files whose extracted quotes differ from the capture do not link yet. |
 | **Import policy** | Reject unsupported, hidden, oversized, excluded, and obvious credential-containing notes. Credential detection is heuristic. |
@@ -44,23 +44,30 @@ NeuroBrain explores that workflow through a small, inspectable system. Import se
 
 ```mermaid
 flowchart LR
-    A[Selected TXT / Markdown notes] --> B[Import policy checks]
-    B --> C[SQLite: sources, versions and chunks]
-    C --> D[Lexical search]
-    C --> E[Optional offline MiniLM]
-    D --> F[Cited evidence]
-    E --> F
-    F --> G[Local browser / CLI]
-    G --> H[Preview and confirm forgetting]
-    H --> I[Remove saved source and derived data]
-    I --> J[Verify deletion receipt]
+    A[Selected file, Notion page or VS Code window] --> B[Privacy and input policy]
+    B --> C[Qwen3.5 4B: pick exact quotes]
+    C --> D[Check every quote against the source text]
+    D --> E[(SQLite: sources, versions, notes, FTS5)]
+    Q[Question] --> R[Word search: top five notes]
+    E --> R
+    R --> S[Citation selector: which notes answer?]
+    S --> T[Re-check the notes still exist]
+    T --> U[Quoted answer with citations, or no evidence]
+    F[Preview and confirm forgetting] --> E
 ```
 
-The default path uses SQLite full-text search and extracts evidence from stored notes. The optional semantic experiment loads a pinned `all-MiniLM-L6-v2` encoder from the local model cache. It does not generate answers or train on your notes.
+| Step | What does it | Trained here? |
+|---|---|---|
+| Extraction | Pretrained `qwen3.5:4b` in Ollama | No |
+| Retrieval | SQLite FTS5 ([retrieval v1](reports/retrieval_v1/README.md)) | No |
+| Answer selection | `neurobrain-selector-v2`, a QLoRA fine-tune of Qwen3.5 4B | Yes |
+| Admission score (preview only) | Small MLP; a logistic baseline [still beats it](reports/admission_v2/report.json) | Yes, advisory |
+
+The selector only returns citation IDs from the five notes it was shown. The app then shows those notes' own text. Selecting the wrong note is still possible.
 
 ## Get started
 
-**Requirements:** Python 3.11 or newer with SQLite FTS5 support. The core prototype uses the Python standard library; optional ML experiments require their own dependencies and cached model files.
+**Requirements:** Python 3.11 or newer with SQLite FTS5 support. The core uses only the standard library. The chat app also needs [Ollama](https://ollama.com) with `qwen3.5:4b`.
 
 ```bash
 git clone https://github.com/Anm0l-17/NEUROBRAIN.git
@@ -68,7 +75,37 @@ cd NEUROBRAIN
 gh repo clone yalongwastaken/git-koi
 ```
 
-### 1. Run the guided demo
+### Chat with your saved notes (one command)
+
+Run these from the repository root.
+
+Save a note into the database (here a fictional demo file):
+
+```bash
+PYTHONPATH=src python3 -m neurobrain.observe --file examples/notes/project.md --save-extracted
+```
+
+Create a key for the chat bridge:
+
+```bash
+export NEUROBRAIN_CHAT_KEY="$(python3 -c 'import secrets; print(secrets.token_urlsafe(32))')"
+```
+
+Start the bridge on port 8766:
+
+```bash
+scripts/start_prototype.sh
+```
+
+`start_prototype.sh` is set up for the project Mac: it uses the interpreter and database under the main checkout path written at the top of the script. Change `ROOT` there for another machine.
+
+- **Selector model:** `NEUROBRAIN_SELECTOR_MODEL`, default `neurobrain-selector-v2`. The adapter weights are not in this repository; build the model with `scripts/deploy_selector.sh` from a trained adapter. Without it, start with `NEUROBRAIN_SELECTOR_MODEL=qwen3.5:4b scripts/start_prototype.sh` (weaker: see below).
+- **Open WebUI:** add an OpenAI-compatible connection to `http://127.0.0.1:8766/v1` with the same key, then pick **`neurobrain-memory`**. Picking the raw Ollama model bypasses the memory entirely.
+- Ask complete questions ("When is the violet demonstration?"). The bridge does not use chat history.
+
+Other inputs (Notion page, VS Code window, hosted Supabase) are described in the [observation quickstart](docs/Observation_Quickstart.md) and [cloud setup](docs/Cloud_Setup.md).
+
+### Model-free demo
 
 ```bash
 PYTHONPATH=src python3 scripts/demo.py
@@ -76,7 +113,7 @@ PYTHONPATH=src python3 scripts/demo.py
 
 The demo uses fictional notes and a temporary database. It checks import, duplicate handling, policy rejection, retrieval, unsupported-query behavior, and deletion across a restart.
 
-### 2. Open the browser interface
+### Browser interface and command line
 
 ```bash
 PYTHONPATH=src python3 -m neurobrain import examples/notes/project.md
@@ -84,22 +121,17 @@ PYTHONPATH=src python3 -m neurobrain import examples/notes/preferences.txt
 PYTHONPATH=src python3 -m neurobrain serve
 ```
 
-Open **[localhost:8765](http://127.0.0.1:8765)**. The example notes are fictional; saved application data defaults to `.neurobrain/memory.sqlite3`.
-
-### 3. Explore from the command line
+Open **[localhost:8765](http://127.0.0.1:8765)**. This interface uses a separate database, `.neurobrain/memory.sqlite3`.
 
 ```bash
 # Search for cited passages
 PYTHONPATH=src python3 -m neurobrain search "SQLite"
 
-# Request an extractive response
-PYTHONPATH=src python3 -m neurobrain ask "SQLite"
-
 # List saved sources and inspect the active import policy
 PYTHONPATH=src python3 -m neurobrain sources
 PYTHONPATH=src python3 -m neurobrain policy
 
-# Try optional hybrid retrieval; reports fallback if unavailable
+# Hybrid retrieval; reports fallback if the encoder is unavailable
 PYTHONPATH=src python3 -m neurobrain hybrid "database choice"
 ```
 
@@ -107,28 +139,32 @@ For your own notes, pass `--notes-root /absolute/path/to/notes` **before the com
 
 ## Evidence & evaluation
 
-The repository includes reproducible checks and small fictional evaluation sets. These establish prototype behavior, **not real-world accuracy or research superiority**.
+All sets are small and mostly fictional or public-derived. They establish prototype behaviour, **not real-world accuracy or research superiority**.
 
 | Recorded evaluation | Result | Interpretation |
 | --- | --- | --- |
-| [Lifecycle baseline](reports/baseline_v0.json) | Recorded gate passed | Checks retrieval, unsupported-query abstention, citations, and selective deletion on a small fictional corpus. |
-| [Semantic experiment](reports/semantic_v0.json) | Lexical and semantic Recall@5 both 1.0 across two cases | Confirms the retrieval path works; does not demonstrate a semantic improvement. |
-| [Admission dataset](data/README.md) | 1,584 fictional reviewed records (80-row pilot plus later batches), all labels still draft | Annotation and consistency work; a small experimental MLP preview score exists but did not beat the logistic baseline and does not control storage. |
+| [Selector v2, sealed set](reports/selector_v2/README.md) (291 rows) | Answerable exact 140/181 (unmodified model, same route: 96/181); abstain precision 0.870 | Passed the gate fixed before training; the precision margin is only three rows |
+| [Live check](reports/live_check/README.md), 20 questions, 26 Nov | v2 15/20; base Qwen 12/20 | A spot check written after seeing the notes, not a sealed score. Three v2 misses cite outdated lines |
+| [Extraction recall](reports/extraction_recall_v1/README.md), four locked pages | Facts kept 39/46 before the fix, 45/46 after | Nearly all of the gain is one encoding fix. The same live check on a re-extracted copy: v2 14/20 → 17/20 |
+| [Retrieval v1](reports/retrieval_v1/README.md), 16 answerable questions | Answering note in the top five: 14/16 → 16/16 | Fixed set; a crowded store still loses one |
+| [Hybrid retrieval](reports/hybrid_v1/README.md) | No gain; live check on new notes 17/20 → 15/20 | Stays off |
+| [Live gates, 24 Nov](reports/demo_week/2026-11-24-hosted.md) | Supabase save/retry/second user/forget, screen OCR, Notion, Open WebUI passed | One fictional run each; a real network-drop test was not run |
+| [Generator fine-tuning](reports/generator_pilot_v1/RESULTS.md) | Failed its gates; not deployed | Negative result |
+| [Admission model](reports/admission_v2/report.json) | MLP loses to logistic regression | Advisory preview only; never decides what is saved |
 
-Run the core tests and baseline evaluation:
+Run the tests (103; tests needing torch are skipped without it):
 
 ```bash
 PYTHONPATH=src python3 -m unittest discover -s tests
-PYTHONPATH=src python3 scripts/evaluate_baseline.py --output reports/baseline_v0.json
 ```
 
-Optional semantic evaluation, using an environment with the required dependencies and pinned model already cached:
+## Known limits
 
-```bash
-PYTHONPATH=src .venv/bin/python scripts/evaluate_semantic.py --output reports/semantic_v0.json
-```
-
-See the [verification report](reports/verification.md), [pilot review](reports/admission_pilot_review_2026-11-06.md), and [repeat review](reports/admission_pilot_repeat_2026-11-06.md) for context and limitations.
+- The selector can cite an outdated line after an update ("dues are $5" after "dues went up to $8"). A newer selector (v3) has data and a gate ready but is **not trained** yet.
+- Word search misses questions that share no word with the answering note.
+- Extraction can still skip facts, differs a little between runs, and makes saving slower than the 5-second target on long pages.
+- Chat questions that lean on history ("what about it?") are refused by a word-list guard that is sometimes wrong.
+- Screen capture supports one approved VS Code window; pause/stop and revoked-permission cases are untested.
 
 ## Privacy & forgetting
 
@@ -144,13 +180,12 @@ Deletion does not erase backups, copied text, browser history, or old database c
 | Stage | Status |
 | --- | --- |
 | Local import, versioning, cited search, browser UI, and verified forgetting | Implemented |
-| Offline MiniLM and hybrid retrieval | Implemented as an optional experiment; broader evaluation needed |
-| Memory admission dataset and annotation rules | Fictional pilot under review; labels remain drafts |
-| Supabase PostgreSQL storage for observations (Drive for original files, optional) | Written and tested on a local PostgreSQL and with mocks; hosted Supabase acceptance (signed-in write, retry, second-user isolation) still open |
-| Live Notion and screen-capture acceptance on the presentation Mac | Open (see [Day 1 evidence](reports/demo_week/2026-11-17.md)) |
-| Fine-tuned generator, temporal reasoning, automatic learned admission, always-on dashboard | Future work |
-
-The local SQLite implementation remains the reference while the planned cloud version works toward feature parity. See the [cloud setup and implementation plan](docs/Cloud_Setup.md).
+| Notion, saved-file and screen-OCR extraction; Open WebUI answers | Implemented; live gates passed 24 Nov |
+| Supabase PostgreSQL storage for observations | Passed hosted checks 24 Nov. Google Drive file import has no recorded hosted run |
+| Fine-tuned citation selector | v2 deployed; v3 (newest fact) awaiting training |
+| Offline MiniLM and hybrid retrieval | Optional; off by default |
+| Memory admission dataset and model | Fictional data, draft labels; advisory only |
+| Generator fine-tuning, temporal graph, Titans/Mamba, model unlearning, skill synthesis, forensic deletion | Future work |
 
 ## Explore the project
 
@@ -161,7 +196,7 @@ The local SQLite implementation remains the reference while the planned cloud ve
 | Annotation work | [Dataset overview](data/README.md) · [Annotation guide v1.2](docs/Admission_Annotation_Guide_v1_2.md) |
 | Research reading | [22-paper research spreadsheet](outputs/01a1a787-93d4-7031-a06c-cf0b8e572393/NeuroBrain_22_Research_Papers.xlsx) |
 | Implementation | [Application](src/neurobrain/) · [Scripts](scripts/) · [Tests](tests/) |
-| Progress record | [Session log](reports/session_log.md) · [Readiness 16 Nov](reports/Prototype_Readiness_2026_11_16.md) · [Demo run sheet](docs/Prototype_Demo_Runbook.md) |
+| Progress record | [Session log](reports/session_log.md) · [Finish plan](docs/Final_Plan_2026-11-30.md) · [Demo run sheet](docs/Prototype_Demo_Runbook.md) |
 
 ---
 
