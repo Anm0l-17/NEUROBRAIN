@@ -2,8 +2,8 @@
 
 Kaggle settings: Accelerator = GPU T4 x1, Internet = On. Start it with Save Version -> Save & Run All
 (a background run); an idle interactive session is killed and loses /kaggle/working.
-Before running, set COMMIT to the pushed commit that contains data/selector_v2.
-Outputs in /kaggle/working/selector_v2: adapter/, checkpoints, run.json, dev_*.json, adapter.zip.
+Before running, set COMMIT to the pushed commit that contains data/selector_v3.
+Outputs in /kaggle/working/selector_v3: adapter/, checkpoints, run.json, dev_*.json, adapter.zip.
 """
 
 # %% [1] Packages: pinned to the versions scripts/deploy_selector.sh was verified with
@@ -28,15 +28,15 @@ from pathlib import Path
 
 COMMIT = "8496da403afeb18b39da1414d4d41322fffa2384"
 REPO = "https://raw.githubusercontent.com/Anm0l-17/NEUROBRAIN"
-OUT = Path("/kaggle/working/selector_v2")
+OUT = Path("/kaggle/working/selector_v3")
 OUT.mkdir(parents=True, exist_ok=True)
 assert re.fullmatch(r"[0-9a-f]{40}", COMMIT), "Set COMMIT to the full pushed commit SHA"
 
-manifest = json.loads(urllib.request.urlopen(f"{REPO}/{COMMIT}/data/selector_v2/manifest.json").read())
+manifest = json.loads(urllib.request.urlopen(f"{REPO}/{COMMIT}/data/selector_v3/manifest.json").read())
 
 
 def fetch(name):
-    raw = urllib.request.urlopen(f"{REPO}/{COMMIT}/data/selector_v2/{name}").read()
+    raw = urllib.request.urlopen(f"{REPO}/{COMMIT}/data/selector_v3/{name}").read()
     assert hashlib.sha256(raw).hexdigest() == manifest["files"][name], f"{name} hash mismatch"
     (OUT / name).write_bytes(raw)
     return [json.loads(line) for line in raw.decode().splitlines()]
@@ -177,4 +177,4 @@ adapter_dev = dev_score(model, "adapter")
 }, indent=2))
 subprocess.run(["zip", "-qr", str(OUT / "adapter.zip"), "adapter", "run.json", "dev_base.json",
                 "dev_adapter.json"], cwd=OUT, check=True)
-print("SELECTOR_DONE", REV, step, "steps; download /kaggle/working/selector_v2/adapter.zip")
+print("SELECTOR_DONE", REV, step, "steps; download /kaggle/working/selector_v3/adapter.zip")

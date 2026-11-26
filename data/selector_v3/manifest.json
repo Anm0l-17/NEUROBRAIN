@@ -1,0 +1,176 @@
+{
+  "seed": 17,
+  "update_seed": 23,
+  "raw_sha256": {
+    "squad_train.parquet": "f6da32ffb482ff463ad056477740d1bb284b96a45db3a08bee6a225ca6abf291",
+    "squad_val.parquet": "0560174ab095c5ac0a8c8dc8da05f1625453c45a77e4ce9cabc6947ddfdd24cb",
+    "hotpot_train0.parquet": "76d3bb3048a7cc73c1958107c0c5872a00d7e7d00c105b81e92f6769e7822e68",
+    "hotpot_val.parquet": "c20b638ca82b21d04fe12e14ff417ad05153d4d215a65de54497fca4e972f7c6",
+    "lme_oracle.json": "821a2034d219ab45846873dd14c14f12cfe7776e73527a483f9dac095d38620c"
+  },
+  "files": {
+    "train.jsonl": "b5131a1595a3be3326b5f61c8516fce37a8d2a3092350dbe724ffa2a486c0ef4",
+    "dev.jsonl": "b4957891960ae0a459bc49231ce367f41028a12abf02208c12a2c31dac191f11",
+    "eval_sealed.jsonl": "87e7f9fd081585ae477ed672fe7a6554640f23e47cf5b63adba0a3b0df79478d",
+    "eval_update_sealed.jsonl": "92d2ef746a44d33bbfbc3d47f847b42a9a7850b75ead8473223b8309e6921ca3"
+  },
+  "counts": {
+    "train": {
+      "rows": 3676,
+      "empty_targets": 730,
+      "by_source": {
+        "hotpotqa": {
+          "rows": 1400,
+          "empty": 253
+        },
+        "longmemeval": {
+          "rows": 351,
+          "empty": 66
+        },
+        "longmemeval_update": {
+          "rows": 75,
+          "empty": 9
+        },
+        "squad2": {
+          "rows": 1150,
+          "empty": 250
+        },
+        "update_absent": {
+          "rows": 152,
+          "empty": 152
+        },
+        "update_current": {
+          "rows": 251,
+          "empty": 0
+        },
+        "update_lone_old": {
+          "rows": 75,
+          "empty": 0
+        },
+        "update_lone_update": {
+          "rows": 65,
+          "empty": 0
+        },
+        "update_original": {
+          "rows": 63,
+          "empty": 0
+        },
+        "update_sibling": {
+          "rows": 94,
+          "empty": 0
+        }
+      }
+    },
+    "dev": {
+      "rows": 386,
+      "empty_targets": 149,
+      "by_source": {
+        "hotpotqa": {
+          "rows": 144,
+          "empty": 36
+        },
+        "longmemeval": {
+          "rows": 29,
+          "empty": 7
+        },
+        "longmemeval_update": {
+          "rows": 3,
+          "empty": 1
+        },
+        "squad2": {
+          "rows": 150,
+          "empty": 90
+        },
+        "update_absent": {
+          "rows": 15,
+          "empty": 15
+        },
+        "update_current": {
+          "rows": 16,
+          "empty": 0
+        },
+        "update_lone_old": {
+          "rows": 5,
+          "empty": 0
+        },
+        "update_lone_update": {
+          "rows": 8,
+          "empty": 0
+        },
+        "update_original": {
+          "rows": 5,
+          "empty": 0
+        },
+        "update_sibling": {
+          "rows": 11,
+          "empty": 0
+        }
+      }
+    },
+    "eval_sealed": {
+      "rows": 261,
+      "empty_targets": 119,
+      "by_source": {
+        "fixture": {
+          "rows": 15,
+          "empty": 6
+        },
+        "hotpotqa": {
+          "rows": 96,
+          "empty": 23
+        },
+        "squad2": {
+          "rows": 150,
+          "empty": 90
+        }
+      }
+    },
+    "eval_update_sealed": {
+      "rows": 267,
+      "empty_targets": 51,
+      "by_source": {
+        "fixture_update": {
+          "rows": 8,
+          "empty": 1
+        },
+        "longmemeval_update": {
+          "rows": 19,
+          "empty": 1
+        },
+        "update_absent": {
+          "rows": 49,
+          "empty": 49
+        },
+        "update_current": {
+          "rows": 92,
+          "empty": 0
+        },
+        "update_lone_old": {
+          "rows": 29,
+          "empty": 0
+        },
+        "update_lone_update": {
+          "rows": 18,
+          "empty": 0
+        },
+        "update_original": {
+          "rows": 16,
+          "empty": 0
+        },
+        "update_sibling": {
+          "rows": 36,
+          "empty": 0
+        }
+      }
+    }
+  },
+  "splits": "SQuAD train articles split 90/10 into train/dev by title; SQuAD validation and HotpotQA validation are sealed only; LongMemEval single-session/multi-session questions go to dev and train (none is unseen); LongMemEval knowledge-update split by question 40/10/50 into sealed-update/dev/train; update templates use disjoint attribute families, names and entity kinds for the sealed update file; fixtures sealed only. No sealed row shares a question or evidence line with the v1 or v2 sealed sets.",
+  "update_policy": "Gold is the line holding the current value only; outdated lines are listed in 'stale'.",
+  "licenses": {
+    "squad2": "CC BY-SA 4.0, rajpurkar/squad_v2",
+    "hotpotqa": "CC BY-SA 4.0, hotpotqa/hotpot_qa distractor",
+    "longmemeval": "MIT, xiaowu0162/longmemeval-cleaned (oracle)",
+    "update templates": "Project-authored fictional text",
+    "fixture": "Project-authored fictional notes, evaluation only"
+  }
+}
