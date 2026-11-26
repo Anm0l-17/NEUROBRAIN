@@ -41,7 +41,7 @@ fixture pages were used to choose the prompt; the second pass was designed after
 
 | Variant | Facts kept (79) | Book club (20) | Raw |
 |---|---|---|---|
-| Old code | 70 (65 to 71 across four runs; the first file was overwritten) | 17 (15 in the first run) | [before.json](before.json), `dev_runs/7pages_old_run*.json` |
+| Old code | 70 (65 to 71 across four runs; the first file was overwritten) | 17 (15 in the five-page run, `dev_runs/5pages_old.json`) | [before.json](before.json), `dev_runs/7pages_old_run*.json` |
 | Prompt, no second pass | 70 | 20 | [dev_runs/7pages_prompt_no_retry.json](dev_runs/7pages_prompt_no_retry.json) |
 | Shipped | 79 (both runs) | 20 | [after.json](after.json) |
 
@@ -71,7 +71,7 @@ Raw: `live_check_{untouched,a_old,b_new,b_new_repeat}.json`, `extra_{a_old,b_new
 - v2 still misses both dues questions (it cites the old $5 line; this is the v3 target) and "library room fee".
 - Base Qwen got one trick question worse ("discount at the library" now cites a dues line). Base is not the
   live selector.
-- The repeat was a second extraction that produced the same 14 notes.
+- The repeat was a second extraction that produced the same 14 notes (`live_notes_new_repeat.json`).
 
 ## Demo fixtures F01–F11
 
@@ -81,9 +81,9 @@ are simulated in this harness. F12 and F13 need hosted Supabase and were not run
 
 ## Limits
 
-- Up to one extra model call per window, so saving a page takes about 20 to 30% longer. Screen watch mode
+- Up to one extra model call per window. Total time rose by 26% on the locked pages and about 6% on the development pages. Screen watch mode
   re-extracts on every change. The 5-second source-to-saved target was already missed for long pages.
-- Extra notes past 12 per window are cut.
+- Extra notes past 12 per window are cut. If the second call fails, the first call's notes are kept.
 - A second-pass sentence is sent without its neighbours, so a stored note can start with "He" or "It".
 - `reports/retrieval_v1/run.py` uses notes written into its fixture, so it cannot see extraction changes.
 

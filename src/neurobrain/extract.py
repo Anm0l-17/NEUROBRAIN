@@ -67,9 +67,12 @@ def generate(text):
         found = window_notes(part)
         # The model sometimes stops partway; ask once more about the sentences it did not quote.
         missed = uncovered(part, found)
-        if missed:
-            # extract_notes allows 12 notes per window, so extra ones past that are cut.
-            found += window_notes("\n".join(missed))[: max(0, 12 - len(found))]
+        # extract_notes allows 12 notes per window: no call when full, extra ones are cut.
+        if missed and len(found) < 12:
+            try:
+                found += window_notes("\n".join(missed))[: 12 - len(found)]
+            except MemoryError:
+                pass  # It only adds notes; a failed second call keeps the first one's.
         notes += found
     return {"notes": notes}
 

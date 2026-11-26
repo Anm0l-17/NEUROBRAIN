@@ -256,6 +256,32 @@ class ExtractionTests(unittest.TestCase):
             extract_notes(text, "page", "page-api")
         request.assert_called_once()
 
+    def test_failed_second_call_keeps_the_first_calls_notes(self):
+        text = "Mira likes tea. Parking is free."
+        replies = [{"notes": [{"kind": "fact", "quote": "Mira likes tea."}]}]
+
+        def request(_):
+            if replies:
+                return replies.pop()
+            raise MemoryError("Local extraction failed or returned incomplete output")
+
+        with patch("neurobrain.extract.structured_request", request):
+            out = extract_notes(text, "page", "page-api")
+        self.assertEqual([n["text"] for n in out["notes"]], ["Mira likes tea."])
+
+    def test_second_call_never_pushes_a_window_past_twelve_notes(self):
+        text = "Mira likes tea. Parking is free."
+        first = [{"kind": "fact", "quote": "Mira likes tea."}] * 11
+        extra = [{"kind": "fact", "quote": "Parking is free."}] * 5
+        request = Mock(side_effect=[{"notes": list(first)}, {"notes": extra}])
+        with patch("neurobrain.extract.structured_request", request):
+            out = extract_notes(text, "page", "page-api")
+        self.assertEqual(len(out["notes"]), 2)
+        request = Mock(return_value={"notes": first + first[:1]})
+        with patch("neurobrain.extract.structured_request", request):
+            extract_notes(text, "page", "page-api")
+        request.assert_called_once()
+
     def test_unresolved_reference_quotes_are_dropped_not_stored(self):
         text = "Move that to there after the thing is finished.\nMira booked it for Friday."
         out = extract_notes(

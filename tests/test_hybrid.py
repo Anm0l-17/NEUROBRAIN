@@ -4,7 +4,7 @@ import tempfile
 import threading
 import unittest
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 from urllib.request import Request, urlopen
 
 from neurobrain import semantic
@@ -85,22 +85,48 @@ class HybridAnswerTests(unittest.TestCase):
             text = json.load(response)["choices"][0]["message"]["content"]
         self.assertIn("closed for repairs", text)
 
-    def test_off_by_default_and_lexical_without_the_encoder(self):
-        for value, query, expected in (
-            ("", "Which venue?", 0),
-            ("1", "Which venue?", 0),
-            ("1", "cafe", 1),
-        ):
-            self.hybrid(value)
+    @unittest.skipIf(np is None, "numpy unavailable")
+    def test_off_unless_the_flag_is_one(self):
+        for value in ("", "0"):
+            self.hybrid(value, encoder=FakeEncoder())
             with MemoryStore(self.db, self.root) as store:
-                self.assertEqual(len(search_evidence(store, query)), expected)
+                self.assertEqual(search_evidence(store, "Which venue?"), [])
+
+    def test_lexical_without_the_encoder(self):
+        self.hybrid()
+        with MemoryStore(self.db, self.root) as store:
+            self.assertEqual(search_evidence(store, "Which venue?"), [])
+            self.assertEqual(len(search_evidence(store, "cafe")), 1)
+
+    def test_hosted_memory_keeps_its_own_search(self):
+        self.hybrid(encoder=object())
+        hosted = Mock(spec=["search"])
+        self.assertIs(search_evidence(hosted, "cafe"), hosted.search.return_value)
+
+    @unittest.skipIf(np is None, "numpy unavailable")
+    def test_save_during_an_index_rebuild_is_not_missed(self):
+        test = self
+
+        class SavesWhileEncoding(FakeEncoder):
+            saved = False
+
+            def encode(self, texts, **kwargs):
+                if not self.saved:
+                    self.saved = True
+                    test.save("hall.md", "Another cafe is in Hall C.")
+                return super().encode(texts, **kwargs)
+
+        self.hybrid(encoder=SavesWhileEncoding())
+        with MemoryStore(self.db, self.root) as store:
+            search_evidence(store, "Which venue?")
+            self.assertEqual(len(search_evidence(store, "Which venue?")), 2)
 
     @unittest.skipIf(np is None, "numpy unavailable")
     def test_index_picks_up_saves_from_another_connection(self):
         self.hybrid(encoder=FakeEncoder())
         with MemoryStore(self.db, self.root) as store:
             self.assertEqual(len(search_evidence(store, "Which venue?")), 1)
-            self.save("hall.md", "The new venue is Hall C.")
+            self.save("hall.md", "Another cafe is in Hall C.")
             self.assertEqual(len(search_evidence(store, "Which venue?")), 2)
 
     @unittest.skipIf(np is None, "numpy unavailable")

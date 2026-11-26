@@ -77,7 +77,11 @@ gh repo clone yalongwastaken/git-koi
 
 ### Chat with your saved notes (one command)
 
-Run these from the repository root.
+Run these from the repository root. The start script serves the database of the checkout named by `ROOT` at its top, and the save command writes to the database of the folder you run it in, so both must be the same checkout. On a new machine, first set `ROOT` to your clone and create the interpreter the script expects:
+
+```bash
+python3 -m venv .venv
+```
 
 Save a note into the database (here a fictional demo file):
 
@@ -91,13 +95,17 @@ Create a key for the chat bridge:
 export NEUROBRAIN_CHAT_KEY="$(python3 -c 'import secrets; print(secrets.token_urlsafe(32))')"
 ```
 
+Copy it for Open WebUI (macOS):
+
+```bash
+printf %s "$NEUROBRAIN_CHAT_KEY" | pbcopy
+```
+
 Start the bridge on port 8766:
 
 ```bash
 scripts/start_prototype.sh
 ```
-
-`start_prototype.sh` is set up for the project Mac: it uses the interpreter and database under the main checkout path written at the top of the script. Change `ROOT` there for another machine.
 
 - **Selector model:** `NEUROBRAIN_SELECTOR_MODEL`, default `neurobrain-selector-v2`. The adapter weights are not in this repository; build the model with `scripts/deploy_selector.sh` from a trained adapter. Without it, start with `NEUROBRAIN_SELECTOR_MODEL=qwen3.5:4b scripts/start_prototype.sh` (weaker: see below).
 - **Open WebUI:** add an OpenAI-compatible connection to `http://127.0.0.1:8766/v1` with the same key, then pick **`neurobrain-memory`**. Picking the raw Ollama model bypasses the memory entirely.
@@ -152,7 +160,7 @@ All sets are small and mostly fictional or public-derived. They establish protot
 | [Generator fine-tuning](reports/generator_pilot_v1/RESULTS.md) | Failed its gates; not deployed | Negative result |
 | [Admission model](reports/admission_v2/report.json) | MLP loses to logistic regression | Advisory preview only; never decides what is saved |
 
-Run the tests (103; tests needing torch are skipped without it):
+Run the tests (108; tests needing torch are skipped without it):
 
 ```bash
 PYTHONPATH=src python3 -m unittest discover -s tests

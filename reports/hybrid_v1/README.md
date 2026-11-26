@@ -42,7 +42,7 @@ On the old notes, the "closed for renovation" line is still not in the hybrid's 
 motivated this experiment is answered by the extraction fix instead, because the stored note now holds the whole
 sentence, cause included.
 
-## Cost when switched on ([startup.jsonl](startup.jsonl), three fresh processes, 41 notes)
+## Cost when switched on ([startup.jsonl](startup.jsonl), three fresh processes, about 40 notes)
 
 | | |
 |---|---|

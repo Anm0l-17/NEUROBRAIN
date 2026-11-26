@@ -265,10 +265,10 @@ ASCII made "Café" come back as "Cafè"; quotes were rewritten; and sentences we
 | Set | Old code | Final code |
 |---|---|---|
 | Four locked pages, written before any variant ran (46 facts) | 39 | **45** |
-| Seven development pages (79 facts; these shaped the fix) | 65–71 over four runs | 79 |
+| Seven development pages (79 facts; these shaped the fix) | 70–71 (an earlier run, file not kept, gave 65) | 79 |
 
 On the locked pages the one-line encoding fix alone also reached 45; the prompt change and second pass were needed for
-the book club page. The cost is about 20–30% more time per page. Eleven scripted lifecycle fixtures (F01–F11,
+the book club page. Total extraction time rose by 26% on the locked pages and about 6% on the development pages. Eleven scripted lifecycle fixtures (F01–F11,
 including the vague-sentence case F07) passed; Notion and OCR are simulated in that script.
 
 ### 5.4 Retrieval
@@ -291,7 +291,7 @@ tested.
 
 ### 5.6 Software tests
 
-103 automated tests pass on the development Mac (26 November); some are skipped where the optional libraries are
+108 automated tests pass on the development Mac (26 November); some are skipped where the optional libraries are
 missing. They cover import policy, versioning, exact spans, forgetting, citation checks, the chat bridge, retrieval
 and extraction handling, mostly with stand-ins for the models. **[Final count to be recorded on the submitted
 code.]**
