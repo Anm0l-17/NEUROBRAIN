@@ -26,7 +26,7 @@ import time
 import urllib.request
 from pathlib import Path
 
-COMMIT = "27becd1f2ab59baa67ed1485c91ea7d7066fb074"
+COMMIT = "22c5f7f9ca004bff01a150818e8a267c1b700f24"
 REPO = "https://raw.githubusercontent.com/Anm0l-17/NEUROBRAIN"
 OUT = Path("/kaggle/working/selector_v3")
 OUT.mkdir(parents=True, exist_ok=True)

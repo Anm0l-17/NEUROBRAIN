@@ -5,7 +5,7 @@ lines when a page records a change. Asked "How much are the dues?", it cites "Du
 Daniel" and ignores "dues went up to $8 a month". v2's data excluded LongMemEval knowledge-update questions, so it
 never trained on an old value and a new value side by side.
 
-`data/selector_v3` is built by `scripts/build_selector_data.py`; data commit `27becd1`, pinned in `kaggle/selector_train.py`.
+`data/selector_v3` is built by `scripts/build_selector_data.py`; data commit `22c5f7f`, pinned in `kaggle/selector_train.py`.
 v3 changes only the data. The request format (`extract.selection_payload` / `SELECT_SYSTEM`) and the notebook
 settings are the same as v2's: seed 17, lr 2e-4, rank 16, accumulation 8, one epoch.
 
