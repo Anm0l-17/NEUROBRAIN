@@ -5,6 +5,7 @@ set -e
 cd "$(dirname "$0")/.."
 ROOT=/Users/anmolkumar/Documents/MINORPROJECT-NEUROBRAIN
 [ -n "$NEUROBRAIN_CHAT_KEY" ] || { echo "Set NEUROBRAIN_CHAT_KEY first."; exit 1; }
-ollama list | grep -q '^neurobrain-selector-v2' || { echo "Model neurobrain-selector-v2 is missing in Ollama."; exit 1; }
+L=$(ollama list 2>/dev/null) || { echo "Ollama is not running. Open the Ollama app first."; exit 1; }
+echo "$L" | grep -q '^neurobrain-selector-v2:' || { echo "Model neurobrain-selector-v2 is missing in Ollama."; exit 1; }
 NEUROBRAIN_SELECTOR_MODEL=neurobrain-selector-v2 PYTHONPATH=src exec "$ROOT/.venv/bin/python" -m neurobrain.chat_api \
   --db "$ROOT/.neurobrain/observations.sqlite3" --notes-root "$ROOT/examples/notes" "$@"
