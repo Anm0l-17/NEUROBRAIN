@@ -21,6 +21,8 @@ To bridge the gap between static, stateless AI assistants and human cognitive fu
 
 ## 2. Scope & Technical Boundaries
 
+> **First-release scope (26 November 2026):** this page is the original vision. The first release is narrower, as the scope ladder in `docs/NeuroBrain_Working_Plan.md` sets out. It does **not** include continuous screen recording, silent history capture, autonomous skill synthesis or script execution, a state-space working memory, Titans/Mamba-style test-time training, a memory graph, or model unlearning. These are future work.
+
 * **In-Scope (What we will build):**
   * A local Python-based agent harness that manages background context capture.
   * A dual-tier memory system comprising a short-term linear-time sequence buffer and a structured episodic memory layer.
@@ -88,3 +90,15 @@ To satisfy academic requirements, this project is grounded in peer-reviewed jour
 ---
 
 ## 6. System Architecture & Modules
+
+The diagram in `docs/NeuroBrain_Architecture.mmd` is the planned cloud design. The modules that exist (26 November 2026) are in `src/neurobrain/`:
+
+| Module | Job |
+|---|---|
+| `core.py` | Import policy, SQLite storage with versions, word search, forgetting with receipts |
+| `observe.py`, `screen.py` | Read an approved file, Notion page or VS Code window (local OCR) |
+| `extract.py` | Pick exact quotes with local Qwen, verify them, answer by selecting stored notes |
+| `chat_api.py` | OpenAI-compatible bridge for Open WebUI |
+| `cloud.py` | Supabase storage and Drive import |
+| `semantic.py` | Optional MiniLM hybrid search |
+| `cli.py`, `web.py`, `chat.py` | Command line, local browser page, plain chat tester |

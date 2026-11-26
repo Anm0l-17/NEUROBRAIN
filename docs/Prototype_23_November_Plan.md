@@ -11,6 +11,8 @@ The immediate delivery order is data extraction, structured notes, then question
 
 This priority order supersedes the scheduling emphasis below; the existing privacy and release checks still apply.
 
+**Update 26 November:** one narrow fine-tune was done after this note. A Qwen 3.5 4B citation selector (v2) passed its gate on 25 November and picks which stored note answers (`reports/selector_v2/README.md`). Extraction still uses the pretrained model. Generator fine-tuning stays deferred.
+
 Revised 10 November. Acceptance is a live, supervised macOS session. The supervisor uses at least two approved applications, changes something on screen, and shows the teacher which observations NeuroBrain kept in the hosted database. The terminal is the operator interface. A third app is the target once two pass the whole workflow.
 
 ## What the teacher sees
