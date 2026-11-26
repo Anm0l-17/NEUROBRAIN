@@ -44,9 +44,12 @@ SCHEMA = {
 WINDOW = 600  # characters per extraction call; one call on a long paragraph stops partway.
 
 
+_SENTENCE_END = r"(?<=[.!?])\s+|\n+"
+
+
 def windows(text):
     """Consecutive slices of text, cut after sentence or line ends, each near WINDOW."""
-    cuts = [m.end() for m in re.finditer(r"(?<=[.!?])\s+|\n+", text)] + [len(text)]
+    cuts = [m.end() for m in re.finditer(_SENTENCE_END, text)] + [len(text)]
     parts, start, end = [], 0, 0
     for cut in cuts:
         if cut - start > WINDOW and end > start:
@@ -61,13 +64,38 @@ def generate(text):
     """Extract from each window so later sentences (often the updates) are not skipped."""
     notes = []
     for part in windows(text):
-        result = generate_window(part)
-        if not isinstance(result, dict) or set(result) != {"notes"}:
-            raise MemoryError("Invalid extraction structure")
-        if not isinstance(result["notes"], list):
-            raise MemoryError("Invalid note list")
-        notes += result["notes"]
+        found = window_notes(part)
+        # The model sometimes stops partway; ask once more about the sentences it did not quote.
+        missed = uncovered(part, found)
+        if missed:
+            # extract_notes allows 12 notes per window, so extra ones past that are cut.
+            found += window_notes("\n".join(missed))[: max(0, 12 - len(found))]
+        notes += found
     return {"notes": notes}
+
+
+def window_notes(text):
+    result = generate_window(text)
+    if not isinstance(result, dict) or set(result) != {"notes"}:
+        raise MemoryError("Invalid extraction structure")
+    if not isinstance(result["notes"], list):
+        raise MemoryError("Invalid note list")
+    return result["notes"]
+
+
+def uncovered(text, notes):
+    """Sentences of text that no note quotes, in whole or in part."""
+    quotes = [
+        n["quote"].strip().lower()
+        for n in notes
+        if isinstance(n, dict) and isinstance(n.get("quote"), str) and n["quote"].strip()
+    ]
+    return [
+        s.strip()
+        for s in re.split(_SENTENCE_END, text)
+        if s.strip()
+        and not any(q in s.lower() or s.strip().lower() in q for q in quotes)
+    ]
 
 
 def generate_window(text):
@@ -88,9 +116,17 @@ def generate_window(text):
                     "Include explicit subjects and qualifications in each quote. "
                     "Return an empty notes array when nothing is useful. Schema: "
                     + json.dumps(SCHEMA)
+                    # Both sentences are needed: reports/extraction_recall_v1.
+                    + " Copy each quote character for character from the observation, keeping every "
+                    "comma and word; never shorten or rephrase it."
+                    " Check every sentence in turn and quote each one that states a fact."
                 ),
             },
-            {"role": "user", "content": json.dumps({"observation": text})},
+            # Escaped "é" made the model write "è", failing the exact-quote check.
+            {
+                "role": "user",
+                "content": json.dumps({"observation": text}, ensure_ascii=False),
+            },
         ],
     )
     return structured_request(payload)

@@ -1,0 +1,50 @@
+{
+ "qwen3.5:4b": [
+  {
+   "q": "Who founded the club?",
+   "ok": false,
+   "cited": [
+    "Priya stepped back as organizer in March and handed book selection to Daniel"
+   ],
+   "top5": [
+    "club now meets at the Wharf Road public library in Meeting Room B, at 6:30 pm instead of 7:00",
+    "The Harbor Lights book club meets on the first Thursday of every month at Corner Grind Café on Wharf Road, starting at 7:00 pm.",
+    "Priya stepped back as organizer in March and handed book selection to Daniel"
+   ]
+  },
+  {
+   "q": "What discount do members get at the café?",
+   "ok": false,
+   "cited": [],
+   "top5": [
+    "The Harbor Lights book club meets on the first Thursday of every month at Corner Grind Café on Wharf Road, starting at 7:00 pm.",
+    "members are asked to finish it by chapter 18",
+    "Collecting dues then passed to a new member, Aisha",
+    "too many members had a clash with a school event"
+   ]
+  }
+ ],
+ "neurobrain-selector-v2": [
+  {
+   "q": "Who founded the club?",
+   "ok": false,
+   "cited": [],
+   "top5": [
+    "club now meets at the Wharf Road public library in Meeting Room B, at 6:30 pm instead of 7:00",
+    "The Harbor Lights book club meets on the first Thursday of every month at Corner Grind Café on Wharf Road, starting at 7:00 pm.",
+    "Priya stepped back as organizer in March and handed book selection to Daniel"
+   ]
+  },
+  {
+   "q": "What discount do members get at the café?",
+   "ok": false,
+   "cited": [],
+   "top5": [
+    "The Harbor Lights book club meets on the first Thursday of every month at Corner Grind Café on Wharf Road, starting at 7:00 pm.",
+    "members are asked to finish it by chapter 18",
+    "Collecting dues then passed to a new member, Aisha",
+    "too many members had a clash with a school event"
+   ]
+  }
+ ]
+}

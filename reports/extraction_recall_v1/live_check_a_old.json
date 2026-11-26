@@ -1,0 +1,317 @@
+{
+ "qwen3.5:4b": {
+  "answerable": "6/13",
+  "partial": 3,
+  "refused_correctly": "5/7",
+  "total": "11/20",
+  "rows": [
+   {
+    "q": "Who picks the books?",
+    "ok": true,
+    "partial": false,
+    "cited": [
+     "Priya stepped back as organizer in March and handed book selection to Daniel"
+    ]
+   },
+   {
+    "q": "What is the current book?",
+    "ok": true,
+    "partial": false,
+    "cited": [
+     "The current book is no longer The Glass Orchard"
+    ]
+   },
+   {
+    "q": "Where does the book club meet?",
+    "ok": false,
+    "partial": true,
+    "cited": [
+     "The Harbor Lights book club meets on the first Thursday of every month at Corner Grind Café on Wharf Road, starting at 7:00 pm.",
+     "club now meets at the Wharf Road public library in Meeting Room B, at 6:30 pm instead of 7:00"
+    ]
+   },
+   {
+    "q": "What time does the book club start?",
+    "ok": false,
+    "partial": true,
+    "cited": [
+     "The Harbor Lights book club meets on the first Thursday of every month at Corner Grind Café on Wharf Road, starting at 7:00 pm.",
+     "club now meets at the Wharf Road public library in Meeting Room B, at 6:30 pm instead of 7:00"
+    ]
+   },
+   {
+    "q": "Which Thursday does the book club meet on?",
+    "ok": false,
+    "partial": false,
+    "cited": [
+     "The Harbor Lights book club meets on the first Thursday of every month at Corner Grind Café on Wharf Road, starting at 7:00 pm."
+    ]
+   },
+   {
+    "q": "Is parking free?",
+    "ok": true,
+    "partial": false,
+    "cited": [
+     "Parking is free on the street after 6 pm."
+    ]
+   },
+   {
+    "q": "Which chapter should we read up to?",
+    "ok": false,
+    "partial": false,
+    "cited": [
+     "members are asked to finish it by chapter 18"
+    ]
+   },
+   {
+    "q": "How much are the dues?",
+    "ok": false,
+    "partial": true,
+    "cited": [
+     "Dues are $5 a month, collected by Daniel, who keeps a spreadsheet of who has paid.",
+     "dues went up to $8 a month to cover the library room fee"
+    ]
+   },
+   {
+    "q": "Who collects the dues?",
+    "ok": false,
+    "partial": false,
+    "cited": [
+     "Dues are $5 a month, collected by Daniel, who keeps a spreadsheet of who has paid."
+    ]
+   },
+   {
+    "q": "Why did the meetings move to the second Thursday?",
+    "ok": true,
+    "partial": false,
+    "cited": [
+     "too many members had a clash with a school event"
+    ]
+   },
+   {
+    "q": "Why did the book club venue change?",
+    "ok": false,
+    "partial": false,
+    "cited": [
+     "club now meets at the Wharf Road public library in Meeting Room B, at 6:30 pm instead of 7:00"
+    ]
+   },
+   {
+    "q": "Why did the dues go up?",
+    "ok": true,
+    "partial": false,
+    "cited": [
+     "dues went up to $8 a month to cover the library room fee"
+    ]
+   },
+   {
+    "q": "When is the amber lighthouse audit?",
+    "ok": true,
+    "partial": false,
+    "cited": [
+     "The amber lighthouse audit for project Wren is on 9 December 2026."
+    ]
+   },
+   {
+    "q": "When is the book club holiday party?",
+    "ok": true,
+    "partial": false,
+    "cited": []
+   },
+   {
+    "q": "How much is the library room fee?",
+    "ok": false,
+    "partial": false,
+    "cited": [
+     "dues went up to $8 a month to cover the library room fee"
+    ]
+   },
+   {
+    "q": "When is the Saffron Bridge kickoff?",
+    "ok": true,
+    "partial": false,
+    "cited": []
+   },
+   {
+    "q": "When is the violet demonstration?",
+    "ok": true,
+    "partial": false,
+    "cited": []
+   },
+   {
+    "q": "When is the amber lighthouse party?",
+    "ok": false,
+    "partial": false,
+    "cited": [
+     "The amber lighthouse audit for project Wren is on 9 December 2026."
+    ]
+   },
+   {
+    "q": "What discount do members get at the library?",
+    "ok": true,
+    "partial": false,
+    "cited": []
+   },
+   {
+    "q": "When is the pink submarine launch?",
+    "ok": true,
+    "partial": false,
+    "cited": []
+   }
+  ]
+ },
+ "neurobrain-selector-v2": {
+  "answerable": "8/13",
+  "partial": 0,
+  "refused_correctly": "6/7",
+  "total": "14/20",
+  "rows": [
+   {
+    "q": "Who picks the books?",
+    "ok": true,
+    "partial": false,
+    "cited": [
+     "Priya stepped back as organizer in March and handed book selection to Daniel"
+    ]
+   },
+   {
+    "q": "What is the current book?",
+    "ok": true,
+    "partial": false,
+    "cited": [
+     "The group dropped it halfway through and switched to Salt and Signal"
+    ]
+   },
+   {
+    "q": "Where does the book club meet?",
+    "ok": true,
+    "partial": false,
+    "cited": [
+     "club now meets at the Wharf Road public library in Meeting Room B, at 6:30 pm instead of 7:00"
+    ]
+   },
+   {
+    "q": "What time does the book club start?",
+    "ok": true,
+    "partial": false,
+    "cited": [
+     "club now meets at the Wharf Road public library in Meeting Room B, at 6:30 pm instead of 7:00"
+    ]
+   },
+   {
+    "q": "Which Thursday does the book club meet on?",
+    "ok": false,
+    "partial": false,
+    "cited": [
+     "The Harbor Lights book club meets on the first Thursday of every month at Corner Grind Café on Wharf Road, starting at 7:00 pm."
+    ]
+   },
+   {
+    "q": "Is parking free?",
+    "ok": true,
+    "partial": false,
+    "cited": [
+     "Parking is free on the street after 6 pm."
+    ]
+   },
+   {
+    "q": "Which chapter should we read up to?",
+    "ok": false,
+    "partial": false,
+    "cited": [
+     "members are asked to finish it by chapter 18"
+    ]
+   },
+   {
+    "q": "How much are the dues?",
+    "ok": false,
+    "partial": false,
+    "cited": [
+     "Dues are $5 a month, collected by Daniel, who keeps a spreadsheet of who has paid."
+    ]
+   },
+   {
+    "q": "Who collects the dues?",
+    "ok": false,
+    "partial": false,
+    "cited": [
+     "Dues are $5 a month, collected by Daniel, who keeps a spreadsheet of who has paid."
+    ]
+   },
+   {
+    "q": "Why did the meetings move to the second Thursday?",
+    "ok": true,
+    "partial": false,
+    "cited": [
+     "too many members had a clash with a school event"
+    ]
+   },
+   {
+    "q": "Why did the book club venue change?",
+    "ok": false,
+    "partial": false,
+    "cited": []
+   },
+   {
+    "q": "Why did the dues go up?",
+    "ok": true,
+    "partial": false,
+    "cited": [
+     "dues went up to $8 a month to cover the library room fee"
+    ]
+   },
+   {
+    "q": "When is the amber lighthouse audit?",
+    "ok": true,
+    "partial": false,
+    "cited": [
+     "The amber lighthouse audit for project Wren is on 9 December 2026."
+    ]
+   },
+   {
+    "q": "When is the book club holiday party?",
+    "ok": true,
+    "partial": false,
+    "cited": []
+   },
+   {
+    "q": "How much is the library room fee?",
+    "ok": false,
+    "partial": false,
+    "cited": [
+     "dues went up to $8 a month to cover the library room fee"
+    ]
+   },
+   {
+    "q": "When is the Saffron Bridge kickoff?",
+    "ok": true,
+    "partial": false,
+    "cited": []
+   },
+   {
+    "q": "When is the violet demonstration?",
+    "ok": true,
+    "partial": false,
+    "cited": []
+   },
+   {
+    "q": "When is the amber lighthouse party?",
+    "ok": true,
+    "partial": false,
+    "cited": []
+   },
+   {
+    "q": "What discount do members get at the library?",
+    "ok": true,
+    "partial": false,
+    "cited": []
+   },
+   {
+    "q": "When is the pink submarine launch?",
+    "ok": true,
+    "partial": false,
+    "cited": []
+   }
+  ]
+ }
+}

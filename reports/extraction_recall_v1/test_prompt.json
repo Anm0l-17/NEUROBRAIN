@@ -1,0 +1,96 @@
+{
+ "set": "test",
+ "total": {
+  "found": 43,
+  "facts": 46,
+  "seconds": 27.7
+ },
+ "pages": [
+  {
+   "source": "t-theatre",
+   "facts": 13,
+   "found": 13,
+   "missed": [],
+   "chatter_kept": [],
+   "unmatched": [],
+   "seconds": 8.1,
+   "notes": [
+    "The Lantern Street theatre group rehearses in Studio 2 on Saturday afternoons.",
+    "Ishaan Bose directs the spring production and designs the posters;",
+    "this season they are staging The Tin Orchard,",
+    "the cast must be off-book by 18 January.",
+    "Tickets cost ₹250, and children get in for ₹100.",
+    "The caretaker, Señora Ruiz, opens the side door early and stores the costumes.",
+    "Rehearsals now start at 3 pm instead of 4 pm because the hall is double-booked.",
+    "Neha handled publicity until December, when Omar took it on.",
+    "The fog machine is still broken."
+   ]
+  },
+  {
+   "source": "t-lab",
+   "facts": 10,
+   "found": 9,
+   "missed": [
+    "six working days"
+   ],
+   "chatter_kept": [],
+   "unmatched": [
+    "the reports go out within six working days"
+   ],
+   "seconds": 7.0,
+   "notes": [
+    "The Quartz soil lab accepts samples from Monday to Thursday.",
+    "Each sample needs a label, a collection date and the farmer's village.",
+    "Dr. Anaïs Menon signs the reports",
+    "A basic test costs ₹180",
+    "We decided to drop the paper register in favour of a shared spreadsheet.",
+    "The centrifuge was serviced on 2 November",
+    "Harpreet is the contact for late samples",
+    "The lab will be closed from 24 to 28 December",
+    "Gloves are kept in the blue cabinet"
+   ]
+  },
+  {
+   "source": "t-trek",
+   "facts": 14,
+   "found": 12,
+   "missed": [
+    "landslide",
+    "forest route"
+   ],
+   "chatter_kept": [],
+   "unmatched": [],
+   "seconds": 6.4,
+   "notes": [
+    "The Sunrise trek leaves from Gate 3 of the bus depot at 5:15 am on 7 February.",
+    "Participants should carry two litres of water, a torch and a rain jacket;",
+    "breakfast is provided at the base village.",
+    "Our guide is Tenzin, who speaks Hindi and English.",
+    "The fee went up to ₹1,400 after the transport contractor changed.",
+    "Refunds are possible until 1 February.",
+    "Meera collects medical forms.",
+    "She also keeps the first-aid kit.",
+    "Dogs are not allowed."
+   ]
+  },
+  {
+   "source": "t-library",
+   "facts": 9,
+   "found": 9,
+   "missed": [],
+   "chatter_kept": [],
+   "unmatched": [],
+   "seconds": 6.2,
+   "notes": [
+    "The Oakridge study room can be booked for at most two hours per student.",
+    "Bookings open at 9 am every day through the front desk.",
+    "Food is not permitted inside, although covered water bottles are fine.",
+    "The projector remote is held by Mr. Fernández.",
+    "Late cancellations lead to a one-week ban.",
+    "The committee agreed to extend weekend hours until 10 pm during exam month.",
+    "The air conditioner leaks and has been reported twice.",
+    "Sana prefers bookings by email."
+   ]
+  }
+ ]
+}

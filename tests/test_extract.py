@@ -1,3 +1,4 @@
+import json
 import os
 import tempfile
 import unittest
@@ -210,6 +211,50 @@ class ExtractionTests(unittest.TestCase):
                 self.assertEqual(preview["versions"], 1)
                 store.forget(trip["source_id"], preview["preview_token"])
                 self.assertTrue(store.search("lakh"))
+
+    def test_model_sees_non_ascii_text_unescaped(self):
+        # Sent as "Caf\\u00e9", the real model quoted it back as "Cafè" and the note was dropped.
+        text = "The caf\u00e9 owner, Rosa, gives members 10% off drinks."
+        seen = []
+
+        def request(payload):
+            seen.append(payload["messages"][1]["content"])
+            return {"notes": [{"kind": "fact", "quote": text}]}
+
+        with patch("neurobrain.extract.structured_request", request):
+            out = extract_notes(text, "page", "page-api")
+        self.assertIn(text, seen[0])
+        self.assertEqual([n["text"] for n in out["notes"]], [text])
+
+    def test_skipped_sentences_get_one_more_call_with_only_those_sentences(self):
+        text = "Mira likes tea. Rosa gives 10% off drinks. Parking is free."
+        replies = [
+            ["Mira likes tea."],
+            ["Rosa gives 10% off drinks.", "Rosa invented this quote."],
+        ]
+        seen = []
+
+        def request(payload):
+            seen.append(json.loads(payload["messages"][1]["content"])["observation"])
+            return {"notes": [{"kind": "fact", "quote": q} for q in replies[len(seen) - 1]]}
+
+        with patch("neurobrain.extract.structured_request", request):
+            out = extract_notes(text, "page", "page-api")
+        self.assertEqual(
+            seen, [text, "Rosa gives 10% off drinks.\nParking is free."]
+        )
+        # The reworded retry quote fails the exact match like any other.
+        self.assertEqual(
+            [n["text"] for n in out["notes"]],
+            ["Mira likes tea.", "Rosa gives 10% off drinks."],
+        )
+
+    def test_no_second_call_when_every_sentence_is_quoted(self):
+        text = "Mira likes tea. Parking is free."
+        request = Mock(return_value={"notes": [{"kind": "fact", "quote": text}]})
+        with patch("neurobrain.extract.structured_request", request):
+            extract_notes(text, "page", "page-api")
+        request.assert_called_once()
 
     def test_unresolved_reference_quotes_are_dropped_not_stored(self):
         text = "Move that to there after the thing is finished.\nMira booked it for Friday."
@@ -466,7 +511,11 @@ class ExtractionTests(unittest.TestCase):
             seen.append(part)
             return {"notes": [{"kind": "fact", "quote": part.split(". ")[-1]}]}
 
-        with patch.object(extract, "generate_window", fake):
+        with (
+            patch.object(extract, "generate_window", fake),
+            # Window splitting only; the second pass has its own tests.
+            patch.object(extract, "uncovered", lambda *_: []),
+        ):
             notes = extract.generate(text)["notes"]
         self.assertGreater(len(seen), 1)
         self.assertTrue(all(len(p) <= extract.WINDOW + 60 for p in seen))

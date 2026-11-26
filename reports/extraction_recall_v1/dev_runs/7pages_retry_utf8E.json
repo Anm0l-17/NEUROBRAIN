@@ -1,0 +1,162 @@
+{
+ "total": {
+  "found": 76,
+  "facts": 79,
+  "seconds": 56.0
+ },
+ "pages": [
+  {
+   "source": "book-club",
+   "facts": 20,
+   "found": 19,
+   "missed": [
+    "chapter 10"
+   ],
+   "chatter_kept": [],
+   "unmatched": [
+    "Rosa reserves the back table for them and gives members 10% off drinks"
+   ],
+   "seconds": 15.4,
+   "notes": [
+    "The Harbor Lights book club meets on the first Thursday of every month at Corner Grind Café on Wharf Road, starting at 7:00 pm.",
+    "members are asked to finish it by chapter 18",
+    "Priya Raman founded it in 2023 and still picks the books",
+    "Dues are $5 a month, collected by Daniel, who keeps a spreadsheet of who has paid.",
+    "The café owner, Rosa, reserves the back table for them",
+    "The café owner, Rosa, reserves the back table for them and gives members 10% off drinks.",
+    "Parking is free on the street after 6 pm.",
+    "meetings would move to the second Thursday",
+    "too many members had a clash with a school event",
+    "Corner Grind closed for renovation",
+    "club now meets at the Wharf Road public library in Meeting Room B, at 6:30 pm instead of 7:00",
+    "Priya stepped back as organizer in March and handed book selection to Daniel",
+    "Collecting dues then passed to a new member, Aisha",
+    "dues went up to $8 a month to cover the library room fee",
+    "The current book is no longer The Glass Orchard",
+    "The group dropped it halfway through and switched to Salt and Signal"
+   ]
+  },
+  {
+   "source": "saffron-bridge",
+   "facts": 7,
+   "found": 7,
+   "missed": [],
+   "chatter_kept": [],
+   "unmatched": [],
+   "seconds": 5.8,
+   "notes": [
+    "The Saffron Bridge project kickoff is on 3 December 2026 in Room 4B.",
+    "Every Saffron Bridge API response must include a request ID.",
+    "Priya prefers short bullet-point summaries over long reports.",
+    "The Saffron Bridge budget review is still unresolved because the vendor quote has not arrived.",
+    "The Saffron Bridge beta release is planned for 15 January 2027.",
+    "We decided to use PostgreSQL instead of MongoDB for the Saffron Bridge backend.",
+    "Rohan will own the Saffron Bridge testing plan."
+   ]
+  },
+  {
+   "source": "garden",
+   "facts": 11,
+   "found": 11,
+   "missed": [],
+   "chatter_kept": [],
+   "unmatched": [],
+   "seconds": 7.6,
+   "notes": [
+    "The Fern Hollow community garden opens at 7:00 am on weekdays.",
+    "José Álvarez coordinates the watering rota and keeps the shed key.",
+    "Each plot costs ₹600 a year, and students pay half.",
+    "We agreed to stop using chemical pesticides from March.",
+    "The compost bins, which Meena built last winter, are behind the tool shed.",
+    "The annual seed swap is on 14 February 2027.",
+    "Water pressure is still a problem on the east side because the old pipe leaks.",
+    "Volunteers prefer morning shifts over evening ones.",
+    "The garden moved its meeting from Sunday to Friday.",
+    "Nadia replaced Tom as treasurer in January."
+   ]
+  },
+  {
+   "source": "robotics",
+   "facts": 10,
+   "found": 10,
+   "missed": [],
+   "chatter_kept": [],
+   "unmatched": [],
+   "seconds": 7.5,
+   "notes": [
+    "Prof. Iyer supervises the Kestrel drone project.",
+    "The team decided to switch from Arduino to an STM32 board.",
+    "Flight tests happen in Hall C every Wednesday at 4 pm.",
+    "Farah handles the battery budget, which is capped at ₹18,000.",
+    "The prototype must stay under 1.2 kg.",
+    "The motor supplier is Nørdic Parts, and delivery takes three weeks.",
+    "We still have not fixed the compass drift near the steel beams.",
+    "The first public demo is planned for 5 March 2027.",
+    "Lukas dislikes late-night testing.",
+    "The previous demo date of 20 February was cancelled."
+   ]
+  },
+  {
+   "source": "hostel",
+   "facts": 10,
+   "found": 10,
+   "missed": [],
+   "chatter_kept": [],
+   "unmatched": [],
+   "seconds": 7.4,
+   "notes": [
+    "The Banyan hostel mess serves dinner from 7:30 pm to 9:15 pm.",
+    "Warden Mrs. D'Souza approves late passes, but only until 10:30 pm.",
+    "Laundry is free on Tuesdays and costs ₹40 per load otherwise.",
+    "Residents voted to remove the Friday paneer dish.",
+    "The Wi-Fi password changes on the first of each month.",
+    "Room 214's geyser has been broken since last week; the electrician is expected on Monday.",
+    "Arjun collects the newspaper money.",
+    "He also looks after the common-room remote.",
+    "Guests must sign the register at the gate.",
+    "Quiet hours now start at 11 pm instead of midnight."
+   ]
+  },
+  {
+   "source": "clinic-fresh",
+   "facts": 10,
+   "found": 10,
+   "missed": [],
+   "chatter_kept": [],
+   "unmatched": [],
+   "seconds": 7.0,
+   "notes": [
+    "The Maple Street animal clinic now opens at 8:30 am, except on Sundays.",
+    "Owners should bring the old prescription to every visit.",
+    "Stray rescues are treated free on Thursdays.",
+    "A vaccination visit costs ₹850, and the fee includes a check-up.",
+    "The X-ray machine is out of service until the part arrives.",
+    "Dr. Zoë Fernandes leads the surgery rota.",
+    "The clinic switched its lab partner to Northgate Diagnostics.",
+    "Kabir used to order supplies, but Leela does it now.",
+    "Parking behind the pharmacy is limited to 30 minutes."
+   ]
+  },
+  {
+   "source": "choir-fresh",
+   "facts": 11,
+   "found": 9,
+   "missed": [
+    "chooses the repertoire",
+    "Winter Light"
+   ],
+   "chatter_kept": [],
+   "unmatched": [],
+   "seconds": 5.3,
+   "notes": [
+    "The Riverside choir rehearses on Monday evenings in the old chapel.",
+    "singers should learn the first two movements",
+    "Mrs. Pinto, lends spare music stands and offers singers free tea",
+    "The December concert has been moved from the 12th to the 19th because the chapel roof is being repaired.",
+    "Sopranos meet half an hour early",
+    "Ritu took over attendance from Sam",
+    "Membership is ₹300 a term."
+   ]
+  }
+ ]
+}

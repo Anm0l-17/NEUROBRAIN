@@ -1,0 +1,98 @@
+[
+ {
+  "source": "garden",
+  "text": "Thanks everyone for coming on Saturday. The Fern Hollow community garden opens at 7:00 am on weekdays. José Álvarez coordinates the watering rota and keeps the shed key. Each plot costs ₹600 a year, and students pay half. We agreed to stop using chemical pesticides from March. The compost bins, which Meena built last winter, are behind the tool shed. Okay, see you all. The annual seed swap is on 14 February 2027. Water pressure is still a problem on the east side because the old pipe leaks. Volunteers prefer morning shifts over evening ones. The garden moved its meeting from Sunday to Friday. Nadia replaced Tom as treasurer in January.",
+  "facts": [
+   "7:00 am",
+   "watering rota",
+   "₹600",
+   "students pay half",
+   "chemical pesticides",
+   "behind the tool shed",
+   "14 February 2027",
+   "pipe leaks",
+   "morning shifts",
+   "to Friday",
+   "as treasurer"
+  ],
+  "chatter": [
+   "Thanks everyone",
+   "see you all"
+  ]
+ },
+ {
+  "source": "robotics",
+  "text": "Quick notes from the robotics lab. Prof. Iyer supervises the Kestrel drone project. The team decided to switch from Arduino to an STM32 board. Flight tests happen in Hall C every Wednesday at 4 pm. Farah handles the battery budget, which is capped at ₹18,000. The prototype must stay under 1.2 kg. Lukas dislikes late-night testing. The motor supplier is Nørdic Parts, and delivery takes three weeks. We still have not fixed the compass drift near the steel beams. The first public demo is planned for 5 March 2027. The previous demo date of 20 February was cancelled. Cool, thanks.",
+  "facts": [
+   "Kestrel drone",
+   "STM32",
+   "Hall C",
+   "battery budget",
+   "1.2 kg",
+   "late-night testing",
+   "Parts",
+   "compass drift",
+   "5 March 2027",
+   "was cancelled"
+  ],
+  "chatter": [
+   "Quick notes",
+   "Cool, thanks"
+  ]
+ },
+ {
+  "source": "hostel",
+  "text": "The Banyan hostel mess serves dinner from 7:30 pm to 9:15 pm. Warden Mrs. D'Souza approves late passes, but only until 10:30 pm. Laundry is free on Tuesdays and costs ₹40 per load otherwise. Residents voted to remove the Friday paneer dish. The Wi-Fi password changes on the first of each month. Room 214's geyser has been broken since last week; the electrician is expected on Monday. Arjun collects the newspaper money. He also looks after the common-room remote. Guests must sign the register at the gate. Quiet hours now start at 11 pm instead of midnight.",
+  "facts": [
+   "7:30 pm",
+   "10:30 pm",
+   "Tuesdays",
+   "paneer",
+   "first of each month",
+   "geyser",
+   "newspaper money",
+   "common-room remote",
+   "sign the register",
+   "11 pm"
+  ],
+  "chatter": []
+ },
+ {
+  "source": "clinic-fresh",
+  "text": "Hi team, hope the week went well. The Maple Street animal clinic now opens at 8:30 am, except on Sundays. Dr. Zoë Fernandes leads the surgery rota. A vaccination visit costs ₹850, and the fee includes a check-up. Stray rescues are treated free on Thursdays. The clinic switched its lab partner to Northgate Diagnostics. Kabir used to order supplies, but Leela does it now. The X-ray machine is out of service until the part arrives. Owners should bring the old prescription to every visit. Parking behind the pharmacy is limited to 30 minutes. Great, thanks all.",
+  "facts": [
+   "8:30 am",
+   "surgery rota",
+   "₹850",
+   "includes a check-up",
+   "free on Thursdays",
+   "Northgate",
+   "Leela",
+   "out of service",
+   "old prescription",
+   "30 minutes"
+  ],
+  "chatter": [
+   "hope the week",
+   "thanks all"
+  ]
+ },
+ {
+  "source": "choir-fresh",
+  "text": "The Riverside choir rehearses on Monday evenings in the old chapel. Anand conducts it and chooses the repertoire; this term's piece is Winter Light, and singers should learn the first two movements. Membership is ₹300 a term. The treasurer, Mrs. Pinto, lends spare music stands and offers singers free tea. The December concert has been moved from the 12th to the 19th because the chapel roof is being repaired. Sopranos meet half an hour early. Ritu took over attendance from Sam.",
+  "facts": [
+   "Monday evenings",
+   "chooses the repertoire",
+   "Winter Light",
+   "first two movements",
+   "₹300",
+   "music stands",
+   "free tea",
+   "19th",
+   "roof is being repaired",
+   "half an hour early",
+   "attendance from Sam"
+  ],
+  "chatter": []
+ }
+]
