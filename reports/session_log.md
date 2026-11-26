@@ -234,3 +234,41 @@ deletion and external benchmark work continues under the research roadmap.
 - **Evidence:** `reports/demo_week/2026-11-17.md` (real local Qwen, F01-F11 with Notion/OCR simulated) and `reports/demo_week/2026-11-16-hosted-prep.md`.
 - **Not done:** live Notion, screen capture, Open WebUI and any hosted Supabase run; they need the user's tokens, permissions and accounts.
 - **Decisions:** the admission MLP is preview-only and never gates saving; Qwen is the pretrained model, no adapter in the demo; no local cache for hosted answers, because it could serve forgotten notes.
+
+## 17 November 2026 — Forget no longer brings back an outdated version
+
+- **Done (branch `demo-week-2026-11`, `4b8bd15`):** forgetting a copy no longer reactivates an older version, locally and in `c2.sql`; re-importing a forgotten source's older text makes a new version. Found by the user's review. Known gaps are listed in `reports/demo_week/2026-11-17.md`.
+
+## 18–19 November 2026 — Merges to `main`
+
+- **Done:** the pre-test branch (PR #1) and a README command added by PR #2 were merged into `main` on 19 November, with a one-line README edit.
+
+## 20–22 November 2026
+
+- No commits recorded.
+
+## 23 November 2026 — Prototype branch assembled
+
+- **Done:** `demo-week-2026-11` merged into the prototype branch (`dea1a82`).
+
+## 24 November 2026 — Live gates passed
+
+- **Passed, on fictional data:** hosted Supabase signed-in save, retry, fresh-process search, second-user isolation (F13) and forget; screen OCR including refusal with another app in front; Notion preview, save, update and version replacement (F05); Open WebUI answers and a no-evidence reply. Evidence: `reports/demo_week/2026-11-24-hosted.md`.
+- **Recorded problems:** two save attempts failed on a rejected password; the OCR route returned no notes when breadcrumbs and chat lines were on screen; a wrong Notion token produces a misleading Supabase message. The Notion connection was reduced to read-only.
+- **Not done:** a real network-drop retry (F12), hosted answers inside Open WebUI, and OCR of an unsaved buffer specifically.
+
+## 25 November 2026 — Citation selector trained; extraction windows
+
+- **Selector v1:** QLoRA on Kaggle. Failed its sealed gate by refusing too often (abstain precision 0.571, answerable exact 0.515). Not promoted (`reports/selector_v1/README.md`).
+- **Selector v2:** new data only, same settings; gate fixed before training. Passed all five items: answerable exact 140/181 against 96/181 for the converted base, abstain precision 0.870. Deployed in Ollama as `neurobrain-selector-v2` and made opt-in through `NEUROBRAIN_SELECTOR_MODEL` (`reports/selector_v2/README.md`).
+- **Extraction:** long pages are read window by window, and one wrong quote no longer discards the page (`808cf28`).
+- **Admission MLP v2:** adding LoCoMo data helped, but logistic regression still won every comparison (`reports/admission_v2/report.json`).
+
+## 26 November 2026 — Retrieval fixes, live check, v3 data, finish plan
+
+- **Retrieval v1:** stemming, stopwords and the next note on the page; recall in the top five 14/16 → 16/16 on the fixed set (`reports/retrieval_v1/README.md`).
+- **Prototype:** one-command start script; live check of 20 questions: v2 15/20, base Qwen 12/20, with three v2 misses citing outdated lines (`reports/live_check/README.md`).
+- **Selector v3:** data and a nine-item gate prepared for the outdated-line problem on branch `claude/selector-v3-update-rows`. **Not trained.**
+- **Finish branch** (`claude/kind-hopper-6c334f`, plan `docs/Final_Plan_2026-11-30.md`): observe test fixed for hidden folders; selector model configurable in the start script; extraction recall fixed (locked test pages 39/46 → 45/46; live check on a re-extracted scratch copy 14/20 → 17/20, `reports/extraction_recall_v1/README.md`); hybrid retrieval added behind `NEUROBRAIN_HYBRID=1` and left off because it did worse on new notes (`reports/hybrid_v1/README.md`). 103 tests pass. The running prototype and live database were not changed.
+
+*Entries for 27–30 November are added as that work happens.*
