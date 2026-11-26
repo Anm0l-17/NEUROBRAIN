@@ -107,7 +107,7 @@ CREATE TABLE IF NOT EXISTS chunks(
     line_end INTEGER NOT NULL,
     UNIQUE(source_id, ordinal)
 );
-CREATE VIRTUAL TABLE IF NOT EXISTS chunks_fts USING fts5(text, content='chunks', content_rowid='id');
+CREATE VIRTUAL TABLE IF NOT EXISTS chunks_fts USING fts5(text, content='chunks', content_rowid='id', tokenize='porter unicode61');
 CREATE TRIGGER IF NOT EXISTS chunk_insert AFTER INSERT ON chunks BEGIN
     INSERT INTO chunks_fts(rowid,text) VALUES(new.id,new.text);
 END;
@@ -126,6 +126,14 @@ CREATE TABLE IF NOT EXISTS observation_metadata(
     metadata TEXT NOT NULL
 );
 """
+
+
+# Question words carry no subject; matching them let unrelated notes fill the top five.
+STOPWORDS = frozenset(
+    "a an and are as at be by can could did do does for from had has have how i in is it "
+    "its me my of on or our should the their them they this to was we were what when where "
+    "which who whom whose why will with would you your".split()
+)
 
 
 def norm(text):
@@ -171,6 +179,20 @@ class MemoryStore:
                 "Unsupported database version; use the matching application."
             )
         self.db.executescript("BEGIN;\n" + SCHEMA + "\nPRAGMA user_version=1;\nCOMMIT;")
+        fts = self.db.execute(
+            "SELECT sql FROM sqlite_master WHERE name='chunks_fts'"
+        ).fetchone()[0]
+        if "porter" not in fts:
+            # Older databases index unstemmed words; rebuild so "books" finds "book".
+            # user_version stays 1 so older app builds can still open the file.
+            with self.db:
+                self.db.execute("BEGIN IMMEDIATE")
+                self.db.execute("DROP TABLE chunks_fts")
+                self.db.execute(
+                    "CREATE VIRTUAL TABLE chunks_fts USING fts5(text, content='chunks',"
+                    " content_rowid='id', tokenize='porter unicode61')"
+                )
+                self.db.execute("INSERT INTO chunks_fts(chunks_fts) VALUES('rebuild')")
 
     def close(self):
         self.db.close()
@@ -365,6 +387,7 @@ class MemoryStore:
         tokens = re.findall(r"[^\W_]+", query, re.UNICODE)[:32]
         if not tokens:
             return []
+        tokens = [t for t in tokens if t.lower() not in STOPWORDS] or tokens
         # Treat input as literal terms, never as caller-supplied FTS syntax.
         expression = " OR ".join('"' + t + '"' for t in tokens)
         rows = self.db.execute(
@@ -392,7 +415,32 @@ class MemoryStore:
                 results.append(item)
                 if len(results) == limit:
                     break
+        if results and results[0]["observation"]:
+            self._add_next_note(results, seen, limit)
         return results
+
+    def _add_next_note(self, results, seen, limit):
+        """Give the top note's next note on the same page the last slot.
+
+        Extracted notes are pieces of one page, so the next one often finishes the
+        top note's thought ("...no longer The Glass Orchard" / "...switched to Salt
+        and Signal") without repeating any of its words.
+        """
+        top = results[0]
+        row = self.db.execute(
+            """SELECT c.*,s.path,s.version,s.imported_at,NULL AS rank
+            FROM chunks c JOIN sources s ON s.id=c.source_id
+            WHERE c.source_id=? AND c.ordinal=? AND s.active=1""",
+            (top["source_id"], top["ordinal"] + 1),
+        ).fetchone()
+        if row is None or norm(row["text"]) in seen or not self._allowed(row["path"]):
+            return
+        item = dict(row)
+        item["citation"] = f"{item['source_id']}:{item['id']}"
+        item["observation"] = top["observation"]
+        item["linked"] = []
+        del results[limit - 1 :]
+        results.append(item)
 
     def ask(self, question: str) -> dict:
         evidence = self.search(question)
