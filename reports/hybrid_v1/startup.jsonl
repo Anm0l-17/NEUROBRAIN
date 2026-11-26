@@ -1,0 +1,30 @@
+{
+ "lexical_imports_s": 0.02,
+ "torch_and_encoder_load_s": 3.96,
+ "first_query_with_index_build_s": 0.142,
+ "later_query_s": 0.004,
+ "peak_rss_mb_before": 25,
+ "peak_rss_mb_after": 512,
+ "chunks": 41,
+ "sees_other_process_save": true
+}
+{
+ "lexical_imports_s": 0.02,
+ "torch_and_encoder_load_s": 3.23,
+ "first_query_with_index_build_s": 0.025,
+ "later_query_s": 0.003,
+ "peak_rss_mb_before": 26,
+ "peak_rss_mb_after": 512,
+ "chunks": 41,
+ "sees_other_process_save": true
+}
+{
+ "lexical_imports_s": 0.01,
+ "torch_and_encoder_load_s": 2.59,
+ "first_query_with_index_build_s": 0.028,
+ "later_query_s": 0.003,
+ "peak_rss_mb_before": 26,
+ "peak_rss_mb_after": 480,
+ "chunks": 41,
+ "sees_other_process_save": true
+}

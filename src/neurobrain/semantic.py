@@ -5,7 +5,7 @@ from __future__ import annotations
 import threading
 from dataclasses import dataclass
 
-from .core import MemoryError, MemoryStore
+from .core import MemoryError, MemoryStore, norm
 
 ENCODER = "sentence-transformers/all-MiniLM-L6-v2"
 REVISION = "1110a243fdf4706b3f48f1d95db1a4f5529b4d41"
@@ -96,6 +96,8 @@ class SemanticIndex:
     def rebuild(self) -> None:
         import numpy as np
 
+        # Read before the rows: a save from another process during the rebuild stays stale.
+        state = self._current_state()
         rows = self.store.db.execute(
             """SELECT c.*,s.path,s.version
             FROM chunks c JOIN sources s ON s.id=c.source_id
@@ -105,7 +107,7 @@ class SemanticIndex:
         if not allowed:
             self._rows = []
             self._vectors = np.empty((0, 0), dtype=np.float32)
-            self._state_token = self._current_state()
+            self._state_token = state
             return
         vectors = self.encoder.encode(
             [row["text"] for row in allowed],
@@ -121,7 +123,7 @@ class SemanticIndex:
             raise MemoryError("The embedding model returned invalid vectors.")
         self._rows = allowed
         self._vectors = vectors
-        self._state_token = self._current_state()
+        self._state_token = state
 
     def rebuild_if_stale(self) -> None:
         if self._state_token != self._current_state():
@@ -196,12 +198,16 @@ def hybrid_search(
         index.rebuild_if_stale()
         semantic = index.search(query, limit=limit)
     fused = {}
-    for rank, hit in enumerate(lexical, start=1):
-        fused.setdefault(hit["citation"], {**hit, "fused_score": 0.0})
-        fused[hit["citation"]]["fused_score"] += 1 / (60 + rank)
-    for rank, hit in enumerate(semantic, start=1):
-        fused.setdefault(hit["citation"], {**hit, "fused_score": 0.0})
-        fused[hit["citation"]]["fused_score"] += 1 / (60 + rank)
+    for hits in (lexical, semantic):
+        counted = set()
+        for rank, hit in enumerate(hits, start=1):
+            # Same note saved through two routes: one slot, scored once per list.
+            key = norm(hit["text"])
+            if key in counted:
+                continue
+            counted.add(key)
+            fused.setdefault(key, {**hit, "fused_score": 0.0})
+            fused[key]["fused_score"] += 1 / (60 + rank)
     results = sorted(
         fused.values(), key=lambda hit: (-hit["fused_score"], hit["citation"])
     )

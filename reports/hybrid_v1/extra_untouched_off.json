@@ -1,0 +1,44 @@
+[
+ {
+  "q": "Why did the venue change?",
+  "top5": [
+   "The current book is no longer The Glass Orchard",
+   "meetings would move to the second Thursday",
+   "Parking is free on the street after 6 pm.",
+   "The Harbor Lights book club meets on the first Thursday of every month at Corner Grind Café on Wharf Road, starting at 7:00 pm.",
+   "The group dropped it halfway through and switched to Salt and Signal"
+  ],
+  "cited": []
+ },
+ {
+  "q": "Why did the book club venue change?",
+  "top5": [
+   "The Harbor Lights book club meets on the first Thursday of every month at Corner Grind Café on Wharf Road, starting at 7:00 pm.",
+   "The current book is no longer The Glass Orchard",
+   "Priya stepped back as organizer in March and handed book selection to Daniel",
+   "club now meets at the Wharf Road public library in Meeting Room B, at 6:30 pm instead of 7:00",
+   "members are asked to finish it by chapter 18"
+  ],
+  "cited": []
+ },
+ {
+  "q": "Who founded the club?",
+  "top5": [
+   "club now meets at the Wharf Road public library in Meeting Room B, at 6:30 pm instead of 7:00",
+   "The Harbor Lights book club meets on the first Thursday of every month at Corner Grind Café on Wharf Road, starting at 7:00 pm.",
+   "Priya stepped back as organizer in March and handed book selection to Daniel"
+  ],
+  "cited": []
+ },
+ {
+  "q": "What discount do members get at the café?",
+  "top5": [
+   "The Harbor Lights book club meets on the first Thursday of every month at Corner Grind Café on Wharf Road, starting at 7:00 pm.",
+   "members are asked to finish it by chapter 18",
+   "Collecting dues then passed to a new member, Aisha",
+   "too many members had a clash with a school event",
+   "members asked to read up to chapter 10 for the next meeting"
+  ],
+  "cited": []
+ }
+]

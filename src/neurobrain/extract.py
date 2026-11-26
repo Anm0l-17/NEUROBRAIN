@@ -273,8 +273,20 @@ def selection_payload(question, evidence, model="qwen3.5:4b"):
     )
 
 
+def search_evidence(store, question):
+    """The five notes the selector sees. Every recheck of an answer must use this too,
+    or notes only the encoder found are dropped as "changed"."""
+    # Opt-in (reports/hybrid_v1). Hosted memory has no local database to embed.
+    if os.environ.get("NEUROBRAIN_HYBRID") == "1" and hasattr(store, "db"):
+        from .semantic import hybrid_search, load_encoder
+
+        # Without the local encoder this is the lexical search.
+        return hybrid_search(store, question, load_encoder()[0], limit=5)[0]
+    return store.search(question, limit=5)
+
+
 def answer(store, question, requester=structured_request):
-    evidence = store.search(question, limit=5)
+    evidence = search_evidence(store, question)
     if not evidence:
         return {"status": "no_evidence", "answers": []}
     # Opt-in fine-tuned selector (reports/selector_v2); extraction keeps the stock model.
@@ -289,7 +301,7 @@ def answer(store, question, requester=structured_request):
     ):
         raise MemoryError("Answer contains an unsupported citation")
     # Re-read after inference so concurrently forgotten evidence cannot be returned.
-    current = {r["citation"]: r for r in store.search(question, limit=5)}
+    current = {r["citation"]: r for r in search_evidence(store, question)}
     answers = [
         dict(
             citation=c,

@@ -1,0 +1,320 @@
+{
+ "summary": {
+  "selector": "neurobrain-selector-v2",
+  "recall@5": "16/16",
+  "answered correctly": "16/16",
+  "near misses with no evidence": "6/6"
+ },
+ "rows": [
+  {
+   "set": "book club",
+   "q": "Who picks the books?",
+   "top5": [
+    "The current book is no longer The Glass Orchard",
+    "Priya stepped back as organizer in March and handed book selection to Daniel",
+    "The Harbor Lights book club meets on the first Thursday of every month at Corner Grind Café on Wharf Road, starting at 7:00 pm.",
+    "The group dropped it halfway through and switched to Salt and Signal"
+   ],
+   "retrieved": true,
+   "answer": [
+    "Priya stepped back as organizer in March and handed book selection to Daniel"
+   ],
+   "correct": true
+  },
+  {
+   "set": "book club",
+   "q": "When does the book club meet?",
+   "top5": [
+    "The Harbor Lights book club meets on the first Thursday of every month at Corner Grind Café on Wharf Road, starting at 7:00 pm.",
+    "club now meets at the Wharf Road public library in Meeting Room B, at 6:30 pm instead of 7:00",
+    "meetings would move to the second Thursday",
+    "The current book is no longer The Glass Orchard",
+    "members are asked to finish it by chapter 18"
+   ],
+   "retrieved": true,
+   "answer": [
+    "club now meets at the Wharf Road public library in Meeting Room B, at 6:30 pm instead of 7:00"
+   ],
+   "correct": true
+  },
+  {
+   "set": "book club",
+   "q": "Where does the book club meet?",
+   "top5": [
+    "The Harbor Lights book club meets on the first Thursday of every month at Corner Grind Café on Wharf Road, starting at 7:00 pm.",
+    "club now meets at the Wharf Road public library in Meeting Room B, at 6:30 pm instead of 7:00",
+    "meetings would move to the second Thursday",
+    "The current book is no longer The Glass Orchard",
+    "members are asked to finish it by chapter 18"
+   ],
+   "retrieved": true,
+   "answer": [
+    "club now meets at the Wharf Road public library in Meeting Room B, at 6:30 pm instead of 7:00"
+   ],
+   "correct": true
+  },
+  {
+   "set": "book club",
+   "q": "How much are the dues?",
+   "top5": [
+    "Collecting dues then passed to a new member, Aisha",
+    "dues went up to $8 a month to cover the library room fee",
+    "Dues are $5 a month, collected by Daniel, who keeps a spreadsheet of who has paid."
+   ],
+   "retrieved": true,
+   "answer": [
+    "Dues are $5 a month, collected by Daniel, who keeps a spreadsheet of who has paid."
+   ],
+   "correct": true
+  },
+  {
+   "set": "book club",
+   "q": "Who collects the dues?",
+   "top5": [
+    "Collecting dues then passed to a new member, Aisha",
+    "Dues are $5 a month, collected by Daniel, who keeps a spreadsheet of who has paid.",
+    "dues went up to $8 a month to cover the library room fee"
+   ],
+   "retrieved": true,
+   "answer": [
+    "Dues are $5 a month, collected by Daniel, who keeps a spreadsheet of who has paid."
+   ],
+   "correct": true
+  },
+  {
+   "set": "book club",
+   "q": "What is the current book?",
+   "top5": [
+    "The current book is no longer The Glass Orchard",
+    "Priya stepped back as organizer in March and handed book selection to Daniel",
+    "The Harbor Lights book club meets on the first Thursday of every month at Corner Grind Café on Wharf Road, starting at 7:00 pm.",
+    "The group dropped it halfway through and switched to Salt and Signal"
+   ],
+   "retrieved": true,
+   "answer": [
+    "The group dropped it halfway through and switched to Salt and Signal"
+   ],
+   "correct": true
+  },
+  {
+   "set": "book club",
+   "q": "Is parking free?",
+   "top5": [
+    "Parking is free on the street after 6 pm.",
+    "meetings would move to the second Thursday"
+   ],
+   "retrieved": true,
+   "answer": [
+    "Parking is free on the street after 6 pm."
+   ],
+   "correct": true
+  },
+  {
+   "set": "book club near miss",
+   "q": "When is the book club holiday party?",
+   "top5": [
+    "The Harbor Lights book club meets on the first Thursday of every month at Corner Grind Café on Wharf Road, starting at 7:00 pm.",
+    "The current book is no longer The Glass Orchard",
+    "Priya stepped back as organizer in March and handed book selection to Daniel",
+    "club now meets at the Wharf Road public library in Meeting Room B, at 6:30 pm instead of 7:00",
+    "members are asked to finish it by chapter 18"
+   ],
+   "retrieved": null,
+   "answer": [],
+   "correct": true
+  },
+  {
+   "set": "saffron",
+   "q": "What must every Saffron Bridge API response include?",
+   "top5": [
+    "Every Saffron Bridge API response must include a request ID.",
+    "Rohan will own the Saffron Bridge testing plan.",
+    "The Saffron Bridge beta release is planned for 15 January 2027.",
+    "The Saffron Bridge project kickoff is on 3 December 2026 in Room 4B.",
+    "Priya prefers short bullet-point summaries over long reports."
+   ],
+   "retrieved": true,
+   "answer": [
+    "Every Saffron Bridge API response must include a request ID."
+   ],
+   "correct": true
+  },
+  {
+   "set": "saffron",
+   "q": "When is the Saffron Bridge kickoff?",
+   "top5": [
+    "The Saffron Bridge project kickoff is on 3 December 2026 in Room 4B.",
+    "Rohan will own the Saffron Bridge testing plan.",
+    "Every Saffron Bridge API response must include a request ID.",
+    "The Saffron Bridge beta release is planned for 15 January 2027.",
+    "We decided to use PostgreSQL instead of MongoDB for the Saffron Bridge backend."
+   ],
+   "retrieved": true,
+   "answer": [
+    "The Saffron Bridge project kickoff is on 3 December 2026 in Room 4B."
+   ],
+   "correct": true
+  },
+  {
+   "set": "saffron",
+   "q": "Which database did we choose for the Saffron Bridge backend?",
+   "top5": [
+    "We decided to use PostgreSQL instead of MongoDB for the Saffron Bridge backend.",
+    "Rohan will own the Saffron Bridge testing plan.",
+    "Every Saffron Bridge API response must include a request ID.",
+    "The Saffron Bridge beta release is planned for 15 January 2027.",
+    "The Saffron Bridge project kickoff is on 3 December 2026 in Room 4B."
+   ],
+   "retrieved": true,
+   "answer": [
+    "We decided to use PostgreSQL instead of MongoDB for the Saffron Bridge backend."
+   ],
+   "correct": true
+  },
+  {
+   "set": "saffron",
+   "q": "How does Priya like summaries?",
+   "top5": [
+    "Priya prefers short bullet-point summaries over long reports.",
+    "Priya stepped back as organizer in March and handed book selection to Daniel",
+    "The Saffron Bridge budget review is still unresolved because the vendor quote has not arrived."
+   ],
+   "retrieved": true,
+   "answer": [
+    "Priya prefers short bullet-point summaries over long reports."
+   ],
+   "correct": true
+  },
+  {
+   "set": "saffron",
+   "q": "Who owns the Saffron Bridge testing plan?",
+   "top5": [
+    "Rohan will own the Saffron Bridge testing plan.",
+    "The Saffron Bridge beta release is planned for 15 January 2027.",
+    "Every Saffron Bridge API response must include a request ID.",
+    "The Saffron Bridge project kickoff is on 3 December 2026 in Room 4B.",
+    "We decided to use PostgreSQL instead of MongoDB for the Saffron Bridge backend."
+   ],
+   "retrieved": true,
+   "answer": [
+    "Rohan will own the Saffron Bridge testing plan."
+   ],
+   "correct": true
+  },
+  {
+   "set": "saffron",
+   "q": "When is the Saffron Bridge beta release?",
+   "top5": [
+    "The Saffron Bridge beta release is planned for 15 January 2027.",
+    "Rohan will own the Saffron Bridge testing plan.",
+    "Every Saffron Bridge API response must include a request ID.",
+    "The Saffron Bridge project kickoff is on 3 December 2026 in Room 4B.",
+    "We decided to use PostgreSQL instead of MongoDB for the Saffron Bridge backend."
+   ],
+   "retrieved": true,
+   "answer": [
+    "The Saffron Bridge beta release is planned for 15 January 2027."
+   ],
+   "correct": true
+  },
+  {
+   "set": "saffron",
+   "q": "When is the violet demonstration?",
+   "top5": [
+    "The violet demonstration is on 24 November 2026."
+   ],
+   "retrieved": true,
+   "answer": [
+    "The violet demonstration is on 24 November 2026."
+   ],
+   "correct": true
+  },
+  {
+   "set": "saffron",
+   "q": "When is the amber lighthouse audit?",
+   "top5": [
+    "The amber lighthouse audit for project Wren is on 9 December 2026."
+   ],
+   "retrieved": true,
+   "answer": [
+    "The amber lighthouse audit for project Wren is on 9 December 2026."
+   ],
+   "correct": true
+  },
+  {
+   "set": "saffron",
+   "q": "How does Mira like answers?",
+   "top5": [
+    "Mira prefers concise answers."
+   ],
+   "retrieved": true,
+   "answer": [
+    "Mira prefers concise answers."
+   ],
+   "correct": true
+  },
+  {
+   "set": "saffron near miss",
+   "q": "When is the Saffron Bridge launch party?",
+   "top5": [
+    "Rohan will own the Saffron Bridge testing plan.",
+    "Every Saffron Bridge API response must include a request ID.",
+    "The Saffron Bridge beta release is planned for 15 January 2027.",
+    "The Saffron Bridge project kickoff is on 3 December 2026 in Room 4B.",
+    "We decided to use PostgreSQL instead of MongoDB for the Saffron Bridge backend."
+   ],
+   "retrieved": null,
+   "answer": [],
+   "correct": true
+  },
+  {
+   "set": "saffron near miss",
+   "q": "Who approved the Saffron Bridge budget?",
+   "top5": [
+    "The Saffron Bridge budget review is still unresolved because the vendor quote has not arrived.",
+    "Rohan will own the Saffron Bridge testing plan.",
+    "Every Saffron Bridge API response must include a request ID.",
+    "The Saffron Bridge beta release is planned for 15 January 2027.",
+    "The Saffron Bridge project kickoff is on 3 December 2026 in Room 4B."
+   ],
+   "retrieved": null,
+   "answer": [],
+   "correct": true
+  },
+  {
+   "set": "saffron near miss",
+   "q": "When is the pink submarine launch?",
+   "top5": [
+    "The violet demonstration is on 24 November 2026.",
+    "The current book is no longer The Glass Orchard",
+    "Parking is free on the street after 6 pm.",
+    "The Saffron Bridge beta release is planned for 15 January 2027.",
+    "The amber lighthouse audit for project Wren is on 9 December 2026."
+   ],
+   "retrieved": null,
+   "answer": [],
+   "correct": true
+  },
+  {
+   "set": "saffron near miss",
+   "q": "When is the amber lighthouse party?",
+   "top5": [
+    "The amber lighthouse audit for project Wren is on 9 December 2026."
+   ],
+   "retrieved": null,
+   "answer": [],
+   "correct": true
+  },
+  {
+   "set": "saffron near miss",
+   "q": "Where is the teal harbour review held?",
+   "top5": [
+    "The Saffron Bridge budget review is still unresolved because the vendor quote has not arrived.",
+    "The Saffron Bridge beta release is planned for 15 January 2027."
+   ],
+   "retrieved": null,
+   "answer": [],
+   "correct": true
+  }
+ ]
+}

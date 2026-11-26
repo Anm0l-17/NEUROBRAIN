@@ -15,7 +15,7 @@ from uuid import uuid4
 
 from .cloud import HostedMemory
 from .core import MemoryError, MemoryStore
-from .extract import answer
+from .extract import answer, search_evidence
 
 MODEL = "neurobrain-memory"
 
@@ -98,7 +98,10 @@ def create_server(db, notes_root, token, port=8766, answerer=answer, hosted=Fals
                     if local:
                         stack.enter_context(local)
                         local.execute("BEGIN IMMEDIATE")
-                    current = {r["citation"]: r["text"] for r in store.search(question)}
+                    current = {
+                        r["citation"]: r["text"]
+                        for r in search_evidence(store, question)
+                    }
                     if any(
                         current.get(r["citation"]) != r["text"]
                         for r in result["answers"]
