@@ -11,8 +11,9 @@ from neurobrain import observe
 
 class ObservationTests(unittest.TestCase):
     def test_selected_saved_file_preview_excludes_content(self):
-        with tempfile.TemporaryDirectory(dir=Path.cwd()) as temp:
-            file = Path(temp) / "fiction.md"
+        with tempfile.TemporaryDirectory() as temp:
+            # resolve(): macOS temp dirs sit behind the /var symlink, which the policy rejects.
+            file = Path(temp).resolve() / "fiction.md"
             file.write_text("violet-marker\nsecond line")
             stdout = io.StringIO()
             with redirect_stdout(stdout):
