@@ -51,6 +51,11 @@ class RetrievalTests(unittest.TestCase):
         save_page(self.store)
         self.assertIn(NOTES[1], self.texts("is the"))
 
+    def test_unmatched_content_words_fall_back_to_all_words(self):
+        save_page(self.store)
+        # Neither "attended" nor "meetups" is indexed as-is; only "the" (a stopword) matches.
+        self.assertTrue(self.texts("Who attended the meetups?"))
+
     def test_top_note_brings_its_next_note_from_the_same_page(self):
         save_page(self.store)
         found = self.texts("What is the current book?")

@@ -387,7 +387,14 @@ class MemoryStore:
         tokens = re.findall(r"[^\W_]+", query, re.UNICODE)[:32]
         if not tokens:
             return []
-        tokens = [t for t in tokens if t.lower() not in STOPWORDS] or tokens
+        content = [t for t in tokens if t.lower() not in STOPWORDS] or tokens
+        results = self._search(content, limit)
+        if not results and content != tokens:
+            # No content word matched ("Which database did we choose?"); fall back to every word.
+            results = self._search(tokens, limit)
+        return results
+
+    def _search(self, tokens, limit):
         # Treat input as literal terms, never as caller-supplied FTS syntax.
         expression = " OR ".join('"' + t + '"' for t in tokens)
         rows = self.db.execute(
