@@ -81,9 +81,9 @@ are simulated in this harness. F12 and F13 need hosted Supabase and were not run
 
 ## Limits
 
-- Up to one extra model call per window. Total time rose by 26% on the locked pages and about 6% on the development pages. Screen watch mode
+- Up to one extra model call per window. Total time rose by 30% on the locked pages and about 6% on the development pages. Screen watch mode
   re-extracts on every change. The 5-second source-to-saved target was already missed for long pages.
-- Extra notes past 12 per window are cut. If the second call fails, the first call's notes are kept; a second reply with a malformed item still rejects the page, as a first reply would.
+- Extra notes past 12 per window are cut. If the second call fails or returns a malformed item, the save fails as a first-call failure does, and the earlier version stays. That gives each page one more chance to fail.
 - A second-pass sentence is sent without its neighbours, so a stored note can start with "He" or "It".
 - `reports/retrieval_v1/run.py` uses notes written into its fixture, so it cannot see extraction changes.
 

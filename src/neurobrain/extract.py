@@ -69,10 +69,8 @@ def generate(text):
         missed = uncovered(part, found)
         # extract_notes allows 12 notes per window: no call when full, extra ones are cut.
         if missed and len(found) < 12:
-            try:
-                found += window_notes("\n".join(missed))[: 12 - len(found)]
-            except MemoryError:
-                pass  # It only adds notes; a failed second call keeps the first one's.
+            # A failure here fails the save: a part-read page must not replace a fuller version.
+            found += window_notes("\n".join(missed))[: 12 - len(found)]
         notes += found
     return {"notes": notes}
 

@@ -268,7 +268,7 @@ ASCII made "Café" come back as "Cafè"; quotes were rewritten; and sentences we
 | Seven development pages (79 facts; these shaped the fix) | 70–71 (an earlier run, file not kept, gave 65) | 79 |
 
 On the locked pages the one-line encoding fix alone also reached 45; the prompt change and second pass were needed for
-the book club page. Total extraction time rose by 26% on the locked pages and about 6% on the development pages. Eleven scripted lifecycle fixtures (F01–F11,
+the book club page. Total extraction time rose by 30% on the locked pages and about 6% on the development pages. Eleven scripted lifecycle fixtures (F01–F11,
 including the vague-sentence case F07) passed; Notion and OCR are simulated in that script.
 
 ### 5.4 Retrieval
