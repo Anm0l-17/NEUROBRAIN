@@ -1,12 +1,11 @@
 # NeuroBrain: a local-first personal memory assistant with cited evidence
 
-Minor project report. **Draft of 26 November 2026.**
+Minor project report. **Draft of 27 November 2026.**
 
 *[To fill in: author, roll number, department, guide, college. Required template and page limit not yet confirmed.]*
 
-*Status of this draft: every section that does not depend on citation selector v3 is written. Places that wait
-for v3 are marked **[v3 pending]**. Numbers cite the file they come from; the single evaluation table
-(`reports/Final_Evaluation_2026-11.md`) is still to be assembled.*
+*Status of this draft: updated 27 November with the citation selector v3 results. Numbers cite the file they come
+from; the single evaluation table (`reports/Final_Evaluation_2026-11.md`) is still to be assembled.*
 
 ---
 
@@ -22,8 +21,9 @@ A pretrained 4-billion-parameter model (Qwen 3.5 4B) extracts the quotes. We fin
 QLoRA as a **citation selector**, which chooses which of five retrieved notes answers the question. On a sealed
 set of 291 examples, with a promotion gate fixed before training, the second version raised exact matches on
 answerable questions from 96/181 (unmodified model, same serving route) to 140/181, with abstention precision
-0.870, and passed. It still tends to cite an outdated line when a page records a change. A third version targets
-that fault **[v3 pending]**.
+0.870, and passed. It still tends to cite an outdated line when a page records a change. A third version, trained to
+prefer the current value, was far better at this on sealed template examples (92/92 against 46/92) but passed only
+eight of its nine pre-set gate items, missing the one on a real page (5 of 8), so the second version stays in use.
 
 Two other training efforts gave negative results: a small model that scores which text is worth remembering did
 not beat logistic regression, and a small generator fine-tune failed its attribution tests. Both are reported.
@@ -170,7 +170,7 @@ near-miss fixtures, and no errors.
 |---|---|---|---|
 | v1 | 3,000 (36%) | 375, 7,208 s | **Failed**: refused too often |
 | v2 | 2,808 (20%) | 351, 7,944 s | **Passed**, deployed |
-| v3 | 3,676 (19.9%) | planned 460, about 3 h | **[v3 pending]** |
+| v3 | 3,676 (19.9%) | 459, 13,445 s | **Failed** one of nine items; not deployed as default |
 
 **v1.** Abstain precision 0.571 (needed 0.85) and answerable exact 122/237, one row below the bar. It returned
 nothing on 90 of 237 answerable rows (`reports/selector_v1/README.md`). The cause was in the data: too many empty
@@ -184,7 +184,7 @@ with the current line as the only correct citation, plus counter-examples (an un
 the original value, an absent attribute) so that the model cannot simply prefer lines with change words. The sealed
 update set uses attribute families and names that never appear in training. Four further gate items cover current-value
 accuracy (at least 69/92), citing an outdated line (at most 28/115), the book club fixtures, and the counter-examples
-(branch `claude/selector-v3-update-rows`, `reports/selector_v3/README.md`).
+(`reports/selector_v3/README.md`). Results are in section 5.1.
 
 ### 4.2 Memory admission model (negative result)
 
@@ -230,15 +230,20 @@ design avoid generated text altogether: the app quotes stored notes.
 (`reports/selector_v2/README.md`.) v2 also passed 9/9 answerable and 6/6 near-miss fixtures. The precision margin is
 three rows. Conversation-style refusals are the weakest area, on a 30-row slice.
 
-**Update behaviour before v3 training** (267-row update set, `reports/selector_v3/README.md` on the v3 branch):
+**v3 against its nine-item gate** (`reports/selector_v3/README.md`). On the new 261-row sealed set it scored 114/142
+answerable exact (v2: 112), abstain recall 0.908 and precision 0.923, with no errors. On the 267-row update set:
 
-| Model | Current value exact | Outdated line cited | Book club fixtures |
+| Model | Current value exact | Outdated line cited | Book club fixtures (dues) |
 |---|---|---|---|
-| Converted base | 26/92 | 82/115 | 1/8 |
-| Adapter v2 | 46/92 | 61/115 | 2/8 |
-| Adapter v3 | **[v3 pending]** | **[v3 pending]** | **[v3 pending]** |
+| Converted base | 26/92 | 82/115 | 1/8 (0/2) |
+| Adapter v2 | 46/92 | 61/115 | 2/8 (0/2) |
+| Adapter v3 | **92/92** | **6/115** | **5/8 (1/2)** — needed 6/8 and 2/2 |
 
-**[v3 pending: both sealed files scored, the nine gate items, and whether v3 replaces v2.]**
+v3 passed items 1 to 7 and item 9 and **failed item 8**. By the rule fixed in advance it was not promoted, although it
+is better than v2 on every other update measure. The gap between 92/92 on template rows and 5/8 on the real page
+suggests the templates are easier than real writing. During training the notebook's own development score showed 141
+unreadable replies of 386; a replay of 20 of those rows on the served model gave 20 readable replies, and the sealed
+runs had none. The cause on the training machine was not established.
 
 ### 5.2 End-to-end spot check
 
@@ -250,11 +255,12 @@ seeing the notes, so this is a regression check, not an unbiased score.
 |---|---|---|
 | Unmodified `qwen3.5:4b` | 12/20 | 14/20 (13/20 on repeat) |
 | Selector v2 | 15/20 | **17/20** |
-| Selector v3 | **[v3 pending]** | **[v3 pending]** |
+| Selector v3 (not promoted) | 17/20 | 17/20 |
 
 The right-hand column uses the retyped page text (`reports/extraction_recall_v1`); the same text extracted with the old
-code scored 14/20 with v2. v2's remaining misses are two dues questions, where it cites the outdated line, and a fee
-the page never states.
+code scored 14/20 with v2. On the re-extracted page v2 misses two dues questions, where it cites the outdated line, and
+a fee the page never states. v3 fixes one dues question and instead cites the outdated reading chapter, so the two tie
+there. The 27 November runs were repeated with identical citations.
 
 ### 5.3 Extraction recall
 
@@ -300,7 +306,8 @@ code.]**
 
 - **Evaluation size.** Sets are small, several were written by the project itself, and some were used to shape fixes.
   Single runs of the extraction and base models vary between runs.
-- **Updates.** The app has no notion of time or replacement; preferring the newest statement is left to the selector.
+- **Updates.** The app has no notion of time or replacement; preferring the newest statement is left to the selector,
+  and the deployed selector (v2) often picks the older one.
 - **Retrieval.** A question sharing no word with its answering note can miss it.
 - **Extraction.** It can skip facts, and saving long pages takes tens of seconds.
 - **Abstention** is not guaranteed; a related but non-answering note can be cited.
@@ -322,7 +329,8 @@ synthesis remain research directions.
 A useful, inspectable personal memory can be built around frozen weights: the model chooses, the database holds the
 facts, and the user sees the original words and can remove them. The one fine-tune that was promoted solves a narrow
 task with a rule set in advance; the other two training efforts fell short and decide nothing in the product. The main open fault is choosing
-current over outdated information. **[v3 pending: whether selector v3 fixed it.]**
+current over outdated information. Training on update examples reduced it sharply on sealed template data, but not
+yet enough on the real page to meet the bar, so it remains open in the deployed system.
 
 ## References
 

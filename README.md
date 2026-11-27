@@ -152,6 +152,7 @@ All sets are small and mostly fictional or public-derived. They establish protot
 | Recorded evaluation | Result | Interpretation |
 | --- | --- | --- |
 | [Selector v2, sealed set](reports/selector_v2/README.md) (291 rows) | Answerable exact 140/181 (unmodified model, same route: 96/181); abstain precision 0.870 | Passed the gate fixed before training; the precision margin is only three rows |
+| [Selector v3, sealed gate](reports/selector_v3/README.md) (528 rows) | Current value 92/92 (v2: 46/92); real book club page 5/8, needed 6/8 and both dues | Failed 1 of 9 items; not promoted |
 | [Live check](reports/live_check/README.md), 20 questions, 26 Nov | v2 15/20; base Qwen 12/20 | A spot check written after seeing the notes, not a sealed score. Three v2 misses cite outdated lines |
 | [Extraction recall](reports/extraction_recall_v1/README.md), four locked pages | Facts kept 39/46 before the fix, 45/46 after | Nearly all of the gain is one encoding fix. The same live check on a re-extracted copy: v2 14/20 → 17/20 |
 | [Retrieval v1](reports/retrieval_v1/README.md), 16 answerable questions | Answering note in the top five: 14/16 → 16/16 | Fixed set; a crowded store still loses one |
@@ -168,7 +169,7 @@ PYTHONPATH=src python3 -m unittest discover -s tests
 
 ## Known limits
 
-- The selector can cite an outdated line after an update ("dues are $5" after "dues went up to $8"). A newer selector (v3) has data and a gate ready but is **not trained** yet.
+- The selector can cite an outdated line after an update ("dues are $5" after "dues went up to $8"). A newer selector (v3) fixes most of this on test data but [failed one of its nine gate items](reports/selector_v3/README.md), so the app still uses v2.
 - Word search misses questions that share no word with the answering note.
 - Extraction can still skip facts, differs a little between runs, and makes saving slower than the 5-second target on long pages.
 - Chat questions that lean on history ("what about it?") are refused by a word-list guard that is sometimes wrong.
@@ -190,7 +191,7 @@ Deletion does not erase backups, copied text, browser history, or old database c
 | Local import, versioning, cited search, browser UI, and verified forgetting | Implemented |
 | Notion, saved-file and screen-OCR extraction; Open WebUI answers | Implemented; live gates passed 24 Nov |
 | Supabase PostgreSQL storage for observations | Passed hosted checks 24 Nov. Google Drive file import has no recorded hosted run |
-| Fine-tuned citation selector | v2 deployed; v3 (newest fact) awaiting training |
+| Fine-tuned citation selector | v2 deployed; v3 (newest fact) trained, not promoted |
 | Offline MiniLM and hybrid retrieval | Optional; off by default |
 | Memory admission dataset and model | Fictional data, draft labels; advisory only |
 | Generator fine-tuning, temporal graph, Titans/Mamba, model unlearning, skill synthesis, forensic deletion | Future work |

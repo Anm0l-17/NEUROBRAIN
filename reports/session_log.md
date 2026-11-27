@@ -271,4 +271,12 @@ deletion and external benchmark work continues under the research roadmap.
 - **Selector v3:** data and a nine-item gate prepared for the outdated-line problem on branch `claude/selector-v3-update-rows`. **Not trained.**
 - **Finish branch** (`claude/kind-hopper-6c334f`, plan `docs/Final_Plan_2026-11-30.md`): observe test fixed for hidden folders; selector model configurable in the start script; extraction recall fixed (locked test pages 39/46 → 45/46; live check on a re-extracted scratch copy 14/20 → 17/20, `reports/extraction_recall_v1/README.md`); hybrid retrieval added behind `NEUROBRAIN_HYBRID=1` and left off because it did worse on new notes (`reports/hybrid_v1/README.md`). 108 tests pass. The running prototype and live database were not changed.
 
-*Entries for 27–30 November are added as that work happens.*
+## 27 November 2026 — Selector v3 trained, fails its gate by one item
+
+- **Done:** the v3 data branch merged; the Kaggle adapter deployed in Ollama as `neurobrain-selector-v3` and scored on both sealed files and the live check.
+- **Result:** eight of nine gate items passed (current value 92/92 against v2's 46/92; outdated line cited 6/115 against 61/115). Item 8 failed: book club 5/8 and 1/2 dues. **Not promoted; v2 stays the default** (`reports/selector_v3/README.md`).
+- **Live check:** stored notes v2 15/20, v3 17/20; re-extracted notes 17/20 each (`reports/live_check/README.md`).
+- **Odd result, unexplained:** the Kaggle notebook's development score had 141 unreadable replies; replayed rows were readable on the served model.
+- **Observed:** nothing was listening on the prototype's port 8766 at the first check this day. It was not stopped or restarted by this work.
+
+*Entries for 28–30 November are added as that work happens.*
