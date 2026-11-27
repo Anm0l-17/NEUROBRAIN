@@ -112,6 +112,53 @@ cues). If the adapter misses any item, it stays an experiment and the app keeps 
 How to count items 7 and 8 from the raw output: a row "cites a stale line" when its prediction shares any ID with the
 row's `stale` list. Book-club rows have source `fixture_update`. A fixture passes on an exact match.
 
+## Adapter v3 result: fails the gate by one item (27 Nov 2026)
+
+**Not promoted. The app keeps `neurobrain-selector-v2`.** v3 passes eight of the nine items and misses item 8, the
+book club fixtures. The rule above was written before training, so it stays an experiment.
+
+Kaggle T4 run (data commit `22c5f7f`, 3,676 rows, **459** optimizer steps, not the 460 estimated below: the last 4
+rows never completed a step; 13,445 s; peak 7.47 GiB). Training loss fell from 0.083 (first tenth) to 0.012 (last
+tenth). Deployed with `scripts/deploy_selector.sh` as `neurobrain-selector-v3` (adapter keys matched before merge).
+
+| Gate item | Needed | Adapter v3 | Adapter v2 | v3 result |
+|---|---|---|---|---|
+| 1. Abstain recall | ≥ 0.50 | 0.908 | 0.849 | pass |
+| 2. Abstain precision | ≥ 0.85 | 0.923 | 0.927 | pass |
+| 3. Answerable exact | ≥ 83 and ≥ 107 of 142 | 114 | 112 | pass |
+| 4. Fixtures | 9/9, ≥ 5/6 near-miss abstain | 9/9, 6/6 | 9/9, 6/6 | pass |
+| 5. Errors, both files | 0 | 0 | 0 | pass |
+| 6. Current value exact | ≥ 69 of 92 | 92 | 46 | pass |
+| 7. Stale line cited | ≤ 28 of 115 | 6 | 61 | pass |
+| 8. Book club | ≥ 6 of 8, both dues | **5 of 8, 1 of 2 dues** | 2 of 8, 0 of 2 | **fail** |
+| 9. Sibling + lone, precision | ≥ 79 of 83, ≥ 0.85 | 83, 1.000 | 83, 0.926 | pass |
+
+Reported, not gated: `update_original` 15/16 (v2 6/16), `update_absent` 49/49 (49/49), `longmemeval_update` 14/19
+(8/19). Sealed file: exact 0.851 (v2 0.816), over-select 0.056 (0.092), no citation on 9 of 142 answerable rows
+(8). Raw: `adapter_eval.json` (440 s), `adapter_update_eval.json` (406 s); items computed by [`gate.py`](gate.py),
+which reproduces the v2 and base figures above.
+
+The three book club misses:
+
+| Question | v3 cited | Gold |
+|---|---|---|
+| Who collects the dues? | only the old "$5 … collected by Daniel" line | "Collecting dues then passed to a new member, Aisha" |
+| What is the current book? | only "no longer The Glass Orchard" | that line **and** "switched to Salt and Signal" |
+| How much is the library room fee? | the "$8 … library room fee" line | nothing (no line states the fee; v2 fails it too) |
+
+How to read this:
+
+- On the update rows built from templates v3 is far better than v2, with no loss on the older sealed set. Of the 6
+  rows where it still cites an outdated line, 5 cite only the old one.
+- Template rows scoring 92/92 are probably easier than real notes. The attribute families and names were held
+  out, but the sentence style was not. On the real page it passes 5 of 8.
+
+**Kaggle dev numbers do not describe the served model.** On `dev.jsonl` the notebook reported exact 0.497, abstain
+recall 0.725, abstain precision 0.857 and **141 parse errors of 386** (v2: 0.759, 0.886, 0.836, 0). Twenty of the
+failed rows were replayed through the served model: all 20 replies were valid and 16 were exactly right, both with
+the app's JSON schema and without it ([`kaggle_failed_rows.json`](kaggle_failed_rows.json)). The cause on Kaggle was
+not established; the notebook saves no raw replies. The sealed gate above had 0 errors.
+
 ## Running it on Kaggle (you start this yourself)
 
 Train has 3,676 rows, which is 460 optimizer steps. v2 took 7,944 s for 351 steps, so expect about **2 h 55 min** on
