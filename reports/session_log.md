@@ -277,6 +277,6 @@ deletion and external benchmark work continues under the research roadmap.
 - **Result:** eight of nine gate items passed (current value 92/92 against v2's 46/92; outdated line cited 6/115 against 61/115). Item 8 failed: book club 5/8 and 1/2 dues. **Not promoted; v2 stays the default** (`reports/selector_v3/README.md`).
 - **Live check:** stored notes v2 15/20, v3 17/20; re-extracted notes 17/20 each (`reports/live_check/README.md`).
 - **Odd result, unexplained:** the Kaggle notebook's development score had 141 unreadable replies; replayed rows were readable on the served model.
-- **Observed:** nothing was listening on the prototype's port 8766 at the first check this day. It was not stopped or restarted by this work.
+- **Observed:** nothing was listening on the prototype's port 8766 at the first check this day. No stop or restart command was sent from this session; the cause is not established.
 
 *Entries for 28–30 November are added as that work happens.*
