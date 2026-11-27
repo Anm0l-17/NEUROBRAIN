@@ -13,7 +13,7 @@ Owners: **C** = Claude; **U** = only the user can do it; **C+U** = Claude prepar
 | Area | State | Evidence |
 |---|---|---|
 | Selector v2 | Passed sealed gate; live in the prototype | `reports/selector_v2/README.md` |
-| Selector v3 (prefers the newest fact) | Data, gate and notebook ready; **not trained** | branch `claude/selector-v3-update-rows` (`reports/selector_v3/README.md` there; gate items 1–9) |
+| Selector v3 (prefers the newest fact) | Trained; **updated 27 Nov:** passed 8 of 9 gate items, failed item 8 (real page); not promoted, v2 stays | `reports/selector_v3/README.md` |
 | Extraction | Windowed and verified; keeps 14 of ~16 page facts | commit `808cf28`; `reports/live_check/README.md` |
 | Retrieval | FTS5 + porter stemming + stopwords + next note; misses cause/effect wording | `reports/retrieval_v1/README.md`, `core.py:382-430` |
 | Live check | v2 15/20, base Qwen 12/20 (v2 misses: 3 stale-fact, 1 search, 1 arguable) | `reports/live_check/` |

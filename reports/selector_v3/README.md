@@ -148,7 +148,7 @@ The three book club misses:
 
 How to read this:
 
-- On the update rows built from templates v3 is far better than v2, with no loss on the older sealed set. Of the 6
+- On the update rows built from templates v3 is far better than v2. On the older kind of sealed rows it stays about level: two more answerable rows exact, abstain precision 0.923 against 0.927, and one more answerable row with no citation. Of the 6
   rows where it still cites an outdated line, 5 cite only the old one.
 - Template rows scoring 92/92 are probably easier than real notes. The attribute families and names were held
   out, but the sentence style was not. On the real page it passes 5 of 8.

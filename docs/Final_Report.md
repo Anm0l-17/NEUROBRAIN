@@ -240,7 +240,7 @@ answerable exact (v2: 112), abstain recall 0.908 and precision 0.923, with no er
 | Adapter v3 | **92/92** | **6/115** | **5/8 (1/2)** — needed 6/8 and 2/2 |
 
 v3 passed items 1 to 7 and item 9 and **failed item 8**. By the rule fixed in advance it was not promoted, although it
-is better than v2 on every other update measure. The gap between 92/92 on template rows and 5/8 on the real page
+is as good as or better than v2 on every other update measure. The gap between 92/92 on template rows and 5/8 on the real page
 suggests the templates are easier than real writing. During training the notebook's own development score showed 141
 unreadable replies of 386; a replay of 20 of those rows on the served model gave 20 readable replies, and the sealed
 runs had none. The cause on the training machine was not established.
@@ -253,7 +253,7 @@ seeing the notes, so this is a regression check, not an unbiased score.
 
 | Selector | Notes as stored on 26 Nov | Same page, re-extracted with the final code |
 |---|---|---|
-| Unmodified `qwen3.5:4b` | 12/20 | 14/20 (13/20 on repeat) |
+| Unmodified `qwen3.5:4b` | 12/20 | 14/20 (13/20 on one repeat on 26 Nov) |
 | Selector v2 | 15/20 | **17/20** |
 | Selector v3 (not promoted) | 17/20 | 17/20 |
 

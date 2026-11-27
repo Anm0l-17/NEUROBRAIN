@@ -22,7 +22,7 @@ Useful information gets scattered across project notes, decisions, and personal 
 
 NeuroBrain explores that workflow through a small, inspectable system. Import selected Markdown or text files, retrieve exact passages with source references, and preview and verify the removal of a saved source.
 
-> **Current checkpoint (26 Nov 2026):** a working local prototype. A selected Notion page, saved file or approved VS Code window → local Qwen3.5 extraction of exact quotes → versioned SQLite memory → a fine-tuned **citation selector** picks which stored note answers → Open WebUI shows that note word for word with its citation, or says it has no evidence. Live gates for hosted Supabase saving, screen OCR, Notion and Open WebUI [passed on 24 Nov](reports/demo_week/2026-11-24-hosted.md) on fictional data. Selector v2 [passed its sealed gate](reports/selector_v2/README.md); it can still cite an outdated line when a page records a change.
+> **Current checkpoint (27 Nov 2026):** a working local prototype. A selected Notion page, saved file or approved VS Code window → local Qwen3.5 extraction of exact quotes → versioned SQLite memory → a fine-tuned **citation selector** picks which stored note answers → Open WebUI shows that note word for word with its citation, or says it has no evidence. Live gates for hosted Supabase saving, screen OCR, Notion and Open WebUI [passed on 24 Nov](reports/demo_week/2026-11-24-hosted.md) on fictional data. Selector v2 [passed its sealed gate](reports/selector_v2/README.md); it can still cite an outdated line when a page records a change.
 
 ## What works today
 
@@ -153,7 +153,7 @@ All sets are small and mostly fictional or public-derived. They establish protot
 | --- | --- | --- |
 | [Selector v2, sealed set](reports/selector_v2/README.md) (291 rows) | Answerable exact 140/181 (unmodified model, same route: 96/181); abstain precision 0.870 | Passed the gate fixed before training; the precision margin is only three rows |
 | [Selector v3, sealed gate](reports/selector_v3/README.md) (528 rows) | Current value 92/92 (v2: 46/92); real book club page 5/8, needed 6/8 and both dues | Failed 1 of 9 items; not promoted |
-| [Live check](reports/live_check/README.md), 20 questions, 26 Nov | v2 15/20; base Qwen 12/20 | A spot check written after seeing the notes, not a sealed score. Three v2 misses cite outdated lines |
+| [Live check](reports/live_check/README.md), 20 questions, stored notes, 26 and 27 Nov | v2 15/20; base Qwen 12/20; v3 17/20 (27 Nov, not deployed) | A spot check written after seeing the notes, not a sealed score. Three v2 misses cite outdated lines |
 | [Extraction recall](reports/extraction_recall_v1/README.md), four locked pages | Facts kept 39/46 before the fix, 45/46 after | Nearly all of the gain is one encoding fix. The same live check on a re-extracted copy: v2 14/20 → 17/20 |
 | [Retrieval v1](reports/retrieval_v1/README.md), 16 answerable questions | Answering note in the top five: 14/16 → 16/16 | Fixed set; a crowded store still loses one |
 | [Hybrid retrieval](reports/hybrid_v1/README.md) | No gain; live check on new notes 17/20 → 15/20 | Stays off |
