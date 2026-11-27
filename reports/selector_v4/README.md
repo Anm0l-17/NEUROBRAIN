@@ -34,7 +34,7 @@ settings are unchanged from v2/v3: seed 17, lr 2e-4, rank 16, accumulation 8, on
    format and citation IDs are the same. It merges them with v3's train/dev lines (kept byte for byte) and shuffles.
    Two runs give identical files.
 
-| Kind | Teacher wrote | Both passes agreed (kept) |
+| Kind | Teacher wrote | Kept after both checks |
 |---|---|---|
 | current | 200 | 198 |
 | two_attr | 120 | 118 |
@@ -101,18 +101,33 @@ one T4. First check that your weekly Kaggle GPU quota has at least 5 hours left 
 quota bar in the notebook editor).
 
 1. Open Kaggle and create a new notebook (or open the old selector notebook).
-2. **File → Import Notebook**, and choose `kaggle/selector_train_v4.ipynb` from this branch
-   (download it from GitHub: branch `claude/blissful-boyd-f91497`, folder `kaggle`).
+2. Download the notebook file from
+   https://github.com/Anm0l-17/NEUROBRAIN/blob/claude/blissful-boyd-f91497/kaggle/selector_train_v4.ipynb
+   (the download button at the top right of the file view). In Kaggle choose **File → Import Notebook** and pick that file.
 3. In the right-hand panel set **Accelerator: GPU T4 x1** and **Internet: On**.
-4. In the second code cell, check that `COMMIT = "..."` holds a long 40-letter code (it is already filled in), not
-   `SET_ME`.
+4. In the second code cell, check that the line reads exactly
+   `COMMIT = "fd98bf8d1bb39456cd31683505f957a72b1cf01b"`.
 5. Leave `SMOKE = True`. Click **Save Version → Save & Run All**. Wait a few minutes until the log ends with
    `SELECTOR_DONE`. This is a short test run.
 6. Change `SMOKE = True` to `SMOKE = False`. Click **Save Version → Save & Run All** again. You can close the tab;
    it runs in the background for about 4.5 hours.
-7. When it finishes, open that version's **Output** tab and download `selector_v4/adapter.zip`.
-8. Give `adapter-v4.zip` (the downloaded zip) back to Claude. Claude deploys it as `neurobrain-selector-v4`,
+7. When it finishes, open that version's **Output** tab and download `selector_v4/adapter.zip`. Rename it to
+   `adapter-v4.zip` and tell Claude where it is (for example `~/Downloads/adapter-v4.zip`).
+   The dev numbers printed at the end of the Kaggle log do **not** decide anything: v3's Kaggle log showed 141 parse
+   errors while the served model had none. Only the 9-item gate below decides.
+8. Hand it to Claude. Claude deploys it as `neurobrain-selector-v4`,
    scores the 9 gate items, and runs the live check on a read-only copy of the database.
+
+## Scoring once the zip arrives (for Claude)
+
+```
+scripts/deploy_selector.sh ...   # as neurobrain-selector-v4
+PYTHONPATH=src python3 scripts/eval_selector.py data/selector_v3/eval_sealed.jsonl --model neurobrain-selector-v4 --out reports/selector_v4/adapter_eval.json
+PYTHONPATH=src python3 scripts/eval_selector.py data/selector_v3/eval_update_sealed.jsonl --model neurobrain-selector-v4 --out reports/selector_v4/adapter_update_eval.json
+python3 reports/selector_v3/gate.py reports/selector_v4/adapter_eval.json reports/selector_v4/adapter_update_eval.json
+```
+
+Then run `reports/live_check/score.py` on a read-only copy of the live DB. Never touch the running app on port 8766.
 
 ## Result
 
