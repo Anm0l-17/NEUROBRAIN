@@ -36,26 +36,31 @@ settings are unchanged from v2/v3: seed 17, lr 2e-4, rank 16, accumulation 8, on
 
 | Kind | Teacher wrote | Both passes agreed (kept) |
 |---|---|---|
-| current | 200 | 199 |
+| current | 200 | 198 |
 | two_attr | 120 | 118 |
-| split | 80 | **54** |
+| split | 80 | **45** |
 | change | 80 | 79 |
 | sibling | 96 | 96 |
 | original | 64 | 64 |
 | lone | 64 | 64 |
 | near_miss | 176 | 176 |
-| **Total** | **880** | **850** (96.6%) |
+| **Total** | **880** | **840** |
 
 Most dropped `split` rows had a "no longer X" line next to a line that states the new value fully on its own. There
 the second pass cited only the new line, which is defensible. The kept `split` rows are mostly the ones where the
 second line really needs the first (as with "switched to it").
 
+**Third review.** An independent checker then read the kept rows. It flagged 9 `split` rows where one gold line
+already states the value alone (the other is only a reason or the old holder), plus 1 row (`g5-003`) that answers a
+wifi-password question with a router-password line. All 10 were dropped as well, leaving 840 (850 agreed − 10). IDs
+of every dropped row are in [`dropped_rows.json`](dropped_rows.json).
+
 ## Data
 
 | Split | Rows | Teacher rows | Empty targets |
 |---|---|---|---|
-| Train | 4,437 (v3 3,676 + 761) | 761 | 890 (20.1%; v3 19.9%) |
-| Dev | 475 (v3 386 + 89) | 89 | 165 |
+| Train | 4,449 (v3 3,676 + 773) | 773 | 895 (20.1%; v3 19.9%) |
+| Dev | 453 (v3 386 + 67) | 67 | 160 |
 
 Hashes are in `data/selector_v4/manifest.json`. v4 has **no sealed file of its own**. It is scored on v3's
 `eval_sealed.jsonl` and `eval_update_sealed.jsonl`, both unchanged.
@@ -91,7 +96,7 @@ The same 9-item gate as v3 (`reports/selector_v3/README.md`), on the same two se
 
 ## Your Kaggle steps (you run these)
 
-Train has 4,437 rows, about **555 optimizer steps**. v3 took about 29 s per step, so expect **about 4.5 hours** on
+Train has 4,449 rows, about **556 optimizer steps**. v3 took about 29 s per step, so expect **about 4.5 hours** on
 one T4. First check that your weekly Kaggle GPU quota has at least 5 hours left (Kaggle → your profile → Settings or the
 quota bar in the notebook editor).
 

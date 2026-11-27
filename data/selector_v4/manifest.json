@@ -4,7 +4,7 @@
   "inputs_sha256": {
     "selector_v3/train.jsonl": "429f5b6ca80aaf2d2ec2c6cfdcf7e6e9746e9579bb11309138d28f5853bc9e59",
     "selector_v3/dev.jsonl": "498c0fb658294c912f49384cbeb3fc8d5c58b55fd8277fdb4fa8ea377a64c78d",
-    "selector_v4/teacher_rows.jsonl": "b3d79afea5e0e0bbeca2a0a58df93e9a61b7ef6e171096e5077c38da7462e0c9"
+    "selector_v4/teacher_rows.jsonl": "5bb8ad3159edaba7d22fd9090c9c90d234cc65b81bae6467a914f1fbba2be505"
   },
   "sealed_sha256_unchanged": {
     "data/selector_v1/eval_sealed.jsonl": "b2e67308c7fbb93d23272a253858bf2573dffe05ea8050aef025a95aecd8fcde",
@@ -13,42 +13,42 @@
     "data/selector_v3/eval_update_sealed.jsonl": "898730f9f4882cb1e248eabfac9510717cae47eb5e935357dd68d7ecfc130664"
   },
   "teacher": {
-    "scenarios": 850,
-    "kept": 850,
+    "scenarios": 840,
+    "kept": 840,
     "dropped": {},
     "kept_by_kind": {
       "change": 79,
-      "current": 199,
+      "current": 198,
       "lone": 64,
       "near_miss": 176,
       "original": 64,
       "sibling": 96,
-      "split": 54,
+      "split": 45,
       "two_attr": 118
     }
   },
   "files": {
-    "train.jsonl": "2084b31136b5d5e2194d6b5d5357d66b8ceed907d60b8005eea06b8892070047",
-    "dev.jsonl": "7667671ccf796833f5358a35d569a31e5bf25e558fc58c87d03edfa64e44cefc"
+    "train.jsonl": "3175c6e54eb70356839bacd5a8e3a21816914b16050bb630dbd30372741ea44f",
+    "dev.jsonl": "b2a9eddbe1069d083479b0fc771737cfe35c3cbf8173577084537297de4577fe"
   },
   "counts": {
     "train": {
-      "rows": 4437,
-      "empty_targets": 890,
-      "teacher_rows": 761,
+      "rows": 4449,
+      "empty_targets": 895,
+      "teacher_rows": 773,
       "by_source": {
         "hotpotqa": 1400,
         "longmemeval": 351,
         "longmemeval_update": 75,
         "squad2": 1150,
-        "teacher_change": 70,
-        "teacher_current": 179,
-        "teacher_lone": 59,
-        "teacher_near_miss": 160,
-        "teacher_original": 60,
-        "teacher_sibling": 85,
-        "teacher_split": 46,
-        "teacher_two_attr": 102,
+        "teacher_change": 73,
+        "teacher_current": 178,
+        "teacher_lone": 61,
+        "teacher_near_miss": 165,
+        "teacher_original": 61,
+        "teacher_sibling": 82,
+        "teacher_split": 43,
+        "teacher_two_attr": 110,
         "update_absent": 152,
         "update_current": 251,
         "update_lone_old": 75,
@@ -59,22 +59,22 @@
       "named_fixture_phrase_hits": 5
     },
     "dev": {
-      "rows": 475,
-      "empty_targets": 165,
-      "teacher_rows": 89,
+      "rows": 453,
+      "empty_targets": 160,
+      "teacher_rows": 67,
       "by_source": {
         "hotpotqa": 144,
         "longmemeval": 29,
         "longmemeval_update": 3,
         "squad2": 150,
-        "teacher_change": 9,
+        "teacher_change": 6,
         "teacher_current": 20,
-        "teacher_lone": 5,
-        "teacher_near_miss": 16,
-        "teacher_original": 4,
-        "teacher_sibling": 11,
-        "teacher_split": 8,
-        "teacher_two_attr": 16,
+        "teacher_lone": 3,
+        "teacher_near_miss": 11,
+        "teacher_original": 3,
+        "teacher_sibling": 14,
+        "teacher_split": 2,
+        "teacher_two_attr": 8,
         "update_absent": 15,
         "update_current": 16,
         "update_lone_old": 5,
